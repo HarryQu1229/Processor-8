@@ -14,7 +14,6 @@ public class Main {
 
         System.out.println(myGraph.getBottomLevel(myGraph.getNodeByValue("h")));
 
-
 //        System.out.println(myGraph.getCriticalPath());
 
 
