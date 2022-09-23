@@ -11,7 +11,7 @@ public class PartialSolution {
     private static int INDEGREE_NO = 2;
 
     // nodeIndex :  [Processor Num, starting Time, Indegree Number]
-    public LinkedHashMap<Node, ArrayList<Integer>> nodeStates;
+    public LinkedHashMap<Node, List<Integer>> nodeStates;
     public double costFunction;
     public List<Node> nodesPath;
 
@@ -61,12 +61,22 @@ public class PartialSolution {
         this.nodeStates = new LinkedHashMap<>();
 
         for (Node node: graph.getAllNodes()){
-            ArrayList<Integer> states = new ArrayList<>();
+            List<Integer> states = new ArrayList<>();
             states.add(0); //processor number
             states.add(0); //starting time
             states.add(graph.getAllParentNode(node).size()); // indegree
             nodeStates.put(node, states);
         }
+    }
+
+    public List<Node> getAvailableNextNodes(){
+        List<Node> availableNextNodes = new ArrayList<>();
+        for (Node node: nodeStates.keySet()){
+            if (nodeStates.get(node).get(INDEGREE_NO) == 0){
+                availableNextNodes.add(node);
+            }
+        }
+        return availableNextNodes;
     }
 
 
