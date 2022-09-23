@@ -11,16 +11,24 @@ public class PartialSolution {
     private static int INDEGREE_NO = 2;
 
     // nodeIndex :  [Processor Num, starting Time, Indegree Number]
-    public LinkedHashMap<Node, List<Integer>> nodeStates;
-    public double costFunction;
-    public List<Node> nodesPath;
+    private LinkedHashMap<Node, List<Integer>> nodeStates;
+    private double costFunction;
+    private List<Node> nodesPath;
 
 
 
     public PartialSolution(PartialSolution prevPartial, MyGraph graph, Node currentNode, int processorNo){
 
-        this.nodesPath = new ArrayList<>(prevPartial.nodesPath);
-        this.nodeStates = new LinkedHashMap<>(prevPartial.nodeStates);
+        this.nodesPath = new ArrayList<>();
+        nodesPath.addAll(prevPartial.getNodesPath());
+        this.nodeStates = new LinkedHashMap<>();
+        for (Node node : prevPartial.getNodeStates().keySet()){
+            List<Integer> states = new ArrayList<>();
+            states.add(prevPartial.getNodeStates().get(node).get(PROCESSOR_NO)); //processor number
+            states.add(prevPartial.getNodeStates().get(node).get(STARTING_TIME)); //starting time
+            states.add(prevPartial.getNodeStates().get(node).get(INDEGREE_NO));
+            nodeStates.put(node, states);
+        }
 
         if (!nodesPath.isEmpty()){
             // get the previous node
@@ -34,6 +42,7 @@ public class PartialSolution {
             if(prevProcessorNo == processorNo){
                 nodeStates.get(currentNode).set(STARTING_TIME, prevStartingTime + prevNodeWeight);
             } else {
+                //System.out.println(prevNode.getId() + " " + currentNode.getId());
                 int communicationCost = graph.getEdgeWeight(prevNode.getId(), currentNode.getId()).intValue();
                 nodeStates.get(currentNode).set(STARTING_TIME, prevStartingTime + prevNodeWeight + communicationCost);
             }
@@ -79,9 +88,15 @@ public class PartialSolution {
         return availableNextNodes;
     }
 
+    public List<Node> getNodesPath(){
+        return nodesPath;
+    }
 
+    public LinkedHashMap<Node, List<Integer>> getNodeStates() {
+        return nodeStates;
+    }
 
-
-
-
+    public double getCostFunction() {
+        return costFunction;
+    }
 }
