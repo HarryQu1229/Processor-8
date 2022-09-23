@@ -127,4 +127,16 @@ public class MyGraph {
         }
         return criticalPath;
     }
+
+    /**
+     * get all nodes from a graph
+     * @return list of all nodes from the graph
+     */
+    public List<Node> getAllNodes(){
+        List<Node> res = new ArrayList<>();
+        for (Node node: graph){
+            res.add(node);
+        }
+        return res;
+    }
 }
