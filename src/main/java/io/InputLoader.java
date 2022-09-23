@@ -23,7 +23,7 @@ public class InputLoader {
      */
     public static Graph loadDotFile(String graphName) {
         String relativePath = "examples/" + graphName + "/in.dot";
-        Graph graph = new SingleGraph("Digraph");
+        Graph graph = new SingleGraph("solution.Digraph");
         FileSource fileSource = new FileSourceDOT();
         fileSource.addSink(graph);
         try {

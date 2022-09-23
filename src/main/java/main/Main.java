@@ -1,18 +1,17 @@
-import io.InputLoader;
-import org.graphstream.graph.Edge;
-import org.graphstream.graph.Graph;
-import org.graphstream.graph.Node;
+package main;
 
-import java.util.Iterator;
+import io.InputLoader;
+import org.graphstream.graph.Graph;
+import solution.Digraph;
 
 public class Main {
 
     public static void main(String[] args){
         Graph graph = InputLoader.loadDotFile("g5");
 //        InputLoader.print(graph, true);
-        MyGraph myGraph = new MyGraph(graph);
+        Digraph digraph = new Digraph(graph);
 
-        System.out.println(myGraph.getBottomLevel(myGraph.getNodeByValue("h")));
+        System.out.println(digraph.getBottomLevel(digraph.getNodeByValue("h")));
 
 //        System.out.println(myGraph.getCriticalPath());
 

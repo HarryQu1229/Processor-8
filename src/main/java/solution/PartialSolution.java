@@ -1,3 +1,5 @@
+package solution;
+
 import org.graphstream.graph.Node;
 
 import java.util.ArrayList;
@@ -17,7 +19,7 @@ public class PartialSolution {
 
 
 
-    public PartialSolution(PartialSolution prevPartial, MyGraph graph, Node currentNode, int processorNo){
+    public PartialSolution(PartialSolution prevPartial, Digraph graph, Node currentNode, int processorNo){
 
         this.nodesPath = new ArrayList<>();
         nodesPath.addAll(prevPartial.getNodesPath());
@@ -65,7 +67,7 @@ public class PartialSolution {
     }
 
     // initial empty state, set up all nodes.
-    public PartialSolution(MyGraph graph){
+    public PartialSolution(Digraph graph){
         this.nodesPath = new ArrayList<>();
         this.nodeStates = new LinkedHashMap<>();
 
