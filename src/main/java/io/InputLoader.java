@@ -1,5 +1,7 @@
 package io;
 
+import org.graphstream.graph.*;
+import org.graphstream.graph.implementations.*;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
