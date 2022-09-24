@@ -71,9 +71,11 @@ public class Digraph extends SingleGraph {
      */
     public List<Node> getAllStartNode() {
         List<Node> res = new ArrayList<>();
-        for (Node d : super.nodeArray) {
-            if (d.getInDegree() == 0) {
-                res.add(d);
+        Iterator<Node> nodeIterator = super.iterator();
+        while (nodeIterator.hasNext()) {
+            Node node = nodeIterator.next();
+            if (node.getInDegree() == 0) {
+                res.add(node);
             }
         }
         return res;

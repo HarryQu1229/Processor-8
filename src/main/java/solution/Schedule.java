@@ -2,6 +2,7 @@ package solution;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * A schedule represents the allocation of a series of tasks, ie, a list of State instance
@@ -14,6 +15,11 @@ public class Schedule {
 
     public Schedule() {
         this.states = new ArrayList<>();
+    }
+
+    public Schedule(Schedule schedule) {
+        this();
+        this.states.addAll(schedule.states);
     }
 
     public Schedule(String schedule) {
@@ -31,10 +37,19 @@ public class Schedule {
         this.states.add(state);
     }
 
+    public boolean hasExecuted(String task) {
+        return this.getTasks().contains(task);
+    }
+
+    public List<String> getTasks() {
+        return this.states.stream().map(State::getTask).collect(Collectors.toList());
+    }
+
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        this.states.forEach(state -> builder.append(state.toString()));
+        this.states.forEach(state -> builder.append(state.toString()).append(";"));
+        builder.deleteCharAt(builder.length() - 1);
         return builder.toString();
     }
 
