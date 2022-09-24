@@ -1,0 +1,15 @@
+digraph "g1" {
+    a [Weight = 1];
+    b [Weight = 1];
+    c [Weight = 1];
+    d [Weight = 1];
+    e [Weight = 1];
+    f [Weight = 1];
+    a -> b [Weight = 1];
+    a -> c [Weight = 1];
+    b -> d [Weight = 1];
+    c -> e [Weight = 1];
+    c -> f [Weight = 1];
+    d -> e [Weight = 1];
+    e -> f [Weight = 1];
+}
