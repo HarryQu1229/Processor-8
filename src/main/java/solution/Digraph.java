@@ -1,70 +1,69 @@
 package solution;
 
 import org.graphstream.graph.Edge;
-import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
+import org.graphstream.graph.implementations.SingleGraph;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Iterator;
 
-public class Digraph {
+public class Digraph extends SingleGraph {
 
-    Graph graph;
-
-    public Digraph(Graph graph) {
-        this.graph = graph;
+    public Digraph(String id) {
+        super(id);
     }
 
     /**
-     *  get the Node according to its value
+     * get the Node according to its value
+     *
      * @param node String   the value of the node
-     * @return  Node  return matching Node
+     * @return Node  return matching Node
      */
     public Node getNodeByValue(String node) {
-        return graph.getNode(node);
+        return super.getNode(node);
     }
-
 
     /**
      * get weight of specific node
+     *
      * @param node String  the value of node
-     * @return  Double  the weight of this node
+     * @return Double  the weight of this node
      */
     public Double getNodeWeight(String node) {
-        return Double.parseDouble(graph.getNode(node).getAttribute("Weight").toString());
+        return Double.parseDouble(super.getNode(node).getAttribute("Weight").toString());
     }
-
 
     /**
      * get the edge sourceNode -> destNode
-     * @param sourceNode  String: the value of sourceNode
-     * @param destNode  String:  the value of destNode
-     * @return  Edge:  the edge which is sourceNode -> destNode
+     *
+     * @param sourceNode String: the value of sourceNode
+     * @param destNode   String:  the value of destNode
+     * @return Edge:  the edge which is sourceNode -> destNode
      */
     public Edge getEdge(String sourceNode, String destNode) {
-        return graph.getEdge("(" + sourceNode + ";" + destNode + ")");
+        return super.getEdge("(" + sourceNode + ";" + destNode + ")");
     }
-
-    //get Edge Weight
 
     /**
      * get Weight of the edge
+     *
      * @param sourceNode String: the value of sourceNode
-     * @param destNode String:  the value of destNode
-     * @return  Double  the weight of the edge which is sourceNode -> destNode
+     * @param destNode   String:  the value of destNode
+     * @return Double  the weight of the edge which is sourceNode -> destNode
      */
     public Double getEdgeWeight(String sourceNode, String destNode) {
         return Double.parseDouble(getEdge(sourceNode, destNode).getAttribute("Weight").toString());
     }
 
-
     /**
      * get list of the node which in-degree is 0
+     *
      * @return return all start Node,which its in-degree is 0
      */
     public List<Node> getAllStartNode() {
         List<Node> res = new ArrayList<>();
-        for (Node d : graph) {
+        for (Node d : super.nodeArray) {
             if (d.getInDegree() == 0) {
                 res.add(d);
             }
@@ -72,11 +71,11 @@ public class Digraph {
         return res;
     }
 
-
     /**
-     *  get all children node of this input node
+     * get all children node of this input node
+     *
      * @param d the input node
-     * @return  the list of the children node(input node d point to these nodes) of this input node d
+     * @return the list of the children node(input node d point to these nodes) of this input node d
      */
     public List<Node> getAllChildrenNode(Node d) {
         List<Node> res = new ArrayList<>();
@@ -90,6 +89,7 @@ public class Digraph {
 
     /**
      * get all Parent Node of this input node
+     *
      * @param d the input node
      * @return the list of the parent node(these nodes will point to input node d)of this input node d
      */
@@ -103,28 +103,31 @@ public class Digraph {
         return res;
     }
 
-
     /**
      * get the bottom level of the node
-     * @param d  the input node d
+     *
+     * @param node the input node
      * @return the bottom level value of this input node in graph
      */
-    public double getBottomLevel(Node d) {
-        double ans = getNodeWeight(d.getId());
+    public double getBottomLevel(Node node) {
+        double ans = getNodeWeight(node.getId());
 
-        for(Node children:getAllChildrenNode(d)){
-             ans = Math.max(ans,getNodeWeight(d.getId())+getBottomLevel(children));
+        Iterator<Node> nodeIterator = super.iterator();
+        while (nodeIterator.hasNext()) {
+            Node childNode = nodeIterator.next();
+            ans = Math.max(ans, getNodeWeight(node.getId()) + getBottomLevel(childNode));
         }
         return ans;
     }
 
     /**
      * get the critical path of the graph
+     *
      * @return the length of the critical path of graph
      */
     public double getCriticalPath() {
         double criticalPath = 0;
-        for(Node d:getAllStartNode()){
+        for (Node d : getAllStartNode()) {
             criticalPath = Math.max(criticalPath, getBottomLevel(d));
         }
         return criticalPath;
@@ -132,12 +135,14 @@ public class Digraph {
 
     /**
      * get all nodes from a graph
+     *
      * @return list of all nodes from the graph
      */
-    public List<Node> getAllNodes(){
+    public List<Node> getAllNodes() {
         List<Node> res = new ArrayList<>();
-        for (Node node: graph){
-            res.add(node);
+        Iterator<Node> nodeIterator = super.iterator();
+        while (nodeIterator.hasNext()) {
+            res.add(nodeIterator.next());
         }
         return res;
     }

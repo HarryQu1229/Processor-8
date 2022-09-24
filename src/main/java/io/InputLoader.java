@@ -8,6 +8,7 @@ import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.SingleGraph;
 import org.graphstream.stream.file.FileSource;
 import org.graphstream.stream.file.FileSourceDOT;
+import solution.Digraph;
 
 import java.io.IOException;
 
@@ -21,9 +22,9 @@ public class InputLoader {
      *                  the file that the loader will load the data from is "examples/<graphName>/in.dot
      * @return a Graph instance that represents the data read from input file
      */
-    public static Graph loadDotFile(String graphName) {
+    public static Digraph loadDotFile(String graphName) {
         String relativePath = "examples/" + graphName + "/in.dot";
-        Graph graph = new SingleGraph("solution.Digraph");
+        Digraph graph = new Digraph("solution." + graphName);
         FileSource fileSource = new FileSourceDOT();
         fileSource.addSink(graph);
         try {
