@@ -23,6 +23,14 @@ public class Schedule {
         }
     }
 
+    public void addState(String state) {
+        this.states.add(new State(state));
+    }
+
+    public void addState(State state) {
+        this.states.add(state);
+    }
+
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();

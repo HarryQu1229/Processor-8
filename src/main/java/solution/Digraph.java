@@ -34,6 +34,14 @@ public class Digraph extends SingleGraph {
         return Double.parseDouble(super.getNode(node).getAttribute("Weight").toString());
     }
 
+    public Edge addEdge(String sourceNode, String targetNode, int weight) {
+        String id = String.format("(%s;%s)", sourceNode, targetNode);
+        super.addEdge(id, sourceNode, targetNode);
+        Edge edge = super.getEdge(id);
+        edge.setAttribute("Weight", weight);
+        return edge;
+    }
+
     /**
      * get the edge sourceNode -> destNode
      *
