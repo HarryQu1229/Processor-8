@@ -15,8 +15,8 @@ public class Main {
         SolutionTree solutionTree = SolutionTree.getSolutionTree(digraph, 1);
 
         System.out.println("\n=== Final print ===");
-        System.out.println(solutionTree.getAllNodes().size());
-//        InputLoader.print(solutionTree, false);
+//        System.out.println(solutionTree.getAllNodes().size());
+        InputLoader.print(solutionTree, false);
 
 //        System.out.println(digraph.getAllNodes());
 

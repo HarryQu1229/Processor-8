@@ -12,9 +12,10 @@ public class SolutionTree extends Digraph {
 
     public static SolutionTree getSolutionTree(Digraph digraph, int processCount) {
 
+        List<Node> startingNodes = digraph.getAllStartNode();
         digraph.addNode("Empty");
         digraph.getNode("Empty").setAttribute("Weight", 0);
-        digraph.getAllStartNode().forEach(startingNode -> {
+        startingNodes.forEach(startingNode -> {
             digraph.addEdge("Empty", startingNode.getId(), 0);
         });
 
@@ -23,10 +24,7 @@ public class SolutionTree extends Digraph {
         schedule.addState(new State("Empty", 0));
         solutionTree.clear();
         solutionTree.addNode(schedule.toString());
-        digraph.getAllChildrenNode(digraph.getNode("Empty")).forEach(child -> {
-            appendChildNodes(solutionTree, digraph, child, schedule);
-        });
-
+        appendChildNodes(solutionTree, digraph, digraph.getNode("Empty"), schedule);
         return solutionTree;
     }
 
@@ -37,7 +35,7 @@ public class SolutionTree extends Digraph {
             List<Node> prerequisites = digraph.getAllParentNode(childNode);
             boolean canExecute = prerequisites.stream().allMatch(
                     x -> schedule.hasExecuted(x.getId())
-            ) && !currentSchedule.hasExecuted(node.getId());
+            ) && !currentSchedule.hasExecuted(childNode.getId());
             if (canExecute) {
                 Schedule newSchedule = new Schedule(schedule);
                 newSchedule.addState(new State(childNode.getId(), 0));
