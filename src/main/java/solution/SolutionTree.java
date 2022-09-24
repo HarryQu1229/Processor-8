@@ -23,7 +23,7 @@ public class SolutionTree extends Digraph {
         Schedule schedule = new Schedule();
         schedule.addState(new State("Empty", 0));
         solutionTree.clear();
-        solutionTree.addNode(schedule.toString());
+        solutionTree.addNode(schedule.toString(), 0);
         appendChildNodes(solutionTree, digraph, digraph.getNode("Empty"), schedule);
         return solutionTree;
     }
@@ -39,7 +39,7 @@ public class SolutionTree extends Digraph {
             if (canExecute) {
                 Schedule newSchedule = new Schedule(schedule);
                 newSchedule.addState(new State(childNode.getId(), 0));
-                solutionTree.addNode(newSchedule.toString());
+                solutionTree.addNode(newSchedule.toString(), 0);
                 solutionTree.addEdge(schedule.toString(), newSchedule.toString(), 0);
                 appendChildNodes(solutionTree, digraph, childNode, newSchedule);
             }
