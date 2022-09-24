@@ -1,6 +1,7 @@
 package main;
 
 import io.InputLoader;
+import org.graphstream.graph.Node;
 import solution.Digraph;
 import solution.SolutionTree;
 import solution.State;
@@ -25,6 +26,16 @@ public class Main {
 //        System.out.println(myGraph.getCriticalPath());
 
 
+    }
+
+    private int countSolutions(SolutionTree solutionTree) {
+        int count = 0;
+        for (Node node: solutionTree.getAllNodes()) {
+            if (node.getOutDegree() == 0) {
+                count++;
+            }
+        }
+        return count;
     }
 
 }
