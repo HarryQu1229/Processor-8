@@ -9,7 +9,7 @@ public class Main {
 
     public static void main(String[] args){
 //        InputLoader.print(graph, true);
-        Digraph digraph = InputLoader.loadDotFile("g1");
+        Digraph digraph = InputLoader.loadDotFile("g7");
 //        InputLoader.print(digraph, false);
 
         SolutionTree solutionTree = SolutionTree.getSolutionTree(digraph, 1);
