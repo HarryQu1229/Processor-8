@@ -4,6 +4,7 @@ import io.InputLoader;
 import org.graphstream.graph.Node;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Each node on a solution tree is a schedule string
@@ -20,7 +21,7 @@ public class SolutionTree extends Digraph {
         });
 
         SolutionTree solutionTree = new SolutionTree();
-        Schedule schedule = new Schedule();
+        Schedule schedule = new Schedule(digraph);
         schedule.addState(new State("Empty", 0));
         solutionTree.clear();
         solutionTree.addNode(schedule.toString(), 0);
@@ -29,15 +30,15 @@ public class SolutionTree extends Digraph {
     }
 
     public static void appendChildNodes(SolutionTree solutionTree, final Digraph digraph, Node node, Schedule currentSchedule) {
-        List<Node> childNodes = digraph.getAllChildrenNode(node);
-        Schedule schedule = new Schedule(currentSchedule.toString());
-        childNodes.forEach(childNode -> {
+        List<Node> waitingTasks = currentSchedule.getWaitingTasks().stream().map(digraph::getNodeByValue).collect(Collectors.toList());
+        Schedule schedule = new Schedule(digraph, currentSchedule.toString());
+        waitingTasks.forEach(childNode -> {
             List<Node> prerequisites = digraph.getAllParentNode(childNode);
             boolean canExecute = prerequisites.stream().allMatch(
                     x -> schedule.hasExecuted(x.getId())
-            ) && !currentSchedule.hasExecuted(childNode.getId());
+            );
             if (canExecute) {
-                Schedule newSchedule = new Schedule(schedule);
+                Schedule newSchedule = new Schedule(digraph, schedule);
                 newSchedule.addState(new State(childNode.getId(), 0));
                 solutionTree.addNode(newSchedule.toString(), 0);
                 solutionTree.addEdge(schedule.toString(), newSchedule.toString(), 0);

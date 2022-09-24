@@ -12,37 +12,50 @@ import java.util.stream.Collectors;
 public class Schedule {
 
     private List<State> states;
+    private List<String> waitingTasks;
 
-    public Schedule() {
+    public Schedule(Digraph digraph) {
         this.states = new ArrayList<>();
+        this.waitingTasks = new ArrayList<>();
+        digraph.getAllNodes().forEach(node -> this.waitingTasks.add(node.getId()));
     }
 
-    public Schedule(Schedule schedule) {
-        this();
+    public Schedule(Digraph digraph, Schedule schedule) {
+        this(digraph);
         this.states.addAll(schedule.states);
+        this.states.forEach(state -> this.waitingTasks.remove(state.getTask()));
     }
 
-    public Schedule(String schedule) {
-        this();
-        for (String state: schedule.split(";")) {
-            this.states.add(new State(state));
+    public Schedule(Digraph digraph, String schedule) {
+        this(digraph);
+        for (String stateString: schedule.split(";")) {
+            State state = new State(stateString);
+            this.states.add(state);
+            this.waitingTasks.remove(state.getTask());
         }
     }
 
     public void addState(String state) {
-        this.states.add(new State(state));
+        State state1 = new State(state);
+        this.waitingTasks.remove(state1.getTask());
+        this.states.add(state1);
     }
 
     public void addState(State state) {
+        this.waitingTasks.remove(state.getTask());
         this.states.add(state);
     }
 
     public boolean hasExecuted(String task) {
-        return this.getTasks().contains(task);
+        return this.getScheduledTasks().contains(task);
     }
 
-    public List<String> getTasks() {
+    public List<String> getScheduledTasks() {
         return this.states.stream().map(State::getTask).collect(Collectors.toList());
+    }
+
+    public List<String> getWaitingTasks() {
+        return this.waitingTasks;
     }
 
     @Override

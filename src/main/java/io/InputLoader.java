@@ -44,7 +44,7 @@ public class InputLoader {
     public static void print(Graph graph, boolean showEnteringEdge) {
         for (Node node : graph) {
             System.out.printf(
-                    "Node [%s], weight = %d\n",
+                    "Node <%s>, weight = %d\n",
                     node,
                     (int) Double.parseDouble(node.getAttribute("Weight").toString())
             );
