@@ -29,18 +29,27 @@ public class SolutionTreeUnitTest {
 
     private int countSolutions(SolutionTree solutionTree) {
         int count = 0;
-        for (Node node: solutionTree.getAllNodes()) {
-            if (node.getOutDegree() == 0) {
+        for (Node node : solutionTree.getAllNodes()) {
+            if (solutionTree.getOutDegree(node) == 0) {
                 count++;
             }
         }
         return count;
     }
 
-//    @Test
-//    public void graph1OneProcessor() {
-//        Digraph digraph = loadGraph("g1");
-//        SolutionTree solutionTree = SolutionTree.getSolutionTree(digraph, 1);
-//        assertEquals(2, countSolutions(solutionTree));
-//    }
+    @Test
+    public void graph1ProcessorAmount1() {
+        Digraph digraph = loadGraph("g1");
+        SolutionTree solutionTree = new SolutionTree(digraph,1);
+        solutionTree.buildTree(solutionTree.getRoot());
+        assertEquals(2, countSolutions(solutionTree));
+    }
+
+    @Test
+    public void graph1ProcessorAmount2() {
+        Digraph digraph = loadGraph("g1");
+        SolutionTree solutionTree = new SolutionTree(digraph,2);
+        solutionTree.buildTree(solutionTree.getRoot());
+        assertEquals(32, countSolutions(solutionTree));
+    }
 }
