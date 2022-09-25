@@ -62,6 +62,31 @@ public class SolutionTreeUnitTest {
         }
     }
 
+    /**
+     * This test suite is based on the assumption that the implementation of solution tree on 26/09/2022 was correct, (
+     * commit: 5ac66763cd632cdcb7968f5ffe59bbedc4e5c3f6). The actual answer was not calculated by hand.
+     *
+     * This test should only be used to compare the new implementation with the implementation on 26/09/2022
+     */
+    @Nested
+    class Graph2UnitTesting {
+
+        Digraph inputGraph;
+
+        @BeforeEach
+        public void loadInputGraph() {
+            inputGraph = loadGraph("g2");
+        }
+
+        @Test
+        public void graph2ProcessorAmount1() {
+            SolutionTree solutionTree = new SolutionTree(inputGraph,1);
+            solutionTree.build(solutionTree.getRoot());
+            assertEquals(211588, countSolutions(solutionTree));
+        }
+
+    }
+
     @Nested
     class Graph6UnitTesting {
 
