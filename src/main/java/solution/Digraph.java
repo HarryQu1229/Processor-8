@@ -129,10 +129,8 @@ public class Digraph extends SingleGraph {
     public double getBottomLevel(Node node) {
         double ans = getNodeWeight(node.getId());
 
-        Iterator<Node> nodeIterator = super.iterator();
-        while (nodeIterator.hasNext()) {
-            Node childNode = nodeIterator.next();
-            ans = Math.max(ans, getNodeWeight(node.getId()) + getBottomLevel(childNode));
+        for(Node children:getAllChildrenNode(node)){
+            ans = Math.max(ans,getNodeWeight(node.getId())+getBottomLevel(children));
         }
         return ans;
     }
