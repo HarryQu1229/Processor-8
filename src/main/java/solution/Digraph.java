@@ -129,8 +129,8 @@ public class Digraph extends SingleGraph {
     public double getBottomLevel(Node node) {
         double ans = getNodeWeight(node.getId());
 
-        for(Node children:getAllChildrenNode(node)){
-            ans = Math.max(ans,getNodeWeight(node.getId())+getBottomLevel(children));
+        for (Node children : getAllChildrenNode(node)) {
+            ans = Math.max(ans, getNodeWeight(node.getId()) + getBottomLevel(children));
         }
         return ans;
     }
@@ -170,7 +170,7 @@ public class Digraph extends SingleGraph {
      */
     public int getInDegree(Node node) {
         int count = 0;
-        for (Edge edge: node) {
+        for (Edge edge : node) {
             if (edge.getNode1().equals(node)) count++;
         }
         return count;
@@ -184,7 +184,7 @@ public class Digraph extends SingleGraph {
      */
     public int getOutDegree(Node node) {
         int count = 0;
-        for (Edge edge: node) {
+        for (Edge edge : node) {
             if (edge.getNode0().equals(node)) count++;
         }
         return count;

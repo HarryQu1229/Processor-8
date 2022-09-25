@@ -41,7 +41,7 @@ public class SolutionTreeUnitTest {
     public void graph1ProcessorAmount1() {
         Digraph digraph = loadGraph("g1");
         SolutionTree solutionTree = new SolutionTree(digraph,1);
-        solutionTree.buildTree(solutionTree.getRoot());
+        solutionTree.build(solutionTree.getRoot());
         assertEquals(2, countSolutions(solutionTree));
     }
 
@@ -49,7 +49,7 @@ public class SolutionTreeUnitTest {
     public void graph1ProcessorAmount2() {
         Digraph digraph = loadGraph("g1");
         SolutionTree solutionTree = new SolutionTree(digraph,2);
-        solutionTree.buildTree(solutionTree.getRoot());
+        solutionTree.build(solutionTree.getRoot());
         assertEquals(32, countSolutions(solutionTree));
     }
 
@@ -57,7 +57,7 @@ public class SolutionTreeUnitTest {
     public void graph6ProcessorAmount1() {
         Digraph digraph = loadGraph("g6");
         SolutionTree solutionTree = new SolutionTree(digraph,1);
-        solutionTree.buildTree(solutionTree.getRoot());
+        solutionTree.build(solutionTree.getRoot());
         assertEquals(1, countSolutions(solutionTree));
     }
 
@@ -65,7 +65,23 @@ public class SolutionTreeUnitTest {
     public void graph6ProcessorAmount2() {
         Digraph digraph = loadGraph("g6");
         SolutionTree solutionTree = new SolutionTree(digraph,2);
-        solutionTree.buildTree(solutionTree.getRoot());
+        solutionTree.build(solutionTree.getRoot());
         assertEquals(8, countSolutions(solutionTree));
+    }
+
+    @Test
+    public void graph7ProcessorAmount1() {
+        Digraph digraph = loadGraph("g7");
+        SolutionTree solutionTree = new SolutionTree(digraph,1);
+        solutionTree.build(solutionTree.getRoot());
+        assertEquals(3, countSolutions(solutionTree));
+    }
+
+    @Test
+    public void graph7ProcessorAmount2() {
+        Digraph digraph = loadGraph("g7");
+        SolutionTree solutionTree = new SolutionTree(digraph,2);
+        solutionTree.build(solutionTree.getRoot());
+        assertEquals(192, countSolutions(solutionTree));
     }
 }

@@ -3,17 +3,13 @@ package main;
 import io.InputLoader;
 import org.graphstream.graph.Node;
 import solution.Digraph;
-import solution.PartialSolution;
 import solution.SolutionTree;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class Main {
 
     public static void main(String[] args) {
 //        InputLoader.print(graph, true);
-        Digraph digraph = InputLoader.loadDotFile("g1");
+        Digraph digraph = InputLoader.loadDotFile("g7");
 
 
 //        InputLoader.print(digraph, false);
@@ -32,13 +28,10 @@ public class Main {
 
 //        int numOfProcessors = 2;
 
-        SolutionTree solutionTree = new SolutionTree(digraph,1);
-
-        solutionTree.buildTree(solutionTree.getRoot());
+        SolutionTree solutionTree = new SolutionTree(digraph,2);
+        solutionTree.build(solutionTree.getRoot());
 
 //        solutionTree.printSolutionTree();
-
-        System.out.println(countLeaves(solutionTree));
 
 //        InputLoader.print(solutionTree, true);
 
