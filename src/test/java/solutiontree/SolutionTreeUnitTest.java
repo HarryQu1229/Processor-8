@@ -37,10 +37,10 @@ public class SolutionTreeUnitTest {
         return count;
     }
 
-    @Test
-    public void graph1OneProcessor() {
-        Digraph digraph = loadGraph("g1");
-        SolutionTree solutionTree = SolutionTree.getSolutionTree(digraph, 1);
-        assertEquals(2, countSolutions(solutionTree));
-    }
+//    @Test
+//    public void graph1OneProcessor() {
+//        Digraph digraph = loadGraph("g1");
+//        SolutionTree solutionTree = SolutionTree.getSolutionTree(digraph, 1);
+//        assertEquals(2, countSolutions(solutionTree));
+//    }
 }

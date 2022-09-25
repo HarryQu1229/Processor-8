@@ -1,54 +1,104 @@
 package solution;
 
-import io.InputLoader;
 import org.graphstream.graph.Node;
 
+import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Queue;
 
 /**
- * Each node on a solution tree is a schedule string
+ * Bruteforce solution to build a solution tree, Each node on a solution tree is represented as a schedule string
  */
 public class SolutionTree extends Digraph {
 
-    public static SolutionTree getSolutionTree(Digraph digraph, int processCount) {
+    private Digraph graph;
+    private int numOfProcessor;
+    private PartialSolution root;
 
-        List<Node> startingNodes = digraph.getAllStartNode();
-        digraph.addNode("Empty");
-        digraph.getNode("Empty").setAttribute("Weight", 0);
-        startingNodes.forEach(startingNode -> {
-            digraph.addEdge("Empty", startingNode.getId(), 0);
-        });
 
-        SolutionTree solutionTree = new SolutionTree();
-        Schedule schedule = new Schedule(digraph);
-        schedule.addState(new State("Empty", 0));
-        solutionTree.clear();
-        solutionTree.addNode(schedule.toString(), 0);
-        appendChildNodes(solutionTree, digraph, digraph.getNode("Empty"), schedule);
-        return solutionTree;
+    public PartialSolution getRoot() {
+        return root;
     }
 
-    public static void appendChildNodes(SolutionTree solutionTree, final Digraph digraph, Node node, Schedule currentSchedule) {
-        List<Node> waitingTasks = currentSchedule.getWaitingTasks().stream().map(digraph::getNodeByValue).collect(Collectors.toList());
-        Schedule schedule = new Schedule(digraph, currentSchedule.toString());
-        waitingTasks.forEach(childNode -> {
-            List<Node> prerequisites = digraph.getAllParentNode(childNode);
-            boolean canExecute = prerequisites.stream().allMatch(
-                    x -> schedule.hasExecuted(x.getId())
-            );
-            if (canExecute) {
-                Schedule newSchedule = new Schedule(digraph, schedule);
-                newSchedule.addState(new State(childNode.getId(), 0));
-                solutionTree.addNode(newSchedule.toString(), 0);
-                solutionTree.addEdge(schedule.toString(), newSchedule.toString(), 0);
-                appendChildNodes(solutionTree, digraph, childNode, newSchedule);
+
+    /**
+     * Constructor of Solution Tree.
+     * @param graph diGraph of the Solution Tree.
+     * @param numOfProcessor The number of processors that Tasks to be scheduled on.
+     */
+    public SolutionTree(Digraph graph, int numOfProcessor) {
+        // create new digraph
+        super("SolutionTree");
+        this.graph = graph;
+        this.numOfProcessor = numOfProcessor;
+        //create the root node of solution tree(empty)
+        root = new PartialSolution(graph);
+        // initialise the root node of the solution tree graph.
+        addNode(root.getInfo(), 0);
+    }
+
+    /**
+     * method to print task schedule string of the solution tree for testing purpose.
+     */
+    public void printSolutionTree() {
+
+        Queue<String> queue = new LinkedList<>();
+        int count = 0;
+
+        queue.add(root.getInfo());
+
+        while (!queue.isEmpty()) {
+            String poll = queue.poll();
+            System.out.println(poll);
+            count++;
+            List<Node> children = getAllChildrenNode(getNodeByValue(poll));
+            for (int i = 0; i < children.size(); i++) {
+                queue.add(children.get(i).getId());
             }
-        });
+        }
+
+        System.out.println(count);
+        System.out.println(minStartingTime);
     }
 
-    public SolutionTree() {
-        super("solution tree");
+
+    // build the solutionTree From this PartialSolution
+    int minStartingTime = Integer.MAX_VALUE;
+
+    /**
+     * method to recursively build the solution tree
+     * @param prevPartialSolution previous PartialSolution immediately prior to the current PartialSolution
+     */
+    public void buildTree(PartialSolution prevPartialSolution) {
+        // base case.
+        if (prevPartialSolution.getNodesPath().size() == graph.getNodeCount()) {
+            Node node = prevPartialSolution.getNodesPath().get(prevPartialSolution.getNodesPath().size() - 1);
+            minStartingTime = (int) Math.min(minStartingTime, prevPartialSolution.getNodeStates().get(node).getStartingTime());
+            return;
+        }
+
+        List<Node> availableNextNodes = prevPartialSolution.getAvailableNextNodes();
+        // for every available next Tasks.
+        for (int i = 0; i < availableNextNodes.size(); i++) {
+            // for every processor
+            for (int j = 1; j <= numOfProcessor; j++) {
+                // create a new PartialSolution and recursively expand the next level of the solution graph
+                PartialSolution currentPartialSolution = new PartialSolution(prevPartialSolution, graph,
+                        availableNextNodes.get(i), j);
+                appendChildNodes(prevPartialSolution, currentPartialSolution);
+                buildTree(currentPartialSolution);
+            }
+        }
+    }
+
+    /**
+     * helper methods to append the children to the current solution tree digraph
+     * @param prev previous Partial solution
+     * @param current current Partial solution
+     */
+    private void appendChildNodes(PartialSolution prev, PartialSolution current) {
+        addNode(current.getInfo(), 0);
+        addEdge(prev.getInfo(), current.getInfo(), 0);
     }
 
 }
