@@ -52,4 +52,20 @@ public class SolutionTreeUnitTest {
         solutionTree.buildTree(solutionTree.getRoot());
         assertEquals(32, countSolutions(solutionTree));
     }
+
+    @Test
+    public void graph6ProcessorAmount1() {
+        Digraph digraph = loadGraph("g6");
+        SolutionTree solutionTree = new SolutionTree(digraph,1);
+        solutionTree.buildTree(solutionTree.getRoot());
+        assertEquals(1, countSolutions(solutionTree));
+    }
+
+    @Test
+    public void graph6ProcessorAmount2() {
+        Digraph digraph = loadGraph("g6");
+        SolutionTree solutionTree = new SolutionTree(digraph,2);
+        solutionTree.buildTree(solutionTree.getRoot());
+        assertEquals(8, countSolutions(solutionTree));
+    }
 }
