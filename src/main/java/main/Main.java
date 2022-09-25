@@ -13,7 +13,7 @@ public class Main {
 
     public static void main(String[] args) {
 //        InputLoader.print(graph, true);
-        Digraph digraph = InputLoader.loadDotFile("g7");
+        Digraph digraph = InputLoader.loadDotFile("g1");
 
 
 //        InputLoader.print(digraph, false);
@@ -32,19 +32,22 @@ public class Main {
 
 //        int numOfProcessors = 2;
 
-        SolutionTree solutionTree = new SolutionTree(digraph,2);
+        SolutionTree solutionTree = new SolutionTree(digraph,1);
 
         solutionTree.buildTree(solutionTree.getRoot());
 
-        solutionTree.printSolutionTree();
+//        solutionTree.printSolutionTree();
 
+        System.out.println(countLeaves(solutionTree));
+
+//        InputLoader.print(solutionTree, true);
 
     }
 
-    private int countSolutions(SolutionTree solutionTree) {
+    private static int countLeaves(Digraph digraph) {
         int count = 0;
-        for (Node node : solutionTree.getAllNodes()) {
-            if (node.getOutDegree() == 0) {
+        for (Node node : digraph.getAllNodes()) {
+            if (digraph.getOutDegree(node) == 0) {
                 count++;
             }
         }
