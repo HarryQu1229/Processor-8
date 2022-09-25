@@ -7,79 +7,98 @@ import java.util.List;
 import java.util.Queue;
 
 /**
- * Each node on a solution tree is a schedule string
+ * Bruteforce solution to build a solution tree, Each node on a solution tree is represented as a schedule string
  */
 public class SolutionTree extends Digraph {
 
-    private  Digraph digraph;
-    private  int numOfProcessor;
-    private  PartialSolution root;
+    private Digraph graph;
+    private int numOfProcessor;
+    private PartialSolution root;
 
 
-    public PartialSolution getRoot(){
+    public PartialSolution getRoot() {
         return root;
     }
 
 
-    public SolutionTree(Digraph digraph,int numOfProcessor){
+    /**
+     * Constructor of Solution Tree.
+     * @param graph diGraph of the Solution Tree.
+     * @param numOfProcessor The number of processors that Tasks to be scheduled on.
+     */
+    public SolutionTree(Digraph graph, int numOfProcessor) {
+        // create new digraph
         super("SolutionTree");
-        this.digraph = digraph;
+        this.graph = graph;
         this.numOfProcessor = numOfProcessor;
         //create the root node of solution tree(empty)
-        root = new PartialSolution(digraph);
-        addNode(root.getInfo(),0);
+        root = new PartialSolution(graph);
+        // initialise the root node of the solution tree graph.
+        addNode(root.getInfo(), 0);
     }
 
+    /**
+     * method to print task schedule string of the solution tree for testing purpose.
+     */
     public void printSolutionTree() {
 
         Queue<String> queue = new LinkedList<>();
-        int count =0;
+        int count = 0;
 
         queue.add(root.getInfo());
 
-        while(!queue.isEmpty()){
+        while (!queue.isEmpty()) {
             String poll = queue.poll();
             System.out.println(poll);
             count++;
-
-
             List<Node> children = getAllChildrenNode(getNodeByValue(poll));
-
-            for(int i=0;i<children.size();i++){
+            for (int i = 0; i < children.size(); i++) {
                 queue.add(children.get(i).getId());
             }
         }
 
         System.out.println(count);
-        System.out.println(small);
+        System.out.println(minStartingTime);
     }
 
 
     // build the solutionTree From this PartialSolution
-    int small = Integer.MAX_VALUE;
-    public void buildTree(PartialSolution prevPartialSolution){
-        if (prevPartialSolution.getNodesPath().size() == digraph.getNodeCount()) {
-            Node node =  prevPartialSolution.getNodesPath().get(prevPartialSolution.getNodesPath().size()-1);
-            small = (int)Math.min(small,prevPartialSolution.getNodeStates().get(node).getStartingTime());
+    int minStartingTime = Integer.MAX_VALUE;
+
+    /**
+     * method to recursively build the solution tree
+     * @param prevPartialSolution previous PartialSolution immediately prior to the current PartialSolution
+     */
+    public void buildTree(PartialSolution prevPartialSolution) {
+        // base case.
+        if (prevPartialSolution.getNodesPath().size() == graph.getNodeCount()) {
+            Node node = prevPartialSolution.getNodesPath().get(prevPartialSolution.getNodesPath().size() - 1);
+            minStartingTime = (int) Math.min(minStartingTime, prevPartialSolution.getNodeStates().get(node).getStartingTime());
             return;
         }
 
         List<Node> availableNextNodes = prevPartialSolution.getAvailableNextNodes();
-
-
+        // for every available next Tasks.
         for (int i = 0; i < availableNextNodes.size(); i++) {
+            // for every processor
             for (int j = 1; j <= numOfProcessor; j++) {
-                PartialSolution currentPartialSolution = new PartialSolution(prevPartialSolution,digraph,
-                        availableNextNodes.get(i),j);
-                appendChildNodes(prevPartialSolution,currentPartialSolution);
+                // create a new PartialSolution and recursively expand the next level of the solution graph
+                PartialSolution currentPartialSolution = new PartialSolution(prevPartialSolution, graph,
+                        availableNextNodes.get(i), j);
+                appendChildNodes(prevPartialSolution, currentPartialSolution);
                 buildTree(currentPartialSolution);
             }
         }
     }
 
-    public void appendChildNodes(PartialSolution prev, PartialSolution current) {
-        addNode(current.getInfo(),0);
-        this.addEdge(prev.getInfo(),current.getInfo(),0);
+    /**
+     * helper methods to append the children to the current solution tree digraph
+     * @param prev previous Partial solution
+     * @param current current Partial solution
+     */
+    private void appendChildNodes(PartialSolution prev, PartialSolution current) {
+        addNode(current.getInfo(), 0);
+        addEdge(prev.getInfo(), current.getInfo(), 0);
     }
 
 }
