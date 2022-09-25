@@ -2,31 +2,31 @@ package solution;
 
 public class NodeProperties {
 
-    private int process_no;
-    private int start_time;
-    private int inDegree_no;
+    private int processorId;
+    private int startingTime;
+    private int inDegree;
 
-    public int getProcess_no() {
-        return process_no;
+    public int getProcessorId() {
+        return processorId;
     }
 
-    public void setProcess_no(int process_no) {
-        this.process_no = process_no;
+    public void setProcessorId(int processorId) {
+        this.processorId = processorId;
     }
 
-    public int getStart_time() {
-        return start_time;
+    public int getStartingTime() {
+        return startingTime;
     }
 
-    public void setStart_time(int start_time) {
-        this.start_time = start_time;
+    public void setStartingTime(int startingTime) {
+        this.startingTime = startingTime;
     }
 
-    public int getInDegree_no() {
-        return inDegree_no;
+    public int getInDegree() {
+        return inDegree;
     }
 
-    public void setInDegree_no(int inDegree_no) {
-        this.inDegree_no = inDegree_no;
+    public void setInDegree(int inDegree) {
+        this.inDegree = inDegree;
     }
 }

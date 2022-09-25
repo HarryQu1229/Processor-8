@@ -1,13 +1,10 @@
 package solution;
 
-import io.InputLoader;
 import org.graphstream.graph.Node;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.PriorityQueue;
 import java.util.Queue;
-import java.util.stream.Collectors;
 
 /**
  * Each node on a solution tree is a schedule string
@@ -63,7 +60,7 @@ public class SolutionTree extends Digraph {
     public void buildTree(PartialSolution prevPartialSolution){
         if (prevPartialSolution.getNodesPath().size() == digraph.getNodeCount()) {
             Node node =  prevPartialSolution.getNodesPath().get(prevPartialSolution.getNodesPath().size()-1);
-            small = (int)Math.min(small,prevPartialSolution.getNodeStates().get(node).getStart_time());
+            small = (int)Math.min(small,prevPartialSolution.getNodeStates().get(node).getStartingTime());
             return;
         }
 
