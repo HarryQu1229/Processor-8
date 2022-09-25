@@ -54,12 +54,16 @@ public class SolutionTree extends Digraph {
         }
 
         System.out.println(count);
+        System.out.println(small);
     }
 
 
     // build the solutionTree From this PartialSolution
+    int small = Integer.MAX_VALUE;
     public void buildTree(PartialSolution prevPartialSolution){
         if (prevPartialSolution.getNodesPath().size() == digraph.getNodeCount()) {
+            Node node =  prevPartialSolution.getNodesPath().get(prevPartialSolution.getNodesPath().size()-1);
+            small = (int)Math.min(small,prevPartialSolution.getNodeStates().get(node).getStart_time());
             return;
         }
 

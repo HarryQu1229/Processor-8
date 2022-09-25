@@ -13,7 +13,7 @@ public class Main {
 
     public static void main(String[] args) {
 //        InputLoader.print(graph, true);
-        Digraph digraph = InputLoader.loadDotFile("g1");
+        Digraph digraph = InputLoader.loadDotFile("g7");
 
 
 //        InputLoader.print(digraph, false);
@@ -38,13 +38,6 @@ public class Main {
 
         solutionTree.printSolutionTree();
 
-
-//        HashSet<Node> freeNodes = new HashSet<>();
-//        freeNodes.addAll(emptySchedule.getAvailableNextNodes());
-//        //System.out.println(freeNodes);
-//
-//        PartialSolution prevPartial = emptySchedule;
-//
 
     }
 
