@@ -8,6 +8,7 @@ import java.util.List;
 
 public class PartialSolution {
 
+
     private static int PROCESSOR_NO = 0;
     private static int STARTING_TIME = 1;
     private static int INDEGREE_NO = 2;
@@ -112,5 +113,21 @@ public class PartialSolution {
 
     public double getCostFunction() {
         return costFunction;
+    }
+
+    public String getInfo(){
+
+        StringBuffer sb = new StringBuffer();
+
+        for(int i=0;i<nodesPath.size();i++){
+            Node node = nodesPath.get(i);
+            sb.append("(" + node.getId()+",");
+            sb.append(nodeStates.get(node).get(PROCESSOR_NO)+",");
+            sb.append(nodeStates.get(node).get(STARTING_TIME)+")");
+            sb.append(";");
+        }
+
+        return sb.toString();
+
     }
 }

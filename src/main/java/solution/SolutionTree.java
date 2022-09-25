@@ -3,7 +3,10 @@ package solution;
 import io.InputLoader;
 import org.graphstream.graph.Node;
 
+import java.util.LinkedList;
 import java.util.List;
+import java.util.PriorityQueue;
+import java.util.Queue;
 import java.util.stream.Collectors;
 
 /**
@@ -11,44 +14,71 @@ import java.util.stream.Collectors;
  */
 public class SolutionTree extends Digraph {
 
-    public static SolutionTree getSolutionTree(Digraph digraph, int processCount) {
+    private  Digraph digraph;
+    private  int numOfProcessor;
+    private  PartialSolution root;
 
-        List<Node> startingNodes = digraph.getAllStartNode();
-        digraph.addNode("Empty");
-        digraph.getNode("Empty").setAttribute("Weight", 0);
-        startingNodes.forEach(startingNode -> {
-            digraph.addEdge("Empty", startingNode.getId(), 0);
-        });
 
-        SolutionTree solutionTree = new SolutionTree();
-        Schedule schedule = new Schedule(digraph);
-        schedule.addState(new State("Empty", 0));
-        solutionTree.clear();
-        solutionTree.addNode(schedule.toString(), 0);
-        appendChildNodes(solutionTree, digraph, digraph.getNode("Empty"), schedule);
-        return solutionTree;
+    public PartialSolution getRoot(){
+        return root;
     }
 
-    public static void appendChildNodes(SolutionTree solutionTree, final Digraph digraph, Node node, Schedule currentSchedule) {
-        List<Node> waitingTasks = currentSchedule.getWaitingTasks().stream().map(digraph::getNodeByValue).collect(Collectors.toList());
-        Schedule schedule = new Schedule(digraph, currentSchedule.toString());
-        waitingTasks.forEach(childNode -> {
-            List<Node> prerequisites = digraph.getAllParentNode(childNode);
-            boolean canExecute = prerequisites.stream().allMatch(
-                    x -> schedule.hasExecuted(x.getId())
-            );
-            if (canExecute) {
-                Schedule newSchedule = new Schedule(digraph, schedule);
-                newSchedule.addState(new State(childNode.getId(), 0));
-                solutionTree.addNode(newSchedule.toString(), 0);
-                solutionTree.addEdge(schedule.toString(), newSchedule.toString(), 0);
-                appendChildNodes(solutionTree, digraph, childNode, newSchedule);
+
+    public SolutionTree(Digraph digraph,int numOfProcessor){
+        super("SolutionTree");
+        this.digraph = digraph;
+        this.numOfProcessor = numOfProcessor;
+        //create the root node of solution tree(empty)
+        root = new PartialSolution(digraph);
+        addNode(root.getInfo(),0);
+    }
+
+    public void printSolutionTree() {
+
+        Queue<String> queue = new LinkedList<>();
+        int count =0;
+
+        queue.add(root.getInfo());
+
+        while(!queue.isEmpty()){
+            String poll = queue.poll();
+            System.out.println(poll);
+            count++;
+
+
+            List<Node> children = getAllChildrenNode(getNodeByValue(poll));
+
+            for(int i=0;i<children.size();i++){
+                queue.add(children.get(i).getId());
             }
-        });
+        }
+
+        System.out.println(count);
     }
 
-    public SolutionTree() {
-        super("solution tree");
+
+    // build the solutionTree From this PartialSolution
+    public void buildTree(PartialSolution prevPartialSolution){
+        if (prevPartialSolution.getNodesPath().size() == digraph.getNodeCount()) {
+            return;
+        }
+
+        List<Node> availableNextNodes = prevPartialSolution.getAvailableNextNodes();
+
+
+        for (int i = 0; i < availableNextNodes.size(); i++) {
+            for (int j = 1; j <= numOfProcessor; j++) {
+                PartialSolution currentPartialSolution = new PartialSolution(prevPartialSolution,digraph,
+                        availableNextNodes.get(i),j);
+                appendChildNodes(prevPartialSolution,currentPartialSolution);
+                buildTree(currentPartialSolution);
+            }
+        }
+    }
+
+    public void appendChildNodes(PartialSolution prev, PartialSolution current) {
+        addNode(current.getInfo(),0);
+        this.addEdge(prev.getInfo(),current.getInfo(),0);
     }
 
 }
