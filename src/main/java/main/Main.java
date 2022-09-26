@@ -3,11 +3,7 @@ package main;
 import io.InputLoader;
 import org.graphstream.graph.Node;
 import solution.Digraph;
-import solution.PartialSolution;
 import solution.SolutionTree;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class Main {
 
@@ -33,18 +29,18 @@ public class Main {
 //        int numOfProcessors = 2;
 
         SolutionTree solutionTree = new SolutionTree(digraph,2);
+        solutionTree.build(solutionTree.getRoot());
 
-        solutionTree.buildTree(solutionTree.getRoot());
+//        solutionTree.printSolutionTree();
 
-        solutionTree.printSolutionTree();
-
+//        InputLoader.print(solutionTree, true);
 
     }
 
-    private int countSolutions(SolutionTree solutionTree) {
+    private static int countLeaves(Digraph digraph) {
         int count = 0;
-        for (Node node : solutionTree.getAllNodes()) {
-            if (node.getOutDegree() == 0) {
+        for (Node node : digraph.getAllNodes()) {
+            if (digraph.getOutDegree(node) == 0) {
                 count++;
             }
         }

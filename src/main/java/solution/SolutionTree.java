@@ -1,10 +1,9 @@
 package solution;
 
+import org.graphstream.graph.Edge;
 import org.graphstream.graph.Node;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
 /**
  * Bruteforce solution to build a solution tree, Each node on a solution tree is represented as a schedule string
@@ -40,7 +39,7 @@ public class SolutionTree extends Digraph {
     /**
      * method to print task schedule string of the solution tree for testing purpose.
      */
-    public void printSolutionTree() {
+    public void print() {
 
         Queue<String> queue = new LinkedList<>();
         int count = 0;
@@ -69,7 +68,7 @@ public class SolutionTree extends Digraph {
      * method to recursively build the solution tree
      * @param prevPartialSolution previous PartialSolution immediately prior to the current PartialSolution
      */
-    public void buildTree(PartialSolution prevPartialSolution) {
+    public void build(PartialSolution prevPartialSolution) {
         // base case.
         if (prevPartialSolution.getNodesPath().size() == graph.getNodeCount()) {
             Node node = prevPartialSolution.getNodesPath().get(prevPartialSolution.getNodesPath().size() - 1);
@@ -79,14 +78,14 @@ public class SolutionTree extends Digraph {
 
         List<Node> availableNextNodes = prevPartialSolution.getAvailableNextNodes();
         // for every available next Tasks.
-        for (int i = 0; i < availableNextNodes.size(); i++) {
+        for (Node availableNextNode : availableNextNodes) {
             // for every processor
             for (int j = 1; j <= numOfProcessor; j++) {
                 // create a new PartialSolution and recursively expand the next level of the solution graph
                 PartialSolution currentPartialSolution = new PartialSolution(prevPartialSolution, graph,
-                        availableNextNodes.get(i), j);
+                        availableNextNode, j);
                 appendChildNodes(prevPartialSolution, currentPartialSolution);
-                buildTree(currentPartialSolution);
+                build(currentPartialSolution);
             }
         }
     }
