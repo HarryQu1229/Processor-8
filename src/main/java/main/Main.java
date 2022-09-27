@@ -9,7 +9,7 @@ public class Main {
 
     public static void main(String[] args) {
 //        InputLoader.print(graph, true);
-        Digraph digraph = InputLoader.loadDotFile("g7");
+        Digraph digraph = InputLoader.loadDotFile("g11");
 
 
 //        InputLoader.print(digraph, false);
@@ -31,11 +31,12 @@ public class Main {
         SolutionTree solutionTree = new SolutionTree(digraph,2);
         solutionTree.build(solutionTree.getRoot());
 
-//        solutionTree.printSolutionTree();
+        solutionTree.print();
 
 //        InputLoader.print(solutionTree, true);
 
     }
+
 
     private static int countLeaves(Digraph digraph) {
         int count = 0;

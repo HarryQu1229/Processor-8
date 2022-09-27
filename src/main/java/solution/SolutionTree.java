@@ -71,8 +71,13 @@ public class SolutionTree extends Digraph {
     public void build(PartialSolution prevPartialSolution) {
         // base case.
         if (prevPartialSolution.getNodesPath().size() == graph.getNodeCount()) {
-            Node node = prevPartialSolution.getNodesPath().get(prevPartialSolution.getNodesPath().size() - 1);
-            minStartingTime = (int) Math.min(minStartingTime, prevPartialSolution.getNodeStates().get(node).getStartingTime());
+            int FinalFinishTime  = 0;
+            List<Node> nodes = prevPartialSolution.getNodesPath();
+            for(int i=0;i<nodes.size();i++){
+                FinalFinishTime = (int) Math.max(FinalFinishTime,prevPartialSolution.getNodeStates().get(nodes.get(i)).getStartingTime()+graph.getNodeWeight(nodes.get(i).getId()));
+            }
+
+            minStartingTime = Math.min(minStartingTime,FinalFinishTime);
             return;
         }
 
