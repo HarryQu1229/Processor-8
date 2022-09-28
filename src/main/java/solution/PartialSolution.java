@@ -12,6 +12,8 @@ public class PartialSolution {
     private List<Node> nodesPath;
     private double costFunction;
 
+    private int idleTime;
+
     /**
      * Constructor for any subsequent partial solution on the solution tree except the root of the solution tree.
      * @param prevPartial previous PartialSolution immediately prior to the current PartialSolution
@@ -19,12 +21,12 @@ public class PartialSolution {
      * @param currentNode The current Task(node) that is going to be scheduled
      * @param processorId Which Processor is the current Task(node) is going to be scheduled on
      */
-    public PartialSolution(PartialSolution prevPartial, Digraph graph, Node currentNode, int processorId) {
+    public PartialSolution(PartialSolution prevPartial, Digraph graph, Node currentNode, int processorId,int numOfProcessor) {
 
         initializeFromPrevPartialSolution(prevPartial);
         scheduleTask(graph, currentNode, processorId);
         updateCurrentPartialSolutionStatus(graph, currentNode, processorId);
-
+        costFunction = getCostFunction(graph,currentNode,numOfProcessor);
     }
 
     /**
@@ -60,6 +62,17 @@ public class PartialSolution {
         return costFunction;
     }
 
+    public void setCostFunction(double costFunction){
+        this.costFunction = costFunction;
+    }
+
+    @Override
+    public String toString() {
+        return "PartialSolution{" +
+                "costFunction=" + costFunction +
+                '}';
+    }
+
     /**
      * @return a String representation of the current partial solution status on the solution tree.
      *           i.e.  "(nodeId,processorId,startTime);"
@@ -74,6 +87,8 @@ public class PartialSolution {
             sb.append(nodeStates.get(node).getStartingTime()+")");
             sb.append(";");
         }
+
+//        sb.append(getCostFunction());
         return sb.toString();
     }
 
@@ -107,6 +122,7 @@ public class PartialSolution {
     private void initializeRootPartialSolution(Digraph graph){
         this.nodesPath = new ArrayList<>();
         this.nodeStates = new LinkedHashMap<>();
+        idleTime = 0;
 
         // initialize status for all nodes.
         for (Node node : graph.getAllNodes()) {
@@ -157,6 +173,7 @@ public class PartialSolution {
             }
             // set the starting time of the current node.
             nodeStates.get(currentNode).setStartingTime(Math.max(startTime, finishTimePrev));
+            idleTime += nodeStates.get(currentNode).getStartingTime()- finishTimePrev;
         }
     }
 
@@ -182,6 +199,17 @@ public class PartialSolution {
             int currentInDegree = nodeStates.get(childNode).getInDegree();
             nodeStates.get(childNode).setInDegree(currentInDegree - 1);
         }
+    }
+
+
+    public double getCostFunction(Digraph graph,Node currentNode,int numOfProcessor){
+        double startTime = nodeStates.get(currentNode).getStartingTime();
+        double bottomLevel = 0;
+        for(Node node: nodesPath) {
+            bottomLevel = Math.max(bottomLevel, nodeStates.get(node).getStartingTime()+graph.getBottomLevel(node));
+        }
+        double loadBalance = (graph.getAllNodeWeight() + idleTime) / (double)numOfProcessor;
+        return startTime+Math.max(bottomLevel,loadBalance);
     }
 
 

@@ -2,14 +2,18 @@ package main;
 
 import io.InputLoader;
 import org.graphstream.graph.Node;
+import solution.AStar;
 import solution.Digraph;
+import solution.PartialSolution;
 import solution.SolutionTree;
+
+import java.util.PriorityQueue;
 
 public class Main {
 
     public static void main(String[] args) {
 //        InputLoader.print(graph, true);
-        Digraph digraph = InputLoader.loadDotFile("g3");
+        Digraph digraph = InputLoader.loadDotFile("g9");
 
 
 //        InputLoader.print(digraph, false);
@@ -28,15 +32,28 @@ public class Main {
 
 //        int numOfProcessors = 2;
 
-        SolutionTree solutionTree = new SolutionTree(digraph,4);
-        solutionTree.build(solutionTree.getRoot());
+//        SolutionTree solutionTree = new SolutionTree(digraph,2);
+//        solutionTree.build(solutionTree.getRoot());
+//        solutionTree.print();
 
-        solutionTree.print();
+
+
+        AStar aStar = new AStar(digraph);
+        String s = aStar.buildTree(2);
+
+        System.out.println(s);
+
+//        PriorityQueue<PartialSolution> test = aStar.test();
+//        while(!test.isEmpty()){
+//            System.out.println(test.poll());
+//        }
+
+
+//        System.out.println(digraph.getAllNodeWeight());
+
 
 //        InputLoader.print(solutionTree, true);
-
     }
-
 
     private static int countLeaves(Digraph digraph) {
         int count = 0;

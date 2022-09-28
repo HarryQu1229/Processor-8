@@ -189,4 +189,12 @@ public class Digraph extends SingleGraph {
         }
         return count;
     }
+
+    public int getAllNodeWeight(){
+        int allNodeWeight = 0;
+        for(Node node:getAllNodes()){
+            allNodeWeight += getNodeWeight(node.getId());
+        }
+        return allNodeWeight;
+    }
 }
