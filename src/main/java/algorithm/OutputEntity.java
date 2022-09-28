@@ -1,29 +1,25 @@
 package algorithm;
 
-public class OutputEntity {
-    String source;
-    String target;
-    int weight;
-    int processor;
-    int start;
+import org.graphstream.graph.Node;
 
-    public OutputEntity(String source, String target, int weight, int processor, int start) {
-        this.source = source;
-        this.target = target;
+public class OutputEntity {
+    private Node task;
+    private double weight;
+    private int processor;
+    private double start;
+
+    public OutputEntity(Node source, double weight, int processor, double start) {
+        this.task = source;
         this.weight = weight;
         this.processor = processor;
         this.start = start;
     }
 
-    public String getSource() {
-        return source;
+    public Node getTask() {
+        return task;
     }
 
-    public String getTarget() {
-        return target;
-    }
-
-    public int getWeight() {
+    public double getWeight() {
         return weight;
     }
 
@@ -31,15 +27,22 @@ public class OutputEntity {
         return processor;
     }
 
-    public int getStart() {
+    public double getStart() {
         return start;
+    }
+
+    public void setProcessor(int processor) {
+        this.processor = processor;
+    }
+
+    public void setStart(int start) {
+        this.start = start;
     }
 
     @Override
     public String toString() {
         return "OutputEntity{" +
-                "source='" + source + '\'' +
-                ", target='" + target + '\'' +
+                "task='" + task + '\'' +
                 ", weight=" + weight +
                 ", processor=" + processor +
                 ", start=" + start +
@@ -47,6 +50,6 @@ public class OutputEntity {
     }
 
     public String toDotString() {
-        return source + " -> " + target + " [Weight=" + weight + ", Start=" + start + ", Processor=" + processor + "]";
+        return task + " [Weight=" + weight + ", Start=" + start + ", Processor=" + processor + "]";
     }
 }
