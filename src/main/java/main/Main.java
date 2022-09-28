@@ -13,7 +13,7 @@ public class Main {
 
     public static void main(String[] args) {
 //        InputLoader.print(graph, true);
-        Digraph digraph = InputLoader.loadDotFile("g9");
+        Digraph digraph = InputLoader.loadDotFile("g10");
 
 
 //        InputLoader.print(digraph, false);
@@ -32,17 +32,20 @@ public class Main {
 
 //        int numOfProcessors = 2;
 
-        SolutionTree solutionTree = new SolutionTree(digraph,2);
-        solutionTree.build(solutionTree.getRoot());
-        solutionTree.print();
+//        SolutionTree solutionTree = new SolutionTree(digraph,2);
+//        solutionTree.build(solutionTree.getRoot());
+//        solutionTree.print();
 
+        //System.out.println(digraph.getCriticalPath());
 
 
         AStar aStar = new AStar(digraph);
-        String s = aStar.buildTree(2);
+        String s = aStar.buildTree(4);
 
         System.out.println(s);
 
+//        System.out.println(digraph.getCriticalPath());
+//        System.out.println(digraph.getBottomLevel(digraph.getNode("1")));
 //        PriorityQueue<PartialSolution> test = aStar.test();
 //        while(!test.isEmpty()){
 //            System.out.println(test.poll());

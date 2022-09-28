@@ -11,6 +11,11 @@ public class AStar {
           return (int)(x1.getCostFunction() - x2.getCostFunction());
     });
 
+    PriorityQueue<PartialSolution> leafNodeQueue = new PriorityQueue<>((x1,x2)->{
+        return (int)(x1.getNodeStates().get(x1.getNodesPath().get(x1.getNodesPath().size()-1)).getStartingTime()
+                - x2.getNodeStates().get(x1.getNodesPath().get(x1.getNodesPath().size()-1)).getStartingTime());
+    });
+
     public PriorityQueue<PartialSolution> test(){
         PartialSolution p1 = new PartialSolution(graph);
         PartialSolution p2 = new PartialSolution(graph);
@@ -61,7 +66,13 @@ public class AStar {
                     for(int i=1;i<=numOfProcessor;i++){
                         PartialSolution current = new PartialSolution(prev,graph,node,i,numOfProcessor);
                         if(current.getNodesPath().size() == graph.getNodeCount()){
-                            return current.getInfo();
+                            leafNodeQueue.add(current);
+                            if (i == numOfProcessor){
+                                return leafNodeQueue.poll().getInfo();
+                            } else {
+                                continue;
+                            }
+//                            return current.getInfo();
                         }else{
                             solutionQueue.add(current);
                         }

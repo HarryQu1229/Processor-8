@@ -26,7 +26,7 @@ public class PartialSolution {
         initializeFromPrevPartialSolution(prevPartial);
         scheduleTask(graph, currentNode, processorId);
         updateCurrentPartialSolutionStatus(graph, currentNode, processorId);
-        costFunction = getCostFunction(graph,currentNode,processorId,numOfProcessor);
+        costFunction = calculateCostFunction(graph,currentNode,processorId,numOfProcessor);
     }
 
     /**
@@ -87,8 +87,9 @@ public class PartialSolution {
             sb.append(nodeStates.get(node).getStartingTime()+")");
             sb.append(";");
         }
+        sb.append(" Finishing Time: ");
+        sb.append(getEndScheduleTime());
 
-        sb.append(idleTime);
         return sb.toString();
     }
 
@@ -204,7 +205,7 @@ public class PartialSolution {
     }
 
 
-    public double getCostFunction(Digraph graph,Node currentNode,int processorId, int numOfProcessor){
+    public double calculateCostFunction(Digraph graph, Node currentNode, int processorId, int numOfProcessor){
 
         // find idle time ----------------------------------------------------
         Node prevNodeSameProcessor = null;
@@ -231,19 +232,46 @@ public class PartialSolution {
         }
         //----------------------------------------------------------------
 
-
         double startTime = nodeStates.get(currentNode).getStartingTime();
         double bottomLevel = 0;
+
         for(Node node: nodesPath) {
-            bottomLevel = Math.max(bottomLevel, nodeStates.get(node).getStartingTime()+graph.getBottomLevel(node));
+            if (bottomLevel < nodeStates.get(node).getStartingTime() + graph.getBottomLevel(node)){
+                bottomLevel = nodeStates.get(node).getStartingTime() + graph.getBottomLevel(node);
+            }
+            //bottomLevel = Math.max(bottomLevel, nodeStates.get(node).getStartingTime()+graph.getBottomLevel(node));
         }
         double loadBalance = (graph.getAllNodeWeight() + idleTime) / (double)numOfProcessor;
-        return startTime+Math.max(bottomLevel,loadBalance);
+        return  Math.max(bottomLevel,startTime+loadBalance);
+
     }
 
 
     public int getIdleTime() {
         return idleTime;
+    }
+
+    private int getEndScheduleTime(){
+        int finishingTime = 0;
+        Node lastNode = null;
+        for (Node node: nodesPath){
+            int weight = (int) Double.parseDouble(node.getGraph().getNode(node.getId()).getAttribute("Weight").toString());
+            int startingTime = nodeStates.get(node).getStartingTime();
+            if (startingTime + weight > finishingTime) {
+               finishingTime = startingTime + weight;
+               lastNode = node;
+            }
+        }
+        return finishingTime;
+
+//        StringBuffer sb = new StringBuffer();
+//        sb.append("  Finish Time: ");
+//        sb.append(finishingTime);
+//        sb.append("  Last Node ID: ");
+//        sb.append(lastNode.getId());
+//        return sb.toString();
+
+
     }
 
 }
