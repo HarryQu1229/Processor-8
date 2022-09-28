@@ -26,7 +26,7 @@ public class PartialSolution {
         initializeFromPrevPartialSolution(prevPartial);
         scheduleTask(graph, currentNode, processorId);
         updateCurrentPartialSolutionStatus(graph, currentNode, processorId);
-        costFunction = getCostFunction(graph,currentNode,numOfProcessor);
+        costFunction = getCostFunction(graph,currentNode,processorId,numOfProcessor);
     }
 
     /**
@@ -88,7 +88,7 @@ public class PartialSolution {
             sb.append(";");
         }
 
-//        sb.append(getCostFunction());
+        sb.append(idleTime);
         return sb.toString();
     }
 
@@ -113,6 +113,8 @@ public class PartialSolution {
 
             nodeStates.put(node, nodeProperties);
         }
+
+        idleTime = prevPartial.getIdleTime();
     }
 
     /**
@@ -173,7 +175,7 @@ public class PartialSolution {
             }
             // set the starting time of the current node.
             nodeStates.get(currentNode).setStartingTime(Math.max(startTime, finishTimePrev));
-            idleTime += nodeStates.get(currentNode).getStartingTime()- finishTimePrev;
+
         }
     }
 
@@ -202,7 +204,34 @@ public class PartialSolution {
     }
 
 
-    public double getCostFunction(Digraph graph,Node currentNode,int numOfProcessor){
+    public double getCostFunction(Digraph graph,Node currentNode,int processorId, int numOfProcessor){
+
+        // find idle time ----------------------------------------------------
+        Node prevNodeSameProcessor = null;
+        int startTimeLatest = 0;
+
+        if (nodesPath.size() > 1) {
+            for (int i = nodesPath.size() - 2; i>= 0; i--){
+                if (nodeStates.get(nodesPath.get(i)).getProcessorId() == processorId && !nodesPath.get(i).getId().equals(currentNode.getId())){
+                    startTimeLatest = nodeStates.get(nodesPath.get(i)).getStartingTime();
+                    prevNodeSameProcessor = nodesPath.get(i);
+                    break;
+                }
+            }
+        }
+
+        if (prevNodeSameProcessor == null){
+            if(nodeStates.get(currentNode).getStartingTime() > 0){
+                idleTime += nodeStates.get(currentNode).getStartingTime();
+            } else {
+                idleTime += 0;
+            }
+        } else {
+            idleTime += nodeStates.get(currentNode).getStartingTime() - (startTimeLatest + graph.getNodeWeight(prevNodeSameProcessor.getId()));
+        }
+        //----------------------------------------------------------------
+
+
         double startTime = nodeStates.get(currentNode).getStartingTime();
         double bottomLevel = 0;
         for(Node node: nodesPath) {
@@ -212,5 +241,9 @@ public class PartialSolution {
         return startTime+Math.max(bottomLevel,loadBalance);
     }
 
+
+    public int getIdleTime() {
+        return idleTime;
+    }
 
 }

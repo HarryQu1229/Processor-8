@@ -32,9 +32,9 @@ public class Main {
 
 //        int numOfProcessors = 2;
 
-//        SolutionTree solutionTree = new SolutionTree(digraph,2);
-//        solutionTree.build(solutionTree.getRoot());
-//        solutionTree.print();
+        SolutionTree solutionTree = new SolutionTree(digraph,2);
+        solutionTree.build(solutionTree.getRoot());
+        solutionTree.print();
 
 
 
