@@ -85,13 +85,21 @@ public class SolutionTree extends Digraph {
         // for every available next Tasks.
         for (Node availableNextNode : availableNextNodes) {
             // for every processor
-            for (int j = 1; j <= numOfProcessor; j++) {
-                // create a new PartialSolution and recursively expand the next level of the solution graph
+            if(prevPartialSolution.getNodesPath().size()==0){
                 PartialSolution currentPartialSolution = new PartialSolution(prevPartialSolution, graph,
-                        availableNextNode, j);
+                        availableNextNode, 1);
                 appendChildNodes(prevPartialSolution, currentPartialSolution);
                 build(currentPartialSolution);
+            }else{
+                for (int j = 1; j <= numOfProcessor; j++) {
+                    // create a new PartialSolution and recursively expand the next level of the solution graph
+                    PartialSolution currentPartialSolution = new PartialSolution(prevPartialSolution, graph,
+                            availableNextNode, j);
+                    appendChildNodes(prevPartialSolution, currentPartialSolution);
+                    build(currentPartialSolution);
+                }
             }
+
         }
     }
 

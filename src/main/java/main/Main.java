@@ -9,7 +9,7 @@ public class Main {
 
     public static void main(String[] args) {
 //        InputLoader.print(graph, true);
-        Digraph digraph = InputLoader.loadDotFile("g11");
+        Digraph digraph = InputLoader.loadDotFile("g3");
 
 
 //        InputLoader.print(digraph, false);
@@ -28,7 +28,7 @@ public class Main {
 
 //        int numOfProcessors = 2;
 
-        SolutionTree solutionTree = new SolutionTree(digraph,2);
+        SolutionTree solutionTree = new SolutionTree(digraph,4);
         solutionTree.build(solutionTree.getRoot());
 
         solutionTree.print();
