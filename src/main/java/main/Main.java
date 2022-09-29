@@ -1,16 +1,20 @@
 package main;
 
 import algorithm.BranchAndBoundAlgorithm;
+import algorithm.NodeInfo;
 import io.InputLoader;
 import org.graphstream.graph.Node;
 import solution.Digraph;
 import solution.SolutionTree;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Main {
 
     public static void main(String[] args) {
 //        InputLoader.print(graph, true);
-        Digraph digraph = InputLoader.loadDotFile("temp");
+        Digraph digraph = InputLoader.loadDotFile("g11");
 
 
 //        InputLoader.print(digraph, false);
@@ -36,7 +40,18 @@ public class Main {
 
 //        InputLoader.print(solutionTree, true);
         long startTime = System.nanoTime();
-        BranchAndBoundAlgorithm.solve(digraph, 4);  
+
+        // for each node initialise its NodeInfo
+        Map<Node, NodeInfo> nodeInfo = new HashMap<>();
+        int nodeSize = 0;
+        int sum = 0;
+        for (Node node : digraph) {
+            nodeInfo.put(node, new NodeInfo(node.getId(), digraph.getNodeWeight(node.getId()).intValue(), node.getInDegree()));
+            nodeSize++;
+            sum += digraph.getNodeWeight(node.getId()).intValue();
+        }
+
+        BranchAndBoundAlgorithm.solve(digraph, 4,nodeInfo,nodeSize,sum);
 
         long endTime = System.nanoTime();
         long duration = (endTime - startTime)/1000000;
