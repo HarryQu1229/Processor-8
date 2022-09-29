@@ -4,9 +4,7 @@ import org.graphstream.graph.Edge;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.SingleGraph;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Iterator;
+import java.util.*;
 
 public class Digraph extends SingleGraph {
 
@@ -190,6 +188,10 @@ public class Digraph extends SingleGraph {
         return count;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getAllNodeWeight(){
         int allNodeWeight = 0;
         for(Node node:getAllNodes()){

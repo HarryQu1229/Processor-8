@@ -49,12 +49,9 @@ public class AStar {
                             leafNodeQueue.offer(current);
                             if (i == numOfProcessor){
                                 return leafNodeQueue.poll().getInfo();
-                            } else {
-                                continue;
                             }
-//                           return current.getInfo();
                         }else{
-                            solutionQueue.add(current);
+                            solutionQueue.offer(current);
                         }
                     }
                 }
@@ -65,3 +62,4 @@ public class AStar {
     }
 
 }
+
