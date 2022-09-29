@@ -4,16 +4,24 @@ import org.graphstream.graph.Edge;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.SingleGraph;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public class Digraph extends SingleGraph{
+
+    private Map<Node, Double> bottomLevels;
 
     public Digraph(String digraphId) {
         super(digraphId);
     }
 
+    /**
+     * helper method to initialises Digraph upon DOT file parsed.
+     */
+    public void initialize(){
+        bottomLevels = new HashMap<>();
+        initializeBottomLevels();
+
+    }
 
     /**
      * Get the `Node` object according to its value
@@ -171,18 +179,36 @@ public class Digraph extends SingleGraph{
     }
 
     /**
+     * helper method for initializing bottom levels.
+     */
+    private void initializeBottomLevels() {
+        for(Node node : getAllNodes()){
+            bottomLevels.put(node, calculateBottomLevel(node));
+        }
+    }
+
+    /**
+     * helper methods for calculating bottom levels.
+     * @param node
+     * @return double       bottom level of selected node.
+     */
+    private double calculateBottomLevel(Node node){
+        double result = getNodeWeightById(node.getId());
+        // recursively calculate bottom level.
+        for (Node children : getChildrenOfNode(node)) {
+            result = Math.max(result, getNodeWeightById(node.getId()) + calculateBottomLevel(children));
+        }
+        return result;
+    }
+
+    /**
      * get the bottom level of the node
      *
      * @param node the input node
      * @return the bottom level value of this input node in graph
      */
     public double getBottomLevel(Node node) {
-        double result = getNodeWeightById(node.getId());
-
-        for (Node children : getChildrenOfNode(node)) {
-            result = Math.max(result, getNodeWeightById(node.getId()) + getBottomLevel(children));
-        }
-        return result;
+        return bottomLevels.get(node);
     }
 
     /**

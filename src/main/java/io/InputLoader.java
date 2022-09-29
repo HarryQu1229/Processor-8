@@ -1,11 +1,8 @@
 package io;
 
-import org.graphstream.graph.*;
-import org.graphstream.graph.implementations.*;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
-import org.graphstream.graph.implementations.SingleGraph;
 import org.graphstream.stream.file.FileSource;
 import org.graphstream.stream.file.FileSourceDOT;
 import solution.Digraph;
@@ -29,6 +26,7 @@ public class InputLoader {
         fileSource.addSink(graph);
         try {
             fileSource.readAll(relativePath);
+            graph.initialize();
         } catch (IOException e) {
             System.err.println(e.getMessage());
         }
