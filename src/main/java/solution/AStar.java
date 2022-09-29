@@ -8,7 +8,7 @@ import java.util.PriorityQueue;
 public class AStar {
 
     PriorityQueue<PartialSolution> solutionQueue = new PriorityQueue<>((x1,x2)->{
-          return (int)(x1.getCostFunction() - x2.getCostFunction());
+          return  (int) (x1.getCostFunction() -  x2.getCostFunction());
     });
 
     PriorityQueue<PartialSolution> leafNodeQueue = new PriorityQueue<>((x1,x2)->{
@@ -16,26 +16,6 @@ public class AStar {
                 - x2.getNodeStates().get(x1.getNodesPath().get(x1.getNodesPath().size()-1)).getStartingTime());
     });
 
-    public PriorityQueue<PartialSolution> test(){
-        PartialSolution p1 = new PartialSolution(graph);
-        PartialSolution p2 = new PartialSolution(graph);
-        PartialSolution p3 = new PartialSolution(graph);
-        PartialSolution p4 = new PartialSolution(graph);
-
-        p1.setCostFunction(65);
-        p2.setCostFunction(12);
-        p3.setCostFunction(44);
-        p4.setCostFunction(32);
-
-
-        solutionQueue.add(p1);
-        solutionQueue.add(p2);
-        solutionQueue.add(p3);
-        solutionQueue.add(p4);
-
-        return solutionQueue;
-
-    }
 
     Digraph graph;
 
@@ -43,7 +23,7 @@ public class AStar {
 
     public AStar(Digraph digraph){
         root = new PartialSolution(digraph);
-        solutionQueue.add(root);
+        solutionQueue.offer(root);
         graph = digraph;
     }
 
@@ -60,19 +40,19 @@ public class AStar {
                      if(current.getNodesPath().size() == graph.getNodeCount()){
                           return current.getInfo();
                      }else{
-                          solutionQueue.add(current);
+                          solutionQueue.offer(current);
                      }
                 }else{
                     for(int i=1;i<=numOfProcessor;i++){
                         PartialSolution current = new PartialSolution(prev,graph,node,i,numOfProcessor);
                         if(current.getNodesPath().size() == graph.getNodeCount()){
-                            leafNodeQueue.add(current);
+                            leafNodeQueue.offer(current);
                             if (i == numOfProcessor){
                                 return leafNodeQueue.poll().getInfo();
                             } else {
                                 continue;
                             }
-//                            return current.getInfo();
+//                           return current.getInfo();
                         }else{
                             solutionQueue.add(current);
                         }
@@ -83,7 +63,5 @@ public class AStar {
 
         return "";
     }
-
-
 
 }

@@ -14,6 +14,7 @@ public class PartialSolution {
 
     private int idleTime;
 
+
     /**
      * Constructor for any subsequent partial solution on the solution tree except the root of the solution tree.
      * @param prevPartial previous PartialSolution immediately prior to the current PartialSolution
@@ -89,6 +90,8 @@ public class PartialSolution {
         }
         sb.append(" Finishing Time: ");
         sb.append(getEndScheduleTime());
+        sb.append(" cost function: ");
+        sb.append(getCostFunction());
 
         return sb.toString();
     }
@@ -145,9 +148,13 @@ public class PartialSolution {
      * @param processorId Which Processor is the current Task(node) is going to be scheduled on
      */
     private void scheduleTask(Digraph graph, Node currentNode, int processorId){
+            // set the starting time of the current node。
+            nodeStates.get(currentNode).setStartingTime(calculateStartingTime(graph, currentNode, processorId));
+    }
+
+    private int calculateStartingTime(Digraph graph, Node currentNode, int processorId){
         // make sure it's not the root partial solution of the solution tree before going to the next step.
         if (!nodesPath.isEmpty()) {
-
             // find the latest finishing time of previously direct parent(s) of the current node(Task) iteratively.
             int startTime = 0;
             for (Node node : nodesPath) {
@@ -169,15 +176,30 @@ public class PartialSolution {
             // check if the current scheduled processor that may have any Tasks may span over the finishing time of the parents of the
             // current node being calculated above. Select the max value between the two values as the starting time of the current node.
             int finishTimePrev = 0;
-            for (Node node: nodesPath){
-                if (nodeStates.get(node).getProcessorId() == processorId){
-                    finishTimePrev = (int)Math.max(finishTimePrev, nodeStates.get(node).getStartingTime()+graph.getNodeWeight(node.getId()));
+            for (Node node : nodesPath) {
+                if (nodeStates.get(node).getProcessorId() == processorId) {
+                    finishTimePrev = (int) Math.max(finishTimePrev, nodeStates.get(node).getStartingTime() + graph.getNodeWeight(node.getId()));
                 }
             }
-            // set the starting time of the current node.
-            nodeStates.get(currentNode).setStartingTime(Math.max(startTime, finishTimePrev));
-
+            return Math.max(startTime, finishTimePrev);
         }
+        return 0;
+    }
+
+    private int futureMinBottomLevel(Digraph graph,int numOfProcessor){
+        int MinStartingTime = Integer.MAX_VALUE;
+        int bottomLevel = 0;
+        for(Node node : getAvailableNextNodes()){
+            for(int p = 1; p <= numOfProcessor; p++){
+                int startingTime = calculateStartingTime(graph, node, p);
+                if(startingTime < MinStartingTime){
+                    MinStartingTime = startingTime;
+                    bottomLevel = (int) graph.getBottomLevel(node) + startingTime;
+                }
+            }
+        }
+
+        return bottomLevel;
     }
 
     /**
@@ -241,9 +263,11 @@ public class PartialSolution {
             }
             //bottomLevel = Math.max(bottomLevel, nodeStates.get(node).getStartingTime()+graph.getBottomLevel(node));
         }
-        double loadBalance = (graph.getAllNodeWeight() + idleTime) / (double)numOfProcessor;
-        return  Math.max(bottomLevel,startTime+loadBalance);
 
+        double loadBalance = (graph.getAllNodeWeight()+ idleTime) / (double)numOfProcessor;
+
+
+        return Math.max(Math.max(bottomLevel,loadBalance),futureMinBottomLevel(graph,numOfProcessor));
     }
 
 
@@ -253,13 +277,11 @@ public class PartialSolution {
 
     private int getEndScheduleTime(){
         int finishingTime = 0;
-        Node lastNode = null;
         for (Node node: nodesPath){
             int weight = (int) Double.parseDouble(node.getGraph().getNode(node.getId()).getAttribute("Weight").toString());
             int startingTime = nodeStates.get(node).getStartingTime();
             if (startingTime + weight > finishingTime) {
                finishingTime = startingTime + weight;
-               lastNode = node;
             }
         }
         return finishingTime;

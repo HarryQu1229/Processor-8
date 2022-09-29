@@ -98,13 +98,23 @@ public class SolutionTree extends Digraph {
                     appendChildNodes(prevPartialSolution, currentPartialSolution);
                     build(currentPartialSolution);
                 }else{
+//                    int startTime = Integer.MAX_VALUE;
+//                    PartialSolution target = null;
                     for (int j = 1; j <= numOfProcessor; j++) {
                         // create a new PartialSolution and recursively expand the next level of the solution graph
+
                         PartialSolution currentPartialSolution = new PartialSolution(prevPartialSolution, graph,
                                 availableNextNode, j,numOfProcessor);
+
+//                        if(currentPartialSolution.getNodeStates().get(availableNextNode).getStartingTime()<startTime){
+//                             startTime = currentPartialSolution.getNodeStates().get(availableNextNode).getStartingTime();
+//                             target = currentPartialSolution;
+//                        }
+
                         appendChildNodes(prevPartialSolution, currentPartialSolution);
                         build(currentPartialSolution);
                     }
+
                 }
 
             }
