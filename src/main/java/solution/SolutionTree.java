@@ -1,5 +1,6 @@
 package solution;
 
+import models.TheGraph;
 import org.graphstream.graph.Node;
 
 import java.io.PrintWriter;
@@ -10,7 +11,6 @@ import java.util.*;
  */
 public class SolutionTree extends Digraph {
 
-    private Digraph graph;
     private int numOfProcessor;
     private PartialSolution root;
 
@@ -22,13 +22,11 @@ public class SolutionTree extends Digraph {
 
     /**
      * Constructor of Solution Tree.
-     * @param graph diGraph of the Solution Tree.
      * @param numOfProcessor The number of processors that Tasks to be scheduled on.
      */
-    public SolutionTree(Digraph graph, int numOfProcessor) {
+    public SolutionTree(int numOfProcessor) {
         // create new digraph
         super("SolutionTree");
-        this.graph = graph;
         this.numOfProcessor = numOfProcessor;
         //create the root node of solution tree(empty)
         root = new PartialSolution();
@@ -76,11 +74,11 @@ public class SolutionTree extends Digraph {
     public void build(PartialSolution prevPartialSolution) {
 
 
-            if (prevPartialSolution.getNodesPath().size() == graph.getNodeCount()) {
+            if (prevPartialSolution.getNodesPath().size() == TheGraph.get().getNodeCount()) {
                 int FinalFinishTime  = 0;
                 List<Node> nodes = prevPartialSolution.getNodesPath();
                 for(int i=0;i<nodes.size();i++){
-                    FinalFinishTime = (int) Math.max(FinalFinishTime,prevPartialSolution.getNodeStates().get(nodes.get(i)).getStartingTime()+graph.getNodeWeightById(nodes.get(i).getId()));
+                    FinalFinishTime = (int) Math.max(FinalFinishTime,prevPartialSolution.getNodeStates().get(nodes.get(i)).getStartingTime()+TheGraph.get().getNodeWeightById(nodes.get(i).getId()));
                 }
 
                 minStartingTime = Math.min(minStartingTime,FinalFinishTime);

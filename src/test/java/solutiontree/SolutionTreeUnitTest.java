@@ -21,6 +21,7 @@ public class SolutionTreeUnitTest {
         fileSource.addSink(graph);
         try {
             fileSource.readAll(relativePath);
+            graph.initialize();
         } catch (IOException e) {
             System.err.println(e.getMessage());
         }
@@ -40,25 +41,24 @@ public class SolutionTreeUnitTest {
     @Nested
     class Graph1UnitTesting {
 
-        Digraph inputGraph;
 
         @BeforeEach
         public void loadInputGraph() {
-            inputGraph = loadGraph("g1");
+            loadGraph("g1");
         }
 
         @Test
         public void graph1ProcessorAmount1() {
-            SolutionTree solutionTree = new SolutionTree(inputGraph,1);
+            SolutionTree solutionTree = new SolutionTree(1);
             solutionTree.build(solutionTree.getRoot());
             assertEquals(2, countSolutions(solutionTree));
         }
 
         @Test
         public void graph1ProcessorAmount2() {
-            SolutionTree solutionTree = new SolutionTree(inputGraph,2);
+            SolutionTree solutionTree = new SolutionTree(2);
             solutionTree.build(solutionTree.getRoot());
-            assertEquals(32, countSolutions(solutionTree));
+            assertEquals(32/2, countSolutions(solutionTree));
         }
     }
 
@@ -80,7 +80,7 @@ public class SolutionTreeUnitTest {
 
         @Test
         public void graph2ProcessorAmount1() {
-            SolutionTree solutionTree = new SolutionTree(inputGraph,1);
+            SolutionTree solutionTree = new SolutionTree(1);
             solutionTree.build(solutionTree.getRoot());
             assertEquals(211588, countSolutions(solutionTree));
         }
@@ -99,16 +99,16 @@ public class SolutionTreeUnitTest {
 
         @Test
         public void graph6ProcessorAmount1() {
-            SolutionTree solutionTree = new SolutionTree(inputGraph,1);
+            SolutionTree solutionTree = new SolutionTree(1);
             solutionTree.build(solutionTree.getRoot());
             assertEquals(1, countSolutions(solutionTree));
         }
 
         @Test
         public void graph6ProcessorAmount2() {
-            SolutionTree solutionTree = new SolutionTree(inputGraph,2);
+            SolutionTree solutionTree = new SolutionTree(2);
             solutionTree.build(solutionTree.getRoot());
-            assertEquals(8, countSolutions(solutionTree));
+            assertEquals(8/2, countSolutions(solutionTree));
         }
     }
 
@@ -124,16 +124,16 @@ public class SolutionTreeUnitTest {
 
         @Test
         public void graph7ProcessorAmount1() {
-            SolutionTree solutionTree = new SolutionTree(inputGraph,1);
+            SolutionTree solutionTree = new SolutionTree(1);
             solutionTree.build(solutionTree.getRoot());
             assertEquals(3, countSolutions(solutionTree));
         }
 
         @Test
         public void graph7ProcessorAmount2() {
-            SolutionTree solutionTree = new SolutionTree(inputGraph,2);
+            SolutionTree solutionTree = new SolutionTree(2);
             solutionTree.build(solutionTree.getRoot());
-            assertEquals(192, countSolutions(solutionTree));
+            assertEquals(192/2, countSolutions(solutionTree));
         }
     }
 }

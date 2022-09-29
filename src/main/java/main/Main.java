@@ -8,8 +8,8 @@ import solution.Digraph;
 public class Main {
 
     public static void main(String[] args) {
-//        InputLoader.print(graph, true);
-        Digraph digraph = InputLoader.loadDotFile("g10");
+//      InputLoader.print(graph, true);
+        InputLoader.loadDotFile("g10");
 
 
 //        digraph.init();
@@ -41,7 +41,6 @@ public class Main {
 //
         AStar aStar = new AStar();
         String s = aStar.buildTree(2);
-
         System.out.println(s);
 
 //        System.out.println(digraph.getCriticalPath());
