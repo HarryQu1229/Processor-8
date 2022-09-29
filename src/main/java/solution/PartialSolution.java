@@ -1,5 +1,7 @@
 package solution;
 
+import models.NodeProperties;
+import models.TheGraph;
 import org.graphstream.graph.Node;
 
 import java.util.*;
@@ -16,25 +18,24 @@ public class PartialSolution{
     /**
      * Constructor for any subsequent partial solution on the solution tree except the root of the solution tree.
      * @param prevPartial previous PartialSolution immediately prior to the current PartialSolution
-     * @param graph diGraph of the Original Tasks Graph
      * @param currentNode The current Task(node) that is going to be scheduled
      * @param processorId Which Processor is the current Task(node) is going to be scheduled on
+     * @Param numOfProcessor
      */
-    public PartialSolution(PartialSolution prevPartial, Digraph graph, Node currentNode, int processorId,int numOfProcessor) {
+    public PartialSolution(PartialSolution prevPartial, Node currentNode, int processorId,int numOfProcessor) {
 
         initializeFromPrevPartialSolution(prevPartial);
-        scheduleTask(graph, currentNode, processorId);
-        updateCurrentPartialSolutionStatus(graph, currentNode, processorId);
+        scheduleTask(currentNode, processorId);
+        updateCurrentPartialSolutionStatus(currentNode, processorId);
         //calculate Cost Function for this PartialSolution
-        costFunction = calculateCostFunction(graph,currentNode,processorId,numOfProcessor);
+        costFunction = calculateCostFunction(currentNode,processorId,numOfProcessor);
     }
 
     /**
      * Constructor for the root of the solution tree.
-     * @param graph diGraph of the Original Tasks Graph
      */
-    public PartialSolution(Digraph graph) {
-        initializeRootPartialSolution(graph);
+    public PartialSolution() {
+        initializeRootPartialSolution();
     }
 
     /**
@@ -113,15 +114,14 @@ public class PartialSolution{
 
     /**
      * initialize fields for root partial solution of the solution tree.
-     * @param graph diGraph of the Original Tasks Graph
      */
-    private void initializeRootPartialSolution(Digraph graph){
+    private void initializeRootPartialSolution(){
         this.nodesPath = new ArrayList<>();
         this.nodeStates = new LinkedHashMap<>();
         idleTime = 0;
 
         // initialize status for all nodes.
-        for (Node node : graph.getAllNodes()) {
+        for (Node node : TheGraph.get().getAllNodes()) {
             NodeProperties nodeProperties = new NodeProperties();
             nodeProperties.setProcessorId(0);//processorId
             nodeProperties.setInDegree(node.getInDegree());// inDegree
@@ -134,16 +134,15 @@ public class PartialSolution{
 
     /**
      * logic for schedule task according to supplied task(Node) and processorId.
-     * @param graph diGraph of the Original Tasks Graph
      * @param currentNode The current Task(node) that is going to be scheduled
      * @param processorId Which Processor is the current Task(node) is going to be scheduled on
      */
-    private void scheduleTask(Digraph graph, Node currentNode, int processorId){
+    private void scheduleTask(Node currentNode, int processorId){
             // set the starting time of the current node.
-            nodeStates.get(currentNode).setStartingTime(calculateStartingTime(graph, currentNode, processorId));
+            nodeStates.get(currentNode).setStartingTime(calculateStartingTime(currentNode, processorId));
     }
 
-    private int calculateStartingTime(Digraph graph, Node currentNode, int processorId){
+    private int calculateStartingTime(Node currentNode, int processorId){
         // make sure it's not the root partial solution of the solution tree before going to the next step.
         if (!nodesPath.isEmpty()) {
             // find the latest finishing time of previously direct parent(s) of the current node(Task) iteratively.
@@ -154,33 +153,33 @@ public class PartialSolution{
                     if (nodeStates.get(node).getProcessorId() == processorId) {
                         // find the finishing time of the parent node of the current node and let it be the starting
                         // time of the current node.
-                        startTime = (int) Math.max(startTime, nodeStates.get(node).getStartingTime() + graph.getNodeWeightById(node.getId()));
+                        startTime = (int) Math.max(startTime, nodeStates.get(node).getStartingTime() + TheGraph.get().getNodeWeightById(node.getId()));
                         // if the current node is on the different processor with the selected its parent node.
                     } else {
                         // find the finishing time of the parent node of the current node and add communication cost,
                         // then let it be the starting time of the current node.
-                        int communicationCost = graph.getEdgeWeight(node.getId(), currentNode.getId()).intValue();
-                        startTime = (int) Math.max(startTime, nodeStates.get(node).getStartingTime() + graph.getNodeWeightById(node.getId()) + communicationCost);
+                        int communicationCost = TheGraph.get().getEdgeWeight(node.getId(), currentNode.getId()).intValue();
+                        startTime = (int) Math.max(startTime, nodeStates.get(node).getStartingTime() + TheGraph.get().getNodeWeightById(node.getId()) + communicationCost);
                     }
                 }
             }
             // check if the current scheduled processor that may have any Tasks may span over the finishing time of the parents of the
             // current node being calculated above. Select the max value between the two values as the starting time of the current node.
-            int finishTimePrev = findLastFinishTime(graph,processorId);
+            int finishTimePrev = findLastFinishTime(processorId);
             return Math.max(startTime, finishTimePrev);
         }
         return 0;
     }
 
-    private int futureMinBottomLevel(Digraph graph,int numOfProcessor){
+    private int futureMinBottomLevel(int numOfProcessor){
         int MinStartingTime = Integer.MAX_VALUE;
         int bottomLevel = 0;
         for(Node node : getAvailableNextNodes()){
             for(int p = 1; p <= numOfProcessor; p++){
-                int startingTime = calculateStartingTime(graph, node, p);
+                int startingTime = calculateStartingTime(node, p);
                 if(startingTime < MinStartingTime){
                     MinStartingTime = startingTime;
-                    bottomLevel = (int) (graph.getBottomLevel(node) + startingTime);
+                    bottomLevel = (int) (TheGraph.get().getBottomLevel(node) + startingTime);
                 }
             }
         }
@@ -193,12 +192,12 @@ public class PartialSolution{
      * @param processorId processor Id
      * @return last finish time of this processor
      */
-    private int findLastFinishTime(Digraph graph,int processorId){
+    private int findLastFinishTime(int processorId){
 
         int lastTime = 0;
         for(Node node:nodesPath){
             if(nodeStates.get(node).getProcessorId()==processorId){
-                lastTime = (int)Math.max(lastTime,nodeStates.get(node).getStartingTime()+ graph.getNodeWeightById(node.getId()));
+                lastTime = (int)Math.max(lastTime,nodeStates.get(node).getStartingTime()+ TheGraph.get().getNodeWeightById(node.getId()));
             }
         }
 
@@ -208,11 +207,10 @@ public class PartialSolution{
     /**
      * updating the current partial solution status and save it into fields.
      *
-     * @param graph diGraph of the Original Tasks Graph
      * @param currentNode The current Task(node) that is going to be scheduled
      * @param processorId Which Processor is the current Task(node) is going to be scheduled on
      */
-    private void updateCurrentPartialSolutionStatus(Digraph graph, Node currentNode, int processorId){
+    private void updateCurrentPartialSolutionStatus(Node currentNode, int processorId){
         // add this node to the solution path
         nodesPath.add(currentNode);
         // set current node's processor number.
@@ -222,27 +220,27 @@ public class PartialSolution{
 
         // decrease all direct children indegree by 1 (effectively get rid of the in edges from the current node to
         // all its children nodes).
-        List<Node> childrenNodes = graph.getChildrenOfNode(currentNode);
+        List<Node> childrenNodes = TheGraph.get().getChildrenOfNode(currentNode);
         for (Node childNode : childrenNodes) {
             int currentInDegree = nodeStates.get(childNode).getInDegree();
             nodeStates.get(childNode).setInDegree(currentInDegree - 1);
         }
     }
 
-    public double calculateCostFunction(Digraph graph, Node currentNode, int processorId, int numOfProcessor){
+    public double calculateCostFunction(Node currentNode, int processorId, int numOfProcessor){
 
         // find idle time ----------------------------------------------------
 
-        idleTime += nodeStates.get(currentNode).getStartingTime() - findLastFinishTime(graph,processorId);
+        idleTime += nodeStates.get(currentNode).getStartingTime() - findLastFinishTime(processorId);
 
         double bottomLevel = 0;
         for(Node node: nodesPath) {
-            bottomLevel = Math.max(bottomLevel, nodeStates.get(node).getStartingTime()+graph.getBottomLevel(node));
+            bottomLevel = Math.max(bottomLevel, nodeStates.get(node).getStartingTime()+TheGraph.get().getBottomLevel(node));
         }
 
-        double loadBalance = (graph.getSumWeightOfNodes()+ idleTime) / (double)numOfProcessor;
+        double loadBalance = (TheGraph.get().getSumWeightOfNodes()+ idleTime) / (double)numOfProcessor;
 
-        return Math.max(Math.max(bottomLevel,loadBalance),futureMinBottomLevel(graph,numOfProcessor));
+        return Math.max(Math.max(bottomLevel,loadBalance),futureMinBottomLevel(numOfProcessor));
     }
 
 

@@ -31,7 +31,7 @@ public class SolutionTree extends Digraph {
         this.graph = graph;
         this.numOfProcessor = numOfProcessor;
         //create the root node of solution tree(empty)
-        root = new PartialSolution(graph);
+        root = new PartialSolution();
         // initialise the root node of the solution tree graph.
         addNode(root.getInfo(), 0);
     }
@@ -92,14 +92,14 @@ public class SolutionTree extends Digraph {
             for (Node availableNextNode : availableNextNodes) {
                 // for every processor
                 if(prevPartialSolution.getNodesPath().size()==0){
-                    PartialSolution currentPartialSolution = new PartialSolution(prevPartialSolution, graph,
+                    PartialSolution currentPartialSolution = new PartialSolution(prevPartialSolution,
                             availableNextNode, 1,numOfProcessor);
                     appendChildNodes(prevPartialSolution, currentPartialSolution);
                     build(currentPartialSolution);
                 }else{
                     for (int j = 1; j <= numOfProcessor; j++) {
                         // create a new PartialSolution and recursively expand the next level of the solution graph
-                        PartialSolution currentPartialSolution = new PartialSolution(prevPartialSolution, graph,
+                        PartialSolution currentPartialSolution = new PartialSolution(prevPartialSolution,
                                 availableNextNode, j,numOfProcessor);
 
                         appendChildNodes(prevPartialSolution, currentPartialSolution);

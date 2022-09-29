@@ -1,5 +1,6 @@
 package solution;
 
+import models.TheGraph;
 import org.graphstream.graph.Node;
 
 import java.util.List;
@@ -17,14 +18,11 @@ public class AStar {
     });
 
 
-    Digraph graph;
-
     PartialSolution root;
 
-    public AStar(Digraph digraph){
-        root = new PartialSolution(digraph);
+    public AStar(){
+        root = new PartialSolution();
         solutionQueue.offer(root);
-        graph = digraph;
     }
 
     public String buildTree(int numOfProcessor){
@@ -36,16 +34,16 @@ public class AStar {
 
             for(Node node:availableNextNodes){
                 if(prev.getNodesPath().size()==0){
-                     PartialSolution current = new PartialSolution(prev,graph,node,1,numOfProcessor);
-                     if(current.getNodesPath().size() == graph.getNodeCount()){
+                     PartialSolution current = new PartialSolution(prev,node,1,numOfProcessor);
+                     if(current.getNodesPath().size() == TheGraph.get().getNodeCount()){
                           return current.getInfo();
                      }else{
                           solutionQueue.offer(current);
                      }
                 }else{
                     for(int i=1;i<=numOfProcessor;i++){
-                        PartialSolution current = new PartialSolution(prev,graph,node,i,numOfProcessor);
-                        if(current.getNodesPath().size() == graph.getNodeCount()){
+                        PartialSolution current = new PartialSolution(prev,node,i,numOfProcessor);
+                        if(current.getNodesPath().size() == TheGraph.get().getNodeCount()){
                             leafNodeQueue.offer(current);
                             if (i == numOfProcessor){
                                 return leafNodeQueue.poll().getInfo();

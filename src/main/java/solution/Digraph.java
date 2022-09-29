@@ -1,5 +1,6 @@
 package solution;
 
+import models.TheGraph;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.SingleGraph;
@@ -20,6 +21,7 @@ public class Digraph extends SingleGraph{
     public void initialize(){
         bottomLevels = new HashMap<>();
         initializeBottomLevels();
+        TheGraph.set(this);
 
     }
 

@@ -37,8 +37,9 @@ public class Main {
 
 //        System.out.println(digraph.getCriticalPath());
 
+
 //
-        AStar aStar = new AStar(digraph);
+        AStar aStar = new AStar();
         String s = aStar.buildTree(2);
 
         System.out.println(s);
