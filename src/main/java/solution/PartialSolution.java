@@ -154,13 +154,13 @@ public class PartialSolution{
                     if (nodeStates.get(node).getProcessorId() == processorId) {
                         // find the finishing time of the parent node of the current node and let it be the starting
                         // time of the current node.
-                        startTime = (int) Math.max(startTime, nodeStates.get(node).getStartingTime() + graph.getNodeWeight(node.getId()));
+                        startTime = (int) Math.max(startTime, nodeStates.get(node).getStartingTime() + graph.getNodeWeightById(node.getId()));
                         // if the current node is on the different processor with the selected its parent node.
                     } else {
                         // find the finishing time of the parent node of the current node and add communication cost,
                         // then let it be the starting time of the current node.
                         int communicationCost = graph.getEdgeWeight(node.getId(), currentNode.getId()).intValue();
-                        startTime = (int) Math.max(startTime, nodeStates.get(node).getStartingTime() + graph.getNodeWeight(node.getId()) + communicationCost);
+                        startTime = (int) Math.max(startTime, nodeStates.get(node).getStartingTime() + graph.getNodeWeightById(node.getId()) + communicationCost);
                     }
                 }
             }
@@ -198,7 +198,7 @@ public class PartialSolution{
         int lastTime = 0;
         for(Node node:nodesPath){
             if(nodeStates.get(node).getProcessorId()==processorId){
-                lastTime = (int)Math.max(lastTime,nodeStates.get(node).getStartingTime()+ graph.getNodeWeight(node.getId()));
+                lastTime = (int)Math.max(lastTime,nodeStates.get(node).getStartingTime()+ graph.getNodeWeightById(node.getId()));
             }
         }
 
@@ -222,7 +222,7 @@ public class PartialSolution{
 
         // decrease all direct children indegree by 1 (effectively get rid of the in edges from the current node to
         // all its children nodes).
-        List<Node> childrenNodes = graph.getAllChildrenNode(currentNode);
+        List<Node> childrenNodes = graph.getChildrenOfNode(currentNode);
         for (Node childNode : childrenNodes) {
             int currentInDegree = nodeStates.get(childNode).getInDegree();
             nodeStates.get(childNode).setInDegree(currentInDegree - 1);
@@ -240,7 +240,7 @@ public class PartialSolution{
             bottomLevel = Math.max(bottomLevel, nodeStates.get(node).getStartingTime()+graph.getBottomLevel(node));
         }
 
-        double loadBalance = (graph.getAllNodeWeight()+ idleTime) / (double)numOfProcessor;
+        double loadBalance = (graph.getSumWeightOfNodes()+ idleTime) / (double)numOfProcessor;
 
         return Math.max(Math.max(bottomLevel,loadBalance),futureMinBottomLevel(graph,numOfProcessor));
     }

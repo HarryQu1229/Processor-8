@@ -30,7 +30,7 @@ public class SolutionTreeUnitTest {
     private int countSolutions(SolutionTree solutionTree) {
         int count = 0;
         for (Node node : solutionTree.getAllNodes()) {
-            if (solutionTree.getOutDegree(node) == 0) {
+            if (solutionTree.getOutDegreeOfNode(node) == 0) {
                 count++;
             }
         }

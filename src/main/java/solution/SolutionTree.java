@@ -1,6 +1,5 @@
 package solution;
 
-import org.graphstream.graph.Edge;
 import org.graphstream.graph.Node;
 
 import java.io.PrintWriter;
@@ -52,7 +51,7 @@ public class SolutionTree extends Digraph {
                 String poll = queue.poll();
                 out.println(poll);
                 count++;
-                List<Node> children = getAllChildrenNode(getNodeByValue(poll));
+                List<Node> children = getChildrenOfNode(getNodeById(poll));
                 for (int i = 0; i < children.size(); i++) {
                     queue.add(children.get(i).getId());
                 }
@@ -81,7 +80,7 @@ public class SolutionTree extends Digraph {
                 int FinalFinishTime  = 0;
                 List<Node> nodes = prevPartialSolution.getNodesPath();
                 for(int i=0;i<nodes.size();i++){
-                    FinalFinishTime = (int) Math.max(FinalFinishTime,prevPartialSolution.getNodeStates().get(nodes.get(i)).getStartingTime()+graph.getNodeWeight(nodes.get(i).getId()));
+                    FinalFinishTime = (int) Math.max(FinalFinishTime,prevPartialSolution.getNodeStates().get(nodes.get(i)).getStartingTime()+graph.getNodeWeightById(nodes.get(i).getId()));
                 }
 
                 minStartingTime = Math.min(minStartingTime,FinalFinishTime);

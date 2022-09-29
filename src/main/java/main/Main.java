@@ -4,10 +4,6 @@ import io.InputLoader;
 import org.graphstream.graph.Node;
 import solution.AStar;
 import solution.Digraph;
-import solution.PartialSolution;
-import solution.SolutionTree;
-
-import java.util.PriorityQueue;
 
 public class Main {
 
@@ -64,7 +60,7 @@ public class Main {
     private static int countLeaves(Digraph digraph) {
         int count = 0;
         for (Node node : digraph.getAllNodes()) {
-            if (digraph.getOutDegree(node) == 0) {
+            if (digraph.getOutDegreeOfNode(node) == 0) {
                 count++;
             }
         }
