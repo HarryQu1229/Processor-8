@@ -247,7 +247,7 @@ public class PartialSolution{
      * @param processorId Which Processor is the current Task(node) is going to be scheduled on
      * @return double       costFunction value of the current partial solution.
      */
-    private double calculateCostFunction(Node currentNode, int processorId){
+    public double calculateCostFunction(Node currentNode, int processorId){
 
         // find idle time
         idleTime += nodeStates.get(currentNode).getStartingTime() - findLastFinishTime(processorId);
@@ -264,7 +264,18 @@ public class PartialSolution{
 
         // return the MAX value from maxCurrentBottomLevel, currentLoadBalance, and futureMinBottomLevel
         // as the cost function value for the current partial solution.
+        if (TheGraph.getMinCost()!=0  && Math.max(bottomLevel, loadBalance) > TheGraph.getMinCost()){
+            return Math.max(bottomLevel,loadBalance);
+        }
         return Math.max(Math.max(bottomLevel,loadBalance),futureMinBottomLevel());
+    }
+
+    @Override
+    public String toString() {
+        return "PartialSolution{" +
+                "nodesPath=" + nodesPath +
+                ", costFunction=" + costFunction +
+                '}';
     }
 
     /**
@@ -272,7 +283,7 @@ public class PartialSolution{
      *
      * @return int      finishing time.
      */
-    private int calculateEndScheduleTime(){
+    public int calculateEndScheduleTime(){
         int finishingTime = 0;
         for (Node node: nodesPath){
             int weight = (int) TheGraph.get().getNodeWeightById(node.getId());

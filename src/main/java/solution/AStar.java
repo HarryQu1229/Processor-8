@@ -21,12 +21,23 @@ public class AStar {
     });
 
 
+
+
+
+
+
+
     PartialSolution root;
+
+    public PartialSolution getRoot(){
+        return root;
+    }
 
     public AStar(){
         root = new PartialSolution();
         // add the root element of the solution tree - i.e. the empty schedule
         solutionQueue.offer(root);
+
     }
 
     /**
@@ -38,6 +49,8 @@ public class AStar {
         while(!solutionQueue.isEmpty()){
             // poll the first element from the Priority queue.
             PartialSolution prev = solutionQueue.poll();
+
+//            System.out.println(prev);
 
             // get available next nodes from the current partial solution.
             List<Node> availableNextNodes = prev.getAvailableNextNodes();
@@ -56,7 +69,9 @@ public class AStar {
                           return current.getInfo();
                      }else{
                          // add the current partial solution to the solutionQueue.
-                          solutionQueue.offer(current);
+
+                             solutionQueue.offer(current);
+
                      }
                      // if the node is not the first node on solution tree.
                 }else{
@@ -72,7 +87,9 @@ public class AStar {
                             }
                         }else{
                             // add to the solutionQueue
-                            solutionQueue.offer(current);
+                            if(current.calculateCostFunction(node,i)<=TheGraph.getMinCost()){
+                                solutionQueue.offer(current);
+                            }
                         }
                     }
                 }
