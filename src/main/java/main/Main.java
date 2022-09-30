@@ -10,13 +10,9 @@ import solution.PartialSolution;
 public class Main {
 
     public static void main(String[] args) {
-//      InputLoader.print(graph, true);
-        InputLoader.loadDotFile("g2");
+
+        InputLoader.loadDotFile("g5");
         InputLoader.setNumOfProcessors(4);
-
-
-
-//        TheGraph.setMinCost(350);
 
 
 
@@ -39,9 +35,6 @@ public class Main {
 
 
         AStar aStar = new AStar();
-        // System.out.println(TheGraph.getMinCost());
-//        aStar.DFSFindOneSolution(aStar.getRoot());
-//        System.out.println(aStar.minCost);
         String s = aStar.buildTree();
         System.out.println(s);
 
