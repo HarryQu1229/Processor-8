@@ -22,7 +22,6 @@ public class Digraph extends SingleGraph{
         bottomLevels = new HashMap<>();
         initializeBottomLevels();
         TheGraph.set(this);
-
     }
 
     /**
@@ -251,6 +250,5 @@ public class Digraph extends SingleGraph{
     public Double getEdgeWeight(String sourceNodeId, String destNodeId) {
         return Double.parseDouble(getEdge(sourceNodeId, destNodeId).getAttribute("Weight").toString());
     }
-
 
 }

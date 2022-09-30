@@ -1,8 +1,10 @@
 package algorithm;
 
+import io.InputLoader;
+import models.TheGraph;
 import org.graphstream.graph.Node;
 import solution.Digraph;
-import solution.NodeProperties;
+import models.NodeProperties;
 
 import java.util.*;
 
@@ -15,14 +17,14 @@ public class BranchAndBoundAlgorithm {
     public static Map<Node,NodeInfo> nodeInfo;
     public static int[] processorsCurrentTimes;
 
-    public static void solve(Digraph graph, int numOfProcessors, Map<Node,NodeInfo> nodeInfo, int nodeSize, int sum) {
+    public static void solve(Map<Node,NodeInfo> nodeInfo, int nodeSize, int sum) {
         BranchAndBoundAlgorithm.nodeInfo = nodeInfo;
         numOfNodes = nodeSize;
         sumOfWeights = sum;
         visitedNodes = new ArrayList<>();
-        processorsCurrentTimes = new int[numOfProcessors];
+        processorsCurrentTimes = new int[InputLoader.getNumOfProcessors()];
         // start calculation for start node
-        calculate(graph, numOfProcessors, 0);
+        calculate( 0);
 
         // print out the solution
         int ans = 0;
@@ -35,7 +37,7 @@ public class BranchAndBoundAlgorithm {
 
     }
 
-    public static void calculate (Digraph graph, int numOfProcessors, int currentCost) {
+    public static void calculate (int currentCost) {
 
         // if the currentCost is already larger than the current minCost, return
         if (currentCost >= minCost) {
@@ -60,7 +62,7 @@ public class BranchAndBoundAlgorithm {
         int previousScheduledProcessor;
         int previousScheduledStartTime;
         // get the next node to be processed
-        for (Node node : graph) {
+        for (Node node : TheGraph.get()) {
             // if the current node should not start (indegree is 0), return
             if (nodeInfo.get(node).getIndegrees() != 0) {
                 continue;
@@ -72,7 +74,7 @@ public class BranchAndBoundAlgorithm {
             }
 
             // update all indegress of the nodes that are connected to the current node
-            for (Node child : graph.getAllChildrenNode(node)) {
+            for (Node child : TheGraph.get().getChildrenOfNode(node)) {
                 nodeInfo.get(child).decreaseIndegrees();
             }
 
@@ -82,7 +84,7 @@ public class BranchAndBoundAlgorithm {
             sumOfWeights-= nodeInfo.get(node).getWeight();
 
             // try schedule each node to each processor
-            for (int i = 1; i<= numOfProcessors; i++) {
+            for (int i = 1; i<= InputLoader.getNumOfProcessors(); i++) {
 
                 startTimeForCurrentChild = 0;
 
@@ -97,7 +99,7 @@ public class BranchAndBoundAlgorithm {
                         } else {
                             // find the finishing time of the parent node of the current node and add communication cost,
                             // then let it be the starting time of the current node.
-                            startTimeForCurrentChild = Math.max(startTimeForCurrentChild, nodeInfo.get(eachProcessedNode).getScheduledStartTime() + nodeInfo.get(eachProcessedNode).getWeight()  + graph.getEdgeWeight(eachProcessedNode.getId(), node.getId()).intValue());
+                            startTimeForCurrentChild = Math.max(startTimeForCurrentChild, nodeInfo.get(eachProcessedNode).getScheduledStartTime() + nodeInfo.get(eachProcessedNode).getWeight()  + TheGraph.get().getEdgeWeight(eachProcessedNode.getId(), node.getId()).intValue());
                         }
                     }
                 }
@@ -116,7 +118,7 @@ public class BranchAndBoundAlgorithm {
                 nodeInfo.get(node).setScheduledProcessor(i);
                 nodeInfo.get(node).setScheduledStartTime(startTimeForCurrentChild);
 
-                calculate(graph, numOfProcessors, currentCost);
+                calculate(currentCost);
 
                 nodeInfo.get(node).setScheduledProcessor(previousScheduledProcessor);
                 nodeInfo.get(node).setScheduledStartTime(previousScheduledStartTime);
@@ -132,7 +134,7 @@ public class BranchAndBoundAlgorithm {
             sumOfWeights+= nodeInfo.get(node).getWeight();
 
             // update all indegress of the nodes that are connected to the current node
-            for (Node child : graph.getAllChildrenNode(node)) {
+            for (Node child : TheGraph.get().getChildrenOfNode(node)) {
                 nodeInfo.get(child).increaseIndegrees();
             }
         }

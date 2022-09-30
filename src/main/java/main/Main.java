@@ -16,9 +16,8 @@ public class Main {
 
     public static void main(String[] args) {
 
-        InputLoader.loadDotFile("g5");
-        InputLoader.setNumOfProcessors(4);
-
+        InputLoader.loadDotFile("g11");
+        InputLoader.setNumOfProcessors(10);
 
 
 //        InputLoader.print(digraph, false);
