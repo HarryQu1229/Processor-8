@@ -13,10 +13,8 @@ public class Main {
 //      InputLoader.print(graph, true);
         InputLoader.loadDotFile("g11");
         InputLoader.setNumOfProcessors(2);
-        TheGraph.DFSFindOneSolution(new PartialSolution());
-        TheGraph.findMinCost(new PartialSolution());
 
-        System.out.println(TheGraph.getMinCost());
+
 
 //        TheGraph.setMinCost(350);
 
@@ -41,6 +39,7 @@ public class Main {
 
 
         AStar aStar = new AStar();
+        // System.out.println(TheGraph.getMinCost());
 //        aStar.DFSFindOneSolution(aStar.getRoot());
 //        System.out.println(aStar.minCost);
         String s = aStar.buildTree();

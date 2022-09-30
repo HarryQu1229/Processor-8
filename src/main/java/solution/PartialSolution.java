@@ -262,11 +262,15 @@ public class PartialSolution{
         // calculate the load balance of the current partial solution.
         double loadBalance = (TheGraph.get().getSumWeightOfNodes() + idleTime) / (double)InputLoader.getNumOfProcessors();
 
-        // return the MAX value from maxCurrentBottomLevel, currentLoadBalance, and futureMinBottomLevel
-        // as the cost function value for the current partial solution.
-        if (TheGraph.getMinCost()!=0  && Math.max(bottomLevel, loadBalance) > TheGraph.getMinCost()){
+        // Since the calculation of the futureMinBottomLevel is computer intensive, we pre-check that if the current
+        // bottom level and loadBalance is already greater than the Minimum Guess Cost, if so, there is no need to calculate
+        // the futureMinBottomLevel since we will be dropping this partial solution and all combination of its children
+        // from the solution tree.
+        if (TheGraph.getMinimumGuessCost()!=0  && Math.max(bottomLevel, loadBalance) > TheGraph.getMinimumGuessCost()){
             return Math.max(bottomLevel,loadBalance);
         }
+        // return the MAX value from maxCurrentBottomLevel, currentLoadBalance, and futureMinBottomLevel
+        // as the cost function value for the current partial solution.
         return Math.max(Math.max(bottomLevel,loadBalance),futureMinBottomLevel());
     }
 

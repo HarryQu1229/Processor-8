@@ -21,12 +21,6 @@ public class AStar {
     });
 
 
-
-
-
-
-
-
     PartialSolution root;
 
     public PartialSolution getRoot(){
@@ -37,6 +31,7 @@ public class AStar {
         root = new PartialSolution();
         // add the root element of the solution tree - i.e. the empty schedule
         solutionQueue.offer(root);
+        new AStarUtil();
 
     }
 
@@ -86,8 +81,13 @@ public class AStar {
                                 return leafNodeQueue.poll().getInfo();
                             }
                         }else{
-                            // add to the solutionQueue
-                            if(current.calculateCostFunction(node,i)<=TheGraph.getMinCost()){
+                            // add to the solutionQueue, if the projected underestimate cost from the current node on the
+                            // solution tree is greater than the minimum guess cost we found from the `AStarUtil` methods,
+                            // effectively it means the minimum cost to reach the leaf node of the solution tree from the
+                            // current node is greater than the Projected Upper Limit of the cost. Therefore, we will discard
+                            // the current node and all of its children nodes on the solution tree. Otherwise, we will add
+                            // the current partial solution into the solution Priority queue.
+                            if(current.calculateCostFunction(node,i) <= TheGraph.getMinimumGuessCost()){
                                 solutionQueue.offer(current);
                             }
                         }
