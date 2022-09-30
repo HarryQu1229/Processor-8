@@ -150,7 +150,7 @@ public class PartialSolution{
      * @param processorId Which Processor is the current Task(node) is going to be scheduled on
      * @return int      starting time
      */
-    private int calculateStartingTime(Node currentNode, int processorId){
+    public int calculateStartingTime(Node currentNode, int processorId){
         // make sure it's not the root partial solution of the solution tree before going to the next step.
         if (!nodesPath.isEmpty()) {
             // find the latest finishing time of previously direct parent(s) of the current node(Task) iteratively.
@@ -204,7 +204,7 @@ public class PartialSolution{
      * @param processorId processor Id
      * @return last finish time of this processor
      */
-    private int findLastFinishTime(int processorId){
+    public int findLastFinishTime(int processorId){
 
         int lastTime = 0;
         for(Node node:nodesPath){

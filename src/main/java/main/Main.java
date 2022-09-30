@@ -11,8 +11,8 @@ public class Main {
 
     public static void main(String[] args) {
 //      InputLoader.print(graph, true);
-        InputLoader.loadDotFile("g11");
-        InputLoader.setNumOfProcessors(2);
+        InputLoader.loadDotFile("g2");
+        InputLoader.setNumOfProcessors(4);
 
 
 

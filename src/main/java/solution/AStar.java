@@ -4,6 +4,7 @@ import io.InputLoader;
 import models.TheGraph;
 import org.graphstream.graph.Node;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.PriorityQueue;
 
@@ -64,31 +65,69 @@ public class AStar {
                           return current.getInfo();
                      }else{
                          // add the current partial solution to the solutionQueue.
-
-                             solutionQueue.offer(current);
-
+                         solutionQueue.offer(current);
                      }
                      // if the node is not the first node on solution tree.
                 }else{
-                    for(int i = 1; i<= InputLoader.getNumOfProcessors(); i++){
-                        PartialSolution current = new PartialSolution(prev,node,i);
-                        // if we have reached leaf node of the solution tree, then return the
-                        // current partial solution as optimal solution, by determining the optimal processorId
-                        // that the leaf task node is being scheduled.
-                        if(current.getNodesPath().size() == TheGraph.get().getNodeCount()){
-                            leafNodeQueue.offer(current);
-                            if (i == InputLoader.getNumOfProcessors()){
-                                return leafNodeQueue.poll().getInfo();
-                            }
+                    List<Integer> emptyProcessorIds = new ArrayList<>();
+                    List<Integer> notEmptyProcessorIds = new ArrayList<>();
+                    for(int i=1;i<=InputLoader.getNumOfProcessors();i++){
+                        if(prev.findLastFinishTime(i)==0){
+                            emptyProcessorIds.add(i);
                         }else{
-                            // add to the solutionQueue, if the projected underestimate cost from the current node on the
-                            // solution tree is greater than the minimum guess cost we found from the `AStarUtil` methods,
-                            // effectively it means the minimum cost to reach the leaf node of the solution tree from the
-                            // current node is greater than the Projected Upper Limit of the cost. Therefore, we will discard
-                            // the current node and all of its children nodes on the solution tree. Otherwise, we will add
-                            // the current partial solution into the solution Priority queue.
-                            if(current.calculateCostFunction(node,i) <= TheGraph.getMinimumGuessCost()){
-                                solutionQueue.offer(current);
+                            notEmptyProcessorIds.add(i);
+                        }
+                    }
+
+
+                    if(emptyProcessorIds.size()<=1){
+
+                        for(int i = 1; i<= InputLoader.getNumOfProcessors(); i++){
+                            PartialSolution current = new PartialSolution(prev,node,i);
+                            // if we have reached leaf node of the solution tree, then return the
+                            // current partial solution as optimal solution, by determining the optimal processorId
+                            // that the leaf task node is being scheduled.
+                            if(current.getNodesPath().size() == TheGraph.get().getNodeCount()){
+                                leafNodeQueue.offer(current);
+                                if (i == InputLoader.getNumOfProcessors()){
+                                    return leafNodeQueue.poll().getInfo();
+                                }
+                            }else{
+                                // add to the solutionQueue, if the projected underestimate cost from the current node on the
+                                // solution tree is greater than the minimum guess cost we found from the `AStarUtil` methods,
+                                // effectively it means the minimum cost to reach the leaf node of the solution tree from the
+                                // current node is greater than the Projected Upper Limit of the cost. Therefore, we will discard
+                                // the current node and all of its children nodes on the solution tree. Otherwise, we will add
+                                // the current partial solution into the solution Priority queue.
+                                if(current.calculateCostFunction(node,i) <= TheGraph.getMinimumGuessCost()){
+                                    solutionQueue.offer(current);
+                                }
+                            }
+                        }
+
+                    }else{
+
+                        notEmptyProcessorIds.add(emptyProcessorIds.get(0));
+                        for(int i = 0; i< notEmptyProcessorIds.size(); i++){
+                            PartialSolution current = new PartialSolution(prev,node,notEmptyProcessorIds.get(i));
+                            // if we have reached leaf node of the solution tree, then return the
+                            // current partial solution as optimal solution, by determining the optimal processorId
+                            // that the leaf task node is being scheduled.
+                            if(current.getNodesPath().size() == TheGraph.get().getNodeCount()){
+                                leafNodeQueue.offer(current);
+                                if (i == notEmptyProcessorIds.size()-1){
+                                    return leafNodeQueue.poll().getInfo();
+                                }
+                            }else{
+                                // add to the solutionQueue, if the projected underestimate cost from the current node on the
+                                // solution tree is greater than the minimum guess cost we found from the `AStarUtil` methods,
+                                // effectively it means the minimum cost to reach the leaf node of the solution tree from the
+                                // current node is greater than the Projected Upper Limit of the cost. Therefore, we will discard
+                                // the current node and all of its children nodes on the solution tree. Otherwise, we will add
+                                // the current partial solution into the solution Priority queue.
+                                if(current.calculateCostFunction(node,notEmptyProcessorIds.get(i)) <= TheGraph.getMinimumGuessCost()){
+                                    solutionQueue.offer(current);
+                                }
                             }
                         }
                     }
