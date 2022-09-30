@@ -6,6 +6,14 @@ public class NodeProperties {
     private int startingTime;
     private int inDegree;
 
+    public NodeProperties() {
+    }
+
+    public NodeProperties(int processorId, int startingTime) {
+        this.processorId = processorId;
+        this.startingTime = startingTime;
+    }
+
     public int getProcessorId() {
         return processorId;
     }

@@ -1,11 +1,16 @@
 package main;
 
+import algorithm.BranchAndBoundAlgorithm;
+import algorithm.NodeInfo;
 import io.InputLoader;
 import models.TheGraph;
 import org.graphstream.graph.Node;
 import solution.AStar;
 import solution.Digraph;
 import solution.PartialSolution;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class Main {
 
@@ -24,8 +29,11 @@ public class Main {
 //        System.out.println(solutionTree.getAllNodes().size());
 //        InputLoader.print(solutionTree, false);
 
+//        System.out.println(digraph.getAllNodes());
 
+//        System.out.println(digraph.getBottomLevel(digraph.getNodeByValue("h")));
 
+//        System.out.println(myGraph.getCriticalPath());
 
 //
 //        BruteForce solutionTree = new BruteForce(2);
@@ -38,8 +46,8 @@ public class Main {
         String s = aStar.buildTree();
         System.out.println(s);
 
-
     }
+
 
     private static int countLeaves(Digraph digraph) {
         int count = 0;
