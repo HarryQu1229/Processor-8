@@ -1,5 +1,6 @@
 package solution;
 
+import io.InputLoader;
 import models.TheGraph;
 import org.graphstream.graph.Node;
 
@@ -11,7 +12,6 @@ import java.util.*;
  */
 public class BruteForce extends Digraph {
 
-    private int numOfProcessor;
     private PartialSolution root;
 
 
@@ -22,12 +22,10 @@ public class BruteForce extends Digraph {
 
     /**
      * Constructor of Solution Tree.
-     * @param numOfProcessor The number of processors that Tasks to be scheduled on.
      */
-    public BruteForce(int numOfProcessor) {
+    public BruteForce() {
         // create new digraph
         super("BruteForce");
-        this.numOfProcessor = numOfProcessor;
         //create the root node of solution tree(empty)
         root = new PartialSolution();
         // initialise the root node of the solution tree graph.
@@ -91,14 +89,14 @@ public class BruteForce extends Digraph {
                 // for every processor
                 if(prevPartialSolution.getNodesPath().size()==0){
                     PartialSolution currentPartialSolution = new PartialSolution(prevPartialSolution,
-                            availableNextNode, 1,numOfProcessor);
+                            availableNextNode, 1);
                     appendChildNodes(prevPartialSolution, currentPartialSolution);
                     build(currentPartialSolution);
                 }else{
-                    for (int j = 1; j <= numOfProcessor; j++) {
+                    for (int j = 1; j <= InputLoader.getNumOfProcessors(); j++) {
                         // create a new PartialSolution and recursively expand the next level of the solution graph
                         PartialSolution currentPartialSolution = new PartialSolution(prevPartialSolution,
-                                availableNextNode, j,numOfProcessor);
+                                availableNextNode, j);
 
                         appendChildNodes(prevPartialSolution, currentPartialSolution);
                         build(currentPartialSolution);

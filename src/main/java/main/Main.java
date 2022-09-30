@@ -9,7 +9,8 @@ public class Main {
 
     public static void main(String[] args) {
 //      InputLoader.print(graph, true);
-        InputLoader.loadDotFile("g1");
+        InputLoader.loadDotFile("g10");
+        InputLoader.setNumOfProcessors(2);
 
 
 
@@ -32,7 +33,7 @@ public class Main {
 
 
         AStar aStar = new AStar();
-        String s = aStar.buildTree(2);
+        String s = aStar.buildTree();
         System.out.println(s);
 
 

@@ -1,5 +1,6 @@
 package solution;
 
+import io.InputLoader;
 import models.TheGraph;
 import org.graphstream.graph.Node;
 
@@ -25,7 +26,7 @@ public class AStar {
         solutionQueue.offer(root);
     }
 
-    public String buildTree(int numOfProcessor){
+    public String buildTree(){
 
         while(!solutionQueue.isEmpty()){
             PartialSolution prev = solutionQueue.poll();
@@ -34,18 +35,18 @@ public class AStar {
 
             for(Node node:availableNextNodes){
                 if(prev.getNodesPath().size()==0){
-                     PartialSolution current = new PartialSolution(prev,node,1,numOfProcessor);
+                     PartialSolution current = new PartialSolution(prev,node,1);
                      if(current.getNodesPath().size() == TheGraph.get().getNodeCount()){
                           return current.getInfo();
                      }else{
                           solutionQueue.offer(current);
                      }
                 }else{
-                    for(int i=1;i<=numOfProcessor;i++){
-                        PartialSolution current = new PartialSolution(prev,node,i,numOfProcessor);
+                    for(int i = 1; i<= InputLoader.getNumOfProcessors(); i++){
+                        PartialSolution current = new PartialSolution(prev,node,i);
                         if(current.getNodesPath().size() == TheGraph.get().getNodeCount()){
                             leafNodeQueue.offer(current);
-                            if (i == numOfProcessor){
+                            if (i == InputLoader.getNumOfProcessors()){
                                 return leafNodeQueue.poll().getInfo();
                             }
                         }else{

@@ -1,5 +1,6 @@
 package solutiontree;
 
+import io.InputLoader;
 import org.graphstream.graph.Node;
 import org.graphstream.stream.file.FileSource;
 import org.graphstream.stream.file.FileSourceDOT;
@@ -49,14 +50,16 @@ public class BruteForceUnitTest {
 
         @Test
         public void graph1ProcessorAmount1() {
-            BruteForce bruteForce = new BruteForce(1);
+            InputLoader.setNumOfProcessors(1);
+            BruteForce bruteForce = new BruteForce();
             bruteForce.build(bruteForce.getRoot());
             assertEquals(2, countSolutions(bruteForce));
         }
 
         @Test
         public void graph1ProcessorAmount2() {
-            BruteForce bruteForce = new BruteForce(2);
+            InputLoader.setNumOfProcessors(2);
+            BruteForce bruteForce = new BruteForce();
             bruteForce.build(bruteForce.getRoot());
             assertEquals(32/2, countSolutions(bruteForce));
         }
@@ -80,7 +83,8 @@ public class BruteForceUnitTest {
 
         @Test
         public void graph2ProcessorAmount1() {
-            BruteForce bruteForce = new BruteForce(1);
+            InputLoader.setNumOfProcessors(1);
+            BruteForce bruteForce = new BruteForce();
             bruteForce.build(bruteForce.getRoot());
             assertEquals(211588, countSolutions(bruteForce));
         }
@@ -99,14 +103,16 @@ public class BruteForceUnitTest {
 
         @Test
         public void graph6ProcessorAmount1() {
-            BruteForce bruteForce = new BruteForce(1);
+            InputLoader.setNumOfProcessors(1);
+            BruteForce bruteForce = new BruteForce();
             bruteForce.build(bruteForce.getRoot());
             assertEquals(1, countSolutions(bruteForce));
         }
 
         @Test
         public void graph6ProcessorAmount2() {
-            BruteForce bruteForce = new BruteForce(2);
+            InputLoader.setNumOfProcessors(2);
+            BruteForce bruteForce = new BruteForce();
             bruteForce.build(bruteForce.getRoot());
             assertEquals(8/2, countSolutions(bruteForce));
         }
@@ -124,14 +130,16 @@ public class BruteForceUnitTest {
 
         @Test
         public void graph7ProcessorAmount1() {
-            BruteForce bruteForce = new BruteForce(1);
+            InputLoader.setNumOfProcessors(1);
+            BruteForce bruteForce = new BruteForce();
             bruteForce.build(bruteForce.getRoot());
             assertEquals(3, countSolutions(bruteForce));
         }
 
         @Test
         public void graph7ProcessorAmount2() {
-            BruteForce bruteForce = new BruteForce(2);
+            InputLoader.setNumOfProcessors(2);
+            BruteForce bruteForce = new BruteForce();
             bruteForce.build(bruteForce.getRoot());
             assertEquals(192/2, countSolutions(bruteForce));
         }

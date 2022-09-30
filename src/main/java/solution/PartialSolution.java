@@ -1,5 +1,6 @@
 package solution;
 
+import io.InputLoader;
 import models.NodeProperties;
 import models.TheGraph;
 import org.graphstream.graph.Node;
@@ -22,13 +23,13 @@ public class PartialSolution{
      * @param processorId Which Processor is the current Task(node) is going to be scheduled on
      * @Param numOfProcessor
      */
-    public PartialSolution(PartialSolution prevPartial, Node currentNode, int processorId,int numOfProcessor) {
+    public PartialSolution(PartialSolution prevPartial, Node currentNode, int processorId) {
 
         initializeFromPrevPartialSolution(prevPartial);
         scheduleTask(currentNode, processorId);
         updateCurrentPartialSolutionStatus(currentNode, processorId);
         //calculate Cost Function for this PartialSolution
-        costFunction = calculateCostFunction(currentNode,processorId,numOfProcessor);
+        costFunction = calculateCostFunction(currentNode,processorId, InputLoader.getNumOfProcessors());
     }
 
     /**

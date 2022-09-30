@@ -11,6 +11,17 @@ import java.io.IOException;
 
 public class InputLoader {
 
+    private static int numOfProcessors;
+
+
+
+    public static void setNumOfProcessors(int inputNumOfProcessors){
+        numOfProcessors = inputNumOfProcessors;
+    }
+
+    public static int getNumOfProcessors(){
+        return numOfProcessors;
+    }
 
     /**
      * To load graph from .dot file using graph stream api
