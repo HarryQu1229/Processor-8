@@ -1,10 +1,11 @@
 package solutiontree;
 
+import io.InputLoader;
 import org.graphstream.graph.Node;
 import org.graphstream.stream.file.FileSource;
 import org.graphstream.stream.file.FileSourceDOT;
+import solution.BruteForce;
 import solution.Digraph;
-import solution.SolutionTree;
 
 import org.junit.jupiter.api.*;
 
@@ -12,7 +13,7 @@ import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class SolutionTreeUnitTest {
+public class BruteForceUnitTest {
 
     private Digraph loadGraph(String graphName) {
         String relativePath = "examples/" + graphName + "/in.dot";
@@ -21,16 +22,17 @@ public class SolutionTreeUnitTest {
         fileSource.addSink(graph);
         try {
             fileSource.readAll(relativePath);
+            graph.initialize();
         } catch (IOException e) {
             System.err.println(e.getMessage());
         }
         return graph;
     }
 
-    private int countSolutions(SolutionTree solutionTree) {
+    private int countSolutions(BruteForce bruteForce) {
         int count = 0;
-        for (Node node : solutionTree.getAllNodes()) {
-            if (solutionTree.getOutDegree(node) == 0) {
+        for (Node node : bruteForce.getAllNodes()) {
+            if (bruteForce.getOutDegreeOfNode(node) == 0) {
                 count++;
             }
         }
@@ -40,25 +42,26 @@ public class SolutionTreeUnitTest {
     @Nested
     class Graph1UnitTesting {
 
-        Digraph inputGraph;
 
         @BeforeEach
         public void loadInputGraph() {
-            inputGraph = loadGraph("g1");
+            loadGraph("g1");
         }
 
         @Test
         public void graph1ProcessorAmount1() {
-            SolutionTree solutionTree = new SolutionTree(inputGraph,1);
-            solutionTree.build(solutionTree.getRoot());
-            assertEquals(2, countSolutions(solutionTree));
+            InputLoader.setNumOfProcessors(1);
+            BruteForce bruteForce = new BruteForce();
+            bruteForce.build(bruteForce.getRoot());
+            assertEquals(2, countSolutions(bruteForce));
         }
 
         @Test
         public void graph1ProcessorAmount2() {
-            SolutionTree solutionTree = new SolutionTree(inputGraph,2);
-            solutionTree.build(solutionTree.getRoot());
-            assertEquals(32, countSolutions(solutionTree));
+            InputLoader.setNumOfProcessors(2);
+            BruteForce bruteForce = new BruteForce();
+            bruteForce.build(bruteForce.getRoot());
+            assertEquals(32/2, countSolutions(bruteForce));
         }
     }
 
@@ -80,9 +83,10 @@ public class SolutionTreeUnitTest {
 
         @Test
         public void graph2ProcessorAmount1() {
-            SolutionTree solutionTree = new SolutionTree(inputGraph,1);
-            solutionTree.build(solutionTree.getRoot());
-            assertEquals(211588, countSolutions(solutionTree));
+            InputLoader.setNumOfProcessors(1);
+            BruteForce bruteForce = new BruteForce();
+            bruteForce.build(bruteForce.getRoot());
+            assertEquals(211588, countSolutions(bruteForce));
         }
 
     }
@@ -99,16 +103,18 @@ public class SolutionTreeUnitTest {
 
         @Test
         public void graph6ProcessorAmount1() {
-            SolutionTree solutionTree = new SolutionTree(inputGraph,1);
-            solutionTree.build(solutionTree.getRoot());
-            assertEquals(1, countSolutions(solutionTree));
+            InputLoader.setNumOfProcessors(1);
+            BruteForce bruteForce = new BruteForce();
+            bruteForce.build(bruteForce.getRoot());
+            assertEquals(1, countSolutions(bruteForce));
         }
 
         @Test
         public void graph6ProcessorAmount2() {
-            SolutionTree solutionTree = new SolutionTree(inputGraph,2);
-            solutionTree.build(solutionTree.getRoot());
-            assertEquals(8, countSolutions(solutionTree));
+            InputLoader.setNumOfProcessors(2);
+            BruteForce bruteForce = new BruteForce();
+            bruteForce.build(bruteForce.getRoot());
+            assertEquals(8/2, countSolutions(bruteForce));
         }
     }
 
@@ -124,16 +130,18 @@ public class SolutionTreeUnitTest {
 
         @Test
         public void graph7ProcessorAmount1() {
-            SolutionTree solutionTree = new SolutionTree(inputGraph,1);
-            solutionTree.build(solutionTree.getRoot());
-            assertEquals(3, countSolutions(solutionTree));
+            InputLoader.setNumOfProcessors(1);
+            BruteForce bruteForce = new BruteForce();
+            bruteForce.build(bruteForce.getRoot());
+            assertEquals(3, countSolutions(bruteForce));
         }
 
         @Test
         public void graph7ProcessorAmount2() {
-            SolutionTree solutionTree = new SolutionTree(inputGraph,2);
-            solutionTree.build(solutionTree.getRoot());
-            assertEquals(192, countSolutions(solutionTree));
+            InputLoader.setNumOfProcessors(2);
+            BruteForce bruteForce = new BruteForce();
+            bruteForce.build(bruteForce.getRoot());
+            assertEquals(192/2, countSolutions(bruteForce));
         }
     }
 }

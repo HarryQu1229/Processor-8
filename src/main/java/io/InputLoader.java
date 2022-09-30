@@ -1,19 +1,29 @@
 package io;
 
-import org.graphstream.graph.*;
-import org.graphstream.graph.implementations.*;
+import models.TheGraph;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
-import org.graphstream.graph.implementations.SingleGraph;
 import org.graphstream.stream.file.FileSource;
 import org.graphstream.stream.file.FileSourceDOT;
 import solution.Digraph;
+import solution.PartialSolution;
 
 import java.io.IOException;
 
 public class InputLoader {
 
+    private static int numOfProcessors;
+
+
+
+    public static void setNumOfProcessors(int inputNumOfProcessors){
+        numOfProcessors = inputNumOfProcessors;
+    }
+
+    public static int getNumOfProcessors(){
+        return numOfProcessors;
+    }
 
     /**
      * To load graph from .dot file using graph stream api
@@ -29,6 +39,7 @@ public class InputLoader {
         fileSource.addSink(graph);
         try {
             fileSource.readAll(relativePath);
+            graph.initialize();
         } catch (IOException e) {
             System.err.println(e.getMessage());
         }

@@ -1,4 +1,4 @@
-package solution;
+package models;
 
 public class NodeProperties {
 
