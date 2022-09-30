@@ -9,7 +9,7 @@ import java.util.*;
 /**
  * Bruteforce solution to build a solution tree, Each node on a solution tree is represented as a schedule string
  */
-public class SolutionTree extends Digraph {
+public class BruteForce extends Digraph {
 
     private int numOfProcessor;
     private PartialSolution root;
@@ -24,9 +24,9 @@ public class SolutionTree extends Digraph {
      * Constructor of Solution Tree.
      * @param numOfProcessor The number of processors that Tasks to be scheduled on.
      */
-    public SolutionTree(int numOfProcessor) {
+    public BruteForce(int numOfProcessor) {
         // create new digraph
-        super("SolutionTree");
+        super("BruteForce");
         this.numOfProcessor = numOfProcessor;
         //create the root node of solution tree(empty)
         root = new PartialSolution();

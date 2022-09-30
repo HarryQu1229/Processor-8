@@ -4,7 +4,6 @@ import io.InputLoader;
 import org.graphstream.graph.Node;
 import solution.AStar;
 import solution.Digraph;
-import solution.SolutionTree;
 
 public class Main {
 
@@ -15,7 +14,7 @@ public class Main {
 
 
 //        InputLoader.print(digraph, false);
-//        SolutionTree solutionTree = SolutionTree.getSolutionTree(digraph, 1);
+//        BruteForce solutionTree = BruteForce.getSolutionTree(digraph, 1);
 //        System.out.println(solutionTree.getNodeCount());
 
 //        System.out.println("\n=== Final print ===");
@@ -26,7 +25,7 @@ public class Main {
 
 
 //
-//        SolutionTree solutionTree = new SolutionTree(2);
+//        BruteForce solutionTree = new BruteForce(2);
 //        solutionTree.build(solutionTree.getRoot());
 //        solutionTree.print();
 
