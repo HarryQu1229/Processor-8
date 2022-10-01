@@ -17,7 +17,7 @@ public class OutputFormatter {
             node.setAttribute("Start", properties.getStartingTime());
             node.setAttribute("Processor", properties.getProcessorId());
         });
-        writeToFile(baseGraph, "Solution.dot");
+        writeToFile(baseGraph, "INPUT-output.dot");
         return baseGraph;
     }
 
