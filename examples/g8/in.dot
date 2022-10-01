@@ -1,0 +1,18 @@
+//nodes_7 - min 28
+// (0,1,0);(3,1,5);(2,2,16);(1,1,11);(6,1,17);(5,2,21);--(4,1,24)--;
+//(0,1,0);(1,1,5);(4,1,11);(3,1,15);--(6,1,21)--;(5,2,15);(2,2,22);
+digraph "OutTree-Balanced-MaxBf-3_Nodes_7_CCR_2.0_WeightType_Random" {
+    0	 [Weight=5];
+    1	 [Weight=6];
+    0 -> 1	 [Weight=15];
+    2	 [Weight=5];
+    0 -> 2	 [Weight=11];
+    3	 [Weight=6];
+    0 -> 3	 [Weight=11];
+    4	 [Weight=4];
+    1 -> 4	 [Weight=19];
+    5	 [Weight=7];
+    1 -> 5	 [Weight=4];
+    6	 [Weight=7];
+    1 -> 6	 [Weight=21];
+}
