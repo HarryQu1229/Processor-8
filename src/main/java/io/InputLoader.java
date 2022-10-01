@@ -15,8 +15,6 @@ public class InputLoader {
 
     private static int numOfProcessors;
 
-
-
     public static void setNumOfProcessors(int inputNumOfProcessors){
         numOfProcessors = inputNumOfProcessors;
     }
@@ -39,6 +37,19 @@ public class InputLoader {
         fileSource.addSink(graph);
         try {
             fileSource.readAll(relativePath);
+            graph.initialize();
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+        }
+        return graph;
+    }
+
+    public static Digraph loadDotFileFromPath(String path) {
+        Digraph graph = new Digraph("solution." + path);
+        FileSource fileSource = new FileSourceDOT();
+        fileSource.addSink(graph);
+        try {
+            fileSource.readAll(path);
             graph.initialize();
         } catch (IOException e) {
             System.err.println(e.getMessage());

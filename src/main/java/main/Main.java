@@ -3,20 +3,24 @@ package main;
 import algorithm.BranchAndBoundAlgorithm;
 import algorithm.NodeInfo;
 import io.InputLoader;
+import io.OutputFormatter;
+import models.NodeProperties;
 import models.TheGraph;
 import org.graphstream.graph.Node;
+import org.graphstream.stream.file.FileSinkDOT;
 import solution.AStar;
 import solution.Digraph;
 import solution.PartialSolution;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
-        InputLoader.loadDotFile("g11");
+        Digraph inputGraph = InputLoader.loadDotFile("g7");
         InputLoader.setNumOfProcessors(2);
 
 
@@ -43,7 +47,9 @@ public class Main {
 
         AStar aStar = new AStar();
         PartialSolution p = aStar.buildTree();
-        System.out.println(p.calculateEndScheduleTime());
+        new OutputFormatter().aStar(p, inputGraph);
+
+//        System.out.println(p.calculateEndScheduleTime());
 //        PartialSolution p = aStar.getLastPartialSolution();
 //        System.out.println(p);
     }

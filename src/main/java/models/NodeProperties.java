@@ -37,4 +37,9 @@ public class NodeProperties {
     public void setInDegree(int inDegree) {
         this.inDegree = inDegree;
     }
+
+    @Override
+    public String toString() {
+        return String.format("NodeProperty{processorId=%d, startTime=%d}", this.processorId, this.startingTime);
+    }
 }
