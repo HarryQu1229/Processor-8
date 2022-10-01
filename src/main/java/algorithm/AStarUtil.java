@@ -1,4 +1,4 @@
-package solution;
+package algorithm;
 
 import io.InputLoader;
 import models.TheGraph;

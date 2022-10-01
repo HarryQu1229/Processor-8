@@ -1,8 +1,9 @@
-package solution;
+package algorithm;
 
 import io.InputLoader;
 import models.TheGraph;
 import org.graphstream.graph.Node;
+import models.Digraph;
 
 import java.io.PrintWriter;
 import java.util.*;

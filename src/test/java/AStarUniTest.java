@@ -2,8 +2,8 @@ import io.InputLoader;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import solution.AStar;
-import solution.PartialSolution;
+import algorithm.AStar;
+import algorithm.PartialSolution;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class AStarUniTest {

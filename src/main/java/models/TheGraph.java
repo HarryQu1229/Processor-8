@@ -1,7 +1,5 @@
 package models;
 
-import solution.Digraph;
-
 public class TheGraph {
 
     private static Digraph graph;

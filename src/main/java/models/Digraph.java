@@ -1,4 +1,4 @@
-package solution;
+package models;
 
 import models.TheGraph;
 import org.graphstream.graph.Edge;

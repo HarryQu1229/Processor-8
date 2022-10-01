@@ -3,8 +3,6 @@ package algorithm;
 import io.InputLoader;
 import models.TheGraph;
 import org.graphstream.graph.Node;
-import solution.Digraph;
-import models.NodeProperties;
 
 import java.util.*;
 

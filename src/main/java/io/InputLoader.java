@@ -1,13 +1,11 @@
 package io;
 
-import models.TheGraph;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 import org.graphstream.stream.file.FileSource;
 import org.graphstream.stream.file.FileSourceDOT;
-import solution.Digraph;
-import solution.PartialSolution;
+import models.Digraph;
 
 import java.io.IOException;
 

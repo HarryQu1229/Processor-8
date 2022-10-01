@@ -1,20 +1,13 @@
 package main;
 
-import algorithm.BranchAndBoundAlgorithm;
-import algorithm.NodeInfo;
 import io.InputLoader;
 import io.OutputFormatter;
-import models.NodeProperties;
-import models.TheGraph;
 import org.graphstream.graph.Node;
-import org.graphstream.stream.file.FileSinkDOT;
-import solution.AStar;
-import solution.Digraph;
-import solution.PartialSolution;
+import algorithm.AStar;
+import models.Digraph;
+import algorithm.PartialSolution;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 public class Main {
 
@@ -29,13 +22,13 @@ public class Main {
         int processAmount = Integer.parseInt(args[1]);
 
         InputLoader.setNumOfProcessors(processAmount);
-        Digraph baseGraph = InputLoader.loadDotFileFromPath(path);
+        InputLoader.loadDotFileFromPath(path);
 
         AStar aStar = new AStar();
         PartialSolution solution = aStar.buildTree();
 
         OutputFormatter outputFormatter = new OutputFormatter();
-        outputFormatter.aStar(solution, baseGraph);
+        outputFormatter.aStar(solution, path.substring(0, path.length() - 4));
 
 //        Digraph inputGraph = InputLoader.loadDotFileFromPath("examples/g7/in.dot");
 //        InputLoader.setNumOfProcessors(2);
