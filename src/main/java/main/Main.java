@@ -17,7 +17,7 @@ public class Main {
     public static void main(String[] args) {
 
         InputLoader.loadDotFile("g11");
-        InputLoader.setNumOfProcessors(10);
+        InputLoader.setNumOfProcessors(2);
 
 
 //        InputLoader.print(digraph, false);
@@ -42,9 +42,10 @@ public class Main {
 
 
         AStar aStar = new AStar();
-        String s = aStar.buildTree();
-        System.out.println(s);
-
+        PartialSolution p = aStar.buildTree();
+        System.out.println(p.calculateEndScheduleTime());
+//        PartialSolution p = aStar.getLastPartialSolution();
+//        System.out.println(p);
     }
 
 
