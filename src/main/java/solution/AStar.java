@@ -41,7 +41,7 @@ public class AStar {
      *
      * @return String   the shortest solution path.
      */
-    public String buildTree() {
+    public PartialSolution buildTree() {
 
         while (!solutionQueue.isEmpty()) {
             // poll the first element from the Priority queue.
@@ -63,7 +63,7 @@ public class AStar {
                     // if we have reached leaf node of the solution tree, then return the
                     // current partial solution as optimal solution.
                     if (current.getNodesPath().size() == TheGraph.get().getNodeCount()) {
-                        return current.getInfo();
+                        return current;
                     } else {
                         // add the current partial solution to the solutionQueue.
                         solutionQueue.offer(current);
@@ -93,7 +93,7 @@ public class AStar {
                             if (current.getNodesPath().size() == TheGraph.get().getNodeCount()) {
                                 leafNodeQueue.offer(current);
                                 if (i == InputLoader.getNumOfProcessors()) {
-                                    return leafNodeQueue.poll().getInfo();
+                                    return leafNodeQueue.poll();
                                 }
                             } else {
                                 // add to the solutionQueue, if the projected underestimate cost from the current node on the
@@ -124,7 +124,7 @@ public class AStar {
                             if (current.getNodesPath().size() == TheGraph.get().getNodeCount()) {
                                 leafNodeQueue.offer(current);
                                 if (i == notEmptyProcessorIds.size() - 1) {
-                                    return leafNodeQueue.poll().getInfo();
+                                    return leafNodeQueue.poll();
                                 }
                             } else {
                                 if (current.calculateCostFunction(node, notEmptyProcessorIds.get(i)) <= TheGraph.getMinimumGuessCost()) {
@@ -136,7 +136,7 @@ public class AStar {
                 }
             }
         }
-        return "";
+        return null;
     }
 
 }
