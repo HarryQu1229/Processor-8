@@ -1,15 +1,23 @@
 package main;
 
+import JavaFX.Controller;
 import io.InputLoader;
 import io.OutputFormatter;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 import org.graphstream.graph.Node;
 import algorithm.AStar;
 import models.Digraph;
 import algorithm.PartialSolution;
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
 
 import java.io.IOException;
 
-public class Main {
+public class Main extends Application {
+
+    private static boolean visualise = true;
 
     public static void main(String[] args) throws IOException {
 
@@ -20,6 +28,11 @@ public class Main {
 
         String path = args[0];
         int processAmount = Integer.parseInt(args[1]);
+
+
+        if (visualise) {
+            launch(args);
+        }
 
         InputLoader.setNumOfProcessors(processAmount);
         InputLoader.loadDotFileFromPath(path);
@@ -76,4 +89,16 @@ public class Main {
     }
 
 
+    @Override
+    public void start(Stage stage) throws Exception {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Visualization.fxml"));
+
+//        Controller controller = new Controller();
+//        loader.setController(controller);
+        Parent root = loader.load();
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.setTitle("Visualisation");
+        stage.show();
+    }
 }
