@@ -18,6 +18,7 @@ import java.io.IOException;
 public class Main extends Application {
 
     private static boolean visualise = true;
+    private static PartialSolution solution = null;
 
     public static void main(String[] args) throws IOException {
 
@@ -38,7 +39,7 @@ public class Main extends Application {
         InputLoader.loadDotFileFromPath(path);
 
         AStar aStar = new AStar();
-        PartialSolution solution = aStar.buildTree();
+        solution = aStar.buildTree();
 
         OutputFormatter outputFormatter = new OutputFormatter();
         outputFormatter.aStar(solution, path.substring(0, path.length() - 4));
@@ -88,13 +89,17 @@ public class Main extends Application {
         return count;
     }
 
+    private static void runAStar() {
+        AStar aStar = new AStar();
+        solution = aStar.buildTree();
+    }
 
     @Override
     public void start(Stage stage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Visualization.fxml"));
+        FXMLLoader loader = new FXMLLoader();
 
-//        Controller controller = new Controller();
-//        loader.setController(controller);
+        loader.setLocation(getClass().getResource("/Visualization.fxml"));
+        Controller controller= loader.getController();
         Parent root = loader.load();
         Scene scene = new Scene(root);
         stage.setScene(scene);
