@@ -9,49 +9,41 @@ import java.util.List;
 import java.util.PriorityQueue;
 
 public class AStar {
-
-    PriorityQueue<PartialSolution> solutionQueue = new PriorityQueue<>((x1, x2) -> {
-        // compare the cost function between 2 solutions.
-        return (int) (x1.getCostFunction() - x2.getCostFunction());
-    });
-
-    PriorityQueue<PartialSolution> leafNodeQueue = new PriorityQueue<>((x1, x2) -> {
-        // compare the last node's starting time on the Node Path between 2 solutions.
-        return x1.getNodeStates().get(x1.getNodesPath().get(x1.getNodesPath().size() - 1)).getStartingTime()
-                - x2.getNodeStates().get(x1.getNodesPath().get(x1.getNodesPath().size() - 1)).getStartingTime();
-    });
-
-
-    PartialSolution root;
-
     public AStar() {
-        root = new PartialSolution();
         // add the root element of the solution tree - i.e. the empty schedule
-        solutionQueue.offer(root);
-        new AStarUtil();
-
     }
 
-    public PartialSolution getRoot() {
-        return root;
-    }
 
     /**
      * using A star algorithm to build tree and calculate solution,
      *
      * @return String   the shortest solution path.
      */
-    public PartialSolution buildTree() {
+    public PartialSolution buildTree(PartialSolution root) {
+
+        PriorityQueue<PartialSolution> solutionQueue = new PriorityQueue<>((x1, x2) -> {
+            // compare the cost function between 2 solutions.
+            return (int) (x1.getCostFunction() - x2.getCostFunction());
+        });
+
+        PriorityQueue<PartialSolution> leafNodeQueue = new PriorityQueue<>((x1, x2) -> {
+            // compare the last node's starting time on the Node Path between 2 solutions.
+            return x1.getNodeStates().get(x1.getNodesPath().get(x1.getNodesPath().size() - 1)).getStartingTime()
+                    - x2.getNodeStates().get(x1.getNodesPath().get(x1.getNodesPath().size() - 1)).getStartingTime();
+        });
+
+        solutionQueue.offer(root);
 
         while (!solutionQueue.isEmpty()) {
+//            System.out.println("first solution: " + solutionQueue);
             // poll the first element from the Priority queue.
             PartialSolution prev = solutionQueue.poll();
-
+//            System.out.println("prev: " + prev);
 //            System.out.println(prev);
 
             // get available next nodes from the current partial solution.
             List<Node> availableNextNodes = prev.getAvailableNextNodes();
-
+//            System.out.println(availableNextNodes);
 
             for (Node node : availableNextNodes) {
                 // when scheduling the starting nodes of the solution tree, remove the trivial
@@ -135,6 +127,7 @@ public class AStar {
                     }
                 }
             }
+//            System.out.println("last solution queue: " + solutionQueue);
         }
         return null;
     }

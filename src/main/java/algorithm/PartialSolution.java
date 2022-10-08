@@ -276,9 +276,14 @@ public class PartialSolution{
 
     @Override
     public String toString() {
+        StringBuffer sb = new StringBuffer();
+        for(Node node:nodesPath){
+            sb.append(node.getId()+": ");
+            sb.append(nodeStates.get(node).getProcessorId()+" ");
+        }
         return "PartialSolution{" +
-                "nodesPath=" + nodesPath +
-                ", costFunction=" + costFunction +
+                "nodesPath=" + nodesPath +" ("+sb.toString()+" )"+
+                "endTime=" + this.calculateEndScheduleTime() +
                 '}';
     }
 

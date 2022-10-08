@@ -1,5 +1,6 @@
 package main;
 
+import algorithm.ParallelAStar;
 import io.InputLoader;
 import io.OutputFormatter;
 import org.graphstream.graph.Node;
@@ -13,25 +14,32 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
 
-        if (args.length < 2) {
-            System.err.println("Invalid arguments");
-            return;
-        }
+//        if (args.length < 2) {
+//            System.err.println("Invalid arguments");
+//            return;
+//        }
+//
+//        String path = args[0];
+//        int processAmount = Integer.parseInt(args[1]);
+//
+//        InputLoader.setNumOfProcessors(processAmount);
+//        InputLoader.loadDotFileFromPath(path);
+//
+//        AStar aStar = new AStar();
+//        PartialSolution solution = aStar.buildTree();
+//
+//        OutputFormatter outputFormatter = new OutputFormatter();
+//        outputFormatter.aStar(solution, path.substring(0, path.length() - 4));
 
-        String path = args[0];
-        int processAmount = Integer.parseInt(args[1]);
+        Digraph inputGraph = InputLoader.loadDotFileFromPath("examples/g11/in.dot");
+        InputLoader.setNumOfProcessors(4);
+        ParallelAStar parallelAStar = new ParallelAStar(4);
 
-        InputLoader.setNumOfProcessors(processAmount);
-        InputLoader.loadDotFileFromPath(path);
+        PartialSolution build = parallelAStar.build();
 
-        AStar aStar = new AStar();
-        PartialSolution solution = aStar.buildTree();
+//        System.out.println(build);
 
-        OutputFormatter outputFormatter = new OutputFormatter();
-        outputFormatter.aStar(solution, path.substring(0, path.length() - 4));
-
-//        Digraph inputGraph = InputLoader.loadDotFileFromPath("examples/g7/in.dot");
-//        InputLoader.setNumOfProcessors(2);
+        System.out.println(build.getInfo());
 //
 //
 ////        InputLoader.print(digraph, false);
@@ -56,7 +64,8 @@ public class Main {
 //
 //
 //        AStar aStar = new AStar();
-//        PartialSolution p = aStar.buildTree();
+//        PartialSolution p = aStar.buildTree(new PartialSolution());
+//        System.out.println(p.getInfo());
 //        new OutputFormatter().aStar(p, inputGraph);
 
 //        System.out.println(p.calculateEndScheduleTime());
