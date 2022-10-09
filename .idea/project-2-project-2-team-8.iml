@@ -34,5 +34,16 @@
     <orderEntry type="library" name="Maven: org.openjfx:javafx-fxml:win:19" level="project" />
     <orderEntry type="library" name="Maven: org.openjfx:javafx-base:12" level="project" />
     <orderEntry type="library" name="Maven: org.openjfx:javafx-base:win:12" level="project" />
+    <orderEntry type="library" name="Maven: eu.hansolo:tilesfx:17.1.15" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Maven: org.openjfx:javafx-swing:17.0.2" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Maven: org.openjfx:javafx-swing:win:17.0.2" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Maven: org.openjfx:javafx-web:17.0.2" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Maven: org.openjfx:javafx-web:win:17.0.2" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Maven: org.openjfx:javafx-media:17.0.2" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Maven: org.openjfx:javafx-media:win:17.0.2" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Maven: eu.hansolo:toolbox:17.0.26" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Maven: eu.hansolo:toolboxfx:17.0.29" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Maven: eu.hansolo.fx:heatmap:17.0.12" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Maven: eu.hansolo.fx:countries:17.0.23" level="project" />
   </component>
 </module>

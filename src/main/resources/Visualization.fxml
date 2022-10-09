@@ -110,6 +110,11 @@
                         </HBox>
                      </children>
                   </VBox>
+                  <VBox fx:id="memBox" prefHeight="200.0" prefWidth="100.0">
+                     <children>
+                        <Label text="Memory Usage:" />
+                     </children>
+                  </VBox>
                </children>
             </HBox>
          </center>

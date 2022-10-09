@@ -6,6 +6,7 @@ import io.OutputFormatter;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import models.TheGraph;
 import org.graphstream.graph.Node;
 import algorithm.AStar;
 import models.Digraph;
@@ -25,6 +26,7 @@ public class Main extends Application {
     private static String numOfProcessors = "numOfProcessors";
     private static String numOfCore = "1";
     private static String currentBestTime = "UNKNOWN";
+    private static String numOfTasks;
 
     public static void main(String[] args) throws IOException {
 
@@ -40,6 +42,8 @@ public class Main extends Application {
 
         InputLoader.setNumOfProcessors(processAmount);
         InputLoader.loadDotFileFromPath(path);
+
+        numOfTasks= String.valueOf(TheGraph.get().getNodeCount());
 
         if (visualise) {
             launch(args);
@@ -126,6 +130,13 @@ public class Main extends Application {
     public static String getOutputFile() {return OUTPUT_FILE;}
     public static String getNumOfProcessors() {return numOfProcessors;}
     public static String getNumOfCore() {return numOfCore;}
-    public static String getCurrentBestTime() {return solution.getInfo();}
+    public static String getNumOfTasks() {return numOfTasks;}
+    public static String getCurrentBestTime() {
+        if (solution == null) {
+            return "UNKNOWN";
+        } else {
+            return String.valueOf(solution.calculateEndScheduleTime());
+        }
+    }
 //    public PartialSolution getSolution() {return solution;}
 }
