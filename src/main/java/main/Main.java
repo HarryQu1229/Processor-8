@@ -14,6 +14,8 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
 
+        long startTime = System.currentTimeMillis();
+
 //        if (args.length < 2) {
 //            System.err.println("Invalid arguments");
 //            return;
@@ -32,8 +34,8 @@ public class Main {
 //        outputFormatter.aStar(solution, path.substring(0, path.length() - 4));
 
         Digraph inputGraph = InputLoader.loadDotFileFromPath("examples/g11/in.dot");
-        InputLoader.setNumOfProcessors(4);
-        ParallelAStar parallelAStar = new ParallelAStar(4);
+        InputLoader.setNumOfProcessors(2);
+        ParallelAStar parallelAStar = new ParallelAStar(2);
 
         PartialSolution build = parallelAStar.build();
 
@@ -71,6 +73,10 @@ public class Main {
 //        System.out.println(p.calculateEndScheduleTime());
 //        PartialSolution p = aStar.getLastPartialSolution();
 //        System.out.println(p);
+
+        long endTime = System.currentTimeMillis(); //获取结束时间
+
+        System.out.println("程序运行时间：" + (endTime - startTime)/1000 + "s");
     }
 
 

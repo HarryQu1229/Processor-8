@@ -35,7 +35,9 @@ public class ParallelAStar {
 
           solutionQueue.offer(new PartialSolution());
 
-          while(solutionQueue.size()<=numofThread) {
+          BreakLoop:
+
+          while(solutionQueue.size()<numofThread) {
 
               PartialSolution prev = solutionQueue.poll();
 
@@ -59,6 +61,9 @@ public class ParallelAStar {
                       } else {
                           // add the current partial solution to the solutionQueue.
                           solutionQueue.offer(current);
+                          if(solutionQueue.size()==numofThread){
+                              break BreakLoop;
+                          }
                       }
                       // if the node is not the first node on solution tree.
                   } else {
@@ -96,6 +101,9 @@ public class ParallelAStar {
                                   // the current partial solution into the solution Priority queue.
                                   if (current.calculateCostFunction(node, i) <= TheGraph.getMinimumGuessCost()) {
                                       solutionQueue.offer(current);
+                                      if(solutionQueue.size()==numofThread){
+                                          break BreakLoop;
+                                      }
                                   }
                               }
                           }
@@ -121,6 +129,9 @@ public class ParallelAStar {
                               } else {
                                   if (current.calculateCostFunction(node, notEmptyProcessorIds.get(i)) <= TheGraph.getMinimumGuessCost()) {
                                       solutionQueue.offer(current);
+                                      if(solutionQueue.size()==numofThread){
+                                          break BreakLoop;
+                                      }
                                   }
                               }
                           }
@@ -129,7 +140,7 @@ public class ParallelAStar {
               }
           }
 
-//          System.out.println(solutionQueue);
+          System.out.println(solutionQueue);
 
           List<MyTask> list = new Vector<>();
           while(!solutionQueue.isEmpty()){
@@ -141,15 +152,16 @@ public class ParallelAStar {
               List<Future<PartialSolution>> futures = executorService.invokeAll(list);
               PartialSolution res= new PartialSolution();
               int minCost = Integer.MAX_VALUE;
-              for(Future<PartialSolution> f:futures){
-                  PartialSolution partialSolution = f.get();
-//                  System.out.println(partialSolution);
-                  if(partialSolution==null){
-                      continue;
-                  }
-                  if(partialSolution.calculateEndScheduleTime()<minCost){
-                      minCost = partialSolution.calculateEndScheduleTime();
-                      res = partialSolution;
+              BreakLabel:
+              while(true){
+                  for(Future<PartialSolution> f:futures){
+                      if(f.isDone()){
+                          PartialSolution partialSolution =f.get();
+                          if(partialSolution != null){
+                               res = partialSolution;
+                               break BreakLabel;
+                          }
+                      }
                   }
               }
               executorService.shutdown();
@@ -175,7 +187,7 @@ class MyTask implements Callable<PartialSolution>{
 
     @Override
     public PartialSolution call() throws Exception {
-//        System.out.println(Thread.currentThread().getName()+ " "+root);
+        System.out.println(Thread.currentThread().getName()+ " "+root);
         PartialSolution partialSolution = astar.buildTree(root);
         return partialSolution;
     }
