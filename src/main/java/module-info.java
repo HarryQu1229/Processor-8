@@ -7,6 +7,7 @@ module project {
     requires gs.core;
 
     opens main;
+    opens JavaFX;
 
     exports JavaFX;
 }

@@ -20,6 +20,12 @@ public class Main extends Application {
     private static boolean visualise = true;
     private static PartialSolution solution = null;
 
+    private static String INPUT_FILE = "input.dot";
+    private static String OUTPUT_FILE = "input-output.dot";
+    private static String numOfProcessors = "numOfProcessors";
+    private static String numOfCore = "1";
+    private static String currentBestTime = "UNKNOWN";
+
     public static void main(String[] args) throws IOException {
 
         if (args.length < 2) {
@@ -28,15 +34,17 @@ public class Main extends Application {
         }
 
         String path = args[0];
+        INPUT_FILE = path;
         int processAmount = Integer.parseInt(args[1]);
+        numOfProcessors = args[1];
 
+        InputLoader.setNumOfProcessors(processAmount);
+        InputLoader.loadDotFileFromPath(path);
 
         if (visualise) {
             launch(args);
         }
 
-        InputLoader.setNumOfProcessors(processAmount);
-        InputLoader.loadDotFileFromPath(path);
 
         AStar aStar = new AStar();
         solution = aStar.buildTree();
@@ -92,6 +100,8 @@ public class Main extends Application {
     private static void runAStar() {
         AStar aStar = new AStar();
         solution = aStar.buildTree();
+        OutputFormatter outputFormatter = new OutputFormatter();
+        outputFormatter.aStar(solution, INPUT_FILE.substring(0, INPUT_FILE.length() - 4));
     }
 
     @Override
@@ -101,9 +111,21 @@ public class Main extends Application {
         loader.setLocation(getClass().getResource("/Visualization.fxml"));
         Controller controller= loader.getController();
         Parent root = loader.load();
+
+        // run the algorithm on another thread
+        new Thread(Main::runAStar).start();
+
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.setTitle("Visualisation");
         stage.show();
     }
+
+
+    public static String getInputFile() {return INPUT_FILE;}
+    public static String getOutputFile() {return OUTPUT_FILE;}
+    public static String getNumOfProcessors() {return numOfProcessors;}
+    public static String getNumOfCore() {return numOfCore;}
+    public static String getCurrentBestTime() {return solution.getInfo();}
+//    public PartialSolution getSolution() {return solution;}
 }
