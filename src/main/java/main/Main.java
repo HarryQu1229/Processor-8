@@ -6,12 +6,15 @@ import org.graphstream.graph.Node;
 import algorithm.AStar;
 import models.Digraph;
 import algorithm.PartialSolution;
+import utils.GraphGenerator;
 
 import java.io.IOException;
 
 public class Main {
 
     public static void main(String[] args) throws IOException {
+
+        GraphGenerator.generateRandomGraphs(10);
 
         if (args.length < 2) {
             System.err.println("Invalid arguments");
