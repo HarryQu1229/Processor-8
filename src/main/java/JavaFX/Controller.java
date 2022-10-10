@@ -90,8 +90,10 @@ public class Controller implements javafx.fxml.Initializable {
         poller = new Timeline(new KeyFrame(Duration.millis(100), event -> {
 
             // Updating memory tile
-            double memoryUsage = (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory())/(1000000d);
-            memoryTile.setValue(memoryUsage);
+            if (Main.getIsRunning()) {
+                double memoryUsage = (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory())/(1000000d);
+                memoryTile.setValue(memoryUsage);
+            }
 
             // Updating best time
             currentBestTime.setText((Main.getCurrentBestTime()));
