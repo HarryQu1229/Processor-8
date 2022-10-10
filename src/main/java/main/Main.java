@@ -27,6 +27,7 @@ public class Main extends Application {
     private static String numOfCore = "1";
     private static String currentBestTime = "UNKNOWN";
     private static String numOfTasks;
+    private static Boolean isRunning = true;
 
     public static void main(String[] args) throws IOException {
 
@@ -131,10 +132,12 @@ public class Main extends Application {
     public static String getNumOfProcessors() {return numOfProcessors;}
     public static String getNumOfCore() {return numOfCore;}
     public static String getNumOfTasks() {return numOfTasks;}
+    public static Boolean getIsRunning() {return isRunning;}
     public static String getCurrentBestTime() {
         if (solution == null) {
             return "UNKNOWN";
         } else {
+            isRunning = false;
             return String.valueOf(solution.calculateEndScheduleTime());
         }
     }

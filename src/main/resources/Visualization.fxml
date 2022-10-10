@@ -2,6 +2,8 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
@@ -30,23 +32,50 @@
                <children>
                   <VBox prefHeight="516.0" prefWidth="399.0">
                      <children>
-                        <HBox prefHeight="100.0" prefWidth="200.0">
+                        <HBox alignment="CENTER">
                            <children>
-                              <Label text="Input: " />
-                              <Label fx:id="inputFile" text="INPUT FILE" />
+                              <Label text="Input: ">
+                                 <font>
+                                    <Font name="Arial" size="14.0" />
+                                 </font></Label>
+                              <Label fx:id="inputFile" text="INPUT FILE">
+                                 <font>
+                                    <Font name="Arial Bold" size="14.0" />
+                                 </font></Label>
                            </children>
+                           <VBox.margin>
+                              <Insets top="10.0" />
+                           </VBox.margin>
                         </HBox>
-                        <HBox prefHeight="100.0" prefWidth="200.0">
+                        <HBox alignment="CENTER">
                            <children>
-                              <Label text="Output: " />
-                              <Label fx:id="outputFile" text="OUTPUT FILE" />
+                              <Label text="Output: ">
+                                 <font>
+                                    <Font name="Arial" size="14.0" />
+                                 </font></Label>
+                              <Label fx:id="outputFile" text="OUTPUT FILE">
+                                 <font>
+                                    <Font name="Arial Bold" size="14.0" />
+                                 </font></Label>
                            </children>
+                           <VBox.margin>
+                              <Insets bottom="10.0" top="10.0" />
+                           </VBox.margin>
                         </HBox>
-                        <HBox prefHeight="100.0" prefWidth="200.0">
+                        <HBox alignment="CENTER">
                            <children>
-                              <Label text="Best Time: " />
-                              <Label fx:id="currentBestTime" text="BEST TIME" />
+                              <Label text="Best Time: ">
+                                 <font>
+                                    <Font name="Arial" size="24.0" />
+                                 </font></Label>
+                              <Label fx:id="currentBestTime" text="BEST TIME">
+                                 <font>
+                                    <Font name="Arial" size="24.0" />
+                                 </font></Label>
                            </children>
+                           <padding>
+                              <Insets bottom="20.0" top="20.0" />
+                           </padding>
                         </HBox>
                         <HBox alignment="CENTER">
                            <children>
@@ -108,11 +137,89 @@
                               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                            </padding>
                         </HBox>
-                     </children>
-                  </VBox>
-                  <VBox fx:id="memBox" prefHeight="200.0" prefWidth="100.0">
-                     <children>
-                        <Label text="Memory Usage:" />
+                        <VBox fx:id="memBox" alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0">
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                        </VBox>
+                        <HBox alignment="CENTER">
+                           <children>
+                              <VBox alignment="CENTER">
+                                 <children>
+                                    <HBox alignment="CENTER">
+                                       <children>
+                                          <Label alignment="CENTER" contentDisplay="CENTER" text="Current Status:">
+                                             <font>
+                                                <Font name="Arial" size="18.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER">
+                                       <children>
+                                          <ImageView fx:id="statusImg" fitHeight="50.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@images/running.gif" />
+                                             </image>
+                                          </ImageView>
+                                          <Label fx:id="statusLabel" prefHeight="41.0" prefWidth="83.0" text="Running~">
+                                             <font>
+                                                <Font name="Arial" size="18.0" />
+                                             </font>
+                                             <HBox.margin>
+                                                <Insets left="5.0" />
+                                             </HBox.margin>
+                                          </Label>
+                                          <ImageView fx:id="statusImg1" fitHeight="50.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@images/celebrate.png" />
+                                             </image>
+                                          </ImageView>
+                                       </children>
+                                       <VBox.margin>
+                                          <Insets left="5.0" right="5.0" />
+                                       </VBox.margin>
+                                    </HBox>
+                                 </children>
+                              </VBox>
+                              <VBox alignment="CENTER">
+                                 <children>
+                                    <HBox alignment="CENTER">
+                                       <children>
+                                          <Label alignment="CENTER" contentDisplay="CENTER" text="Runtime Elapsed">
+                                             <font>
+                                                <Font name="Arial" size="18.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER">
+                                       <children>
+                                          <Label fx:id="runtimeCounter" alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="50.0" text="0">
+                                             <font>
+                                                <Font name="Arial" size="18.0" />
+                                             </font>
+                                          </Label>
+                                          <Label text="seconds">
+                                             <HBox.margin>
+                                                <Insets left="5.0" />
+                                             </HBox.margin>
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                                 <padding>
+                                    <Insets left="20.0" />
+                                 </padding>
+                              </VBox>
+                           </children>
+                           <padding>
+                              <Insets bottom="10.0" top="10.0" />
+                           </padding>
+                        </HBox>
                      </children>
                   </VBox>
                </children>

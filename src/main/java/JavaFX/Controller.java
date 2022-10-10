@@ -1,6 +1,5 @@
 package JavaFX;
 
-import algorithm.AStar;
 import eu.hansolo.tilesfx.Tile;
 import eu.hansolo.tilesfx.TileBuilder;
 import javafx.animation.Animation;
@@ -11,7 +10,10 @@ import javafx.scene.control.Label;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.util.Duration;
 import main.Main;
 
@@ -31,10 +33,20 @@ public class Controller implements javafx.fxml.Initializable {
     private Label currentBestTime;
     @FXML
     private VBox memBox;
-    private Timeline poller;
+    @FXML
+    private ImageView statusImg;
+    @FXML
+    private ImageView statusImg1;
+    @FXML
+    private Label statusLabel;
+    @FXML
+    private Label runtimeCounter;
 
+    private Timeline poller;
+    private Timeline runtimePoller;
+    private long startTime;
+    private long currentTime;
     private Tile memoryTile;
-//    private Tile memoryTile;
     private int TILE_WIDTH = 200;
     private int TILE_HEIGHT = 200;
 
@@ -42,8 +54,23 @@ public class Controller implements javafx.fxml.Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         setUpDefaultValues();
+        setUpRuntimeCounter();
         setUpMemoryTile();
         update();
+    }
+
+    private void setUpRuntimeCounter() {
+        startTime=System.currentTimeMillis();
+        runtimePoller = new Timeline(new KeyFrame(Duration.millis(100), event -> {
+            currentTime=System.currentTimeMillis();
+            runtimeCounter.setText((currentTime - startTime) / 1000 + "s");
+        }));
+        runtimePoller.setCycleCount(Animation.INDEFINITE);
+        runtimePoller.play();
+    }
+
+    private void endRuntimeCounter() {
+        runtimePoller.stop();
     }
 
     private void setUpMemoryTile() {
@@ -52,7 +79,7 @@ public class Controller implements javafx.fxml.Initializable {
                 .prefSize(TILE_WIDTH, TILE_HEIGHT)
                 .maxValue(Runtime.getRuntime().maxMemory() / (1024 * 1024))
                 .threshold(Runtime.getRuntime().maxMemory() * 0.8 / (1024 * 1024))
-                .title("Memory")
+                .title("Memory Usage")
                 .unit("MB")
                 .build();
         memBox.getChildren().addAll(this.memoryTile);
@@ -68,6 +95,15 @@ public class Controller implements javafx.fxml.Initializable {
 
             // Updating best time
             currentBestTime.setText((Main.getCurrentBestTime()));
+
+            // Updating status
+            if (!Main.getIsRunning()) {
+                endRuntimeCounter();
+                statusLabel.setText("Finished");
+                statusImg.setVisible(false);
+                statusImg1.setVisible(true);
+                currentBestTime.setTextFill(Color.GREEN);
+            }
         }));
         poller.setCycleCount(Animation.INDEFINITE);
         poller.play();
@@ -79,6 +115,7 @@ public class Controller implements javafx.fxml.Initializable {
         numOfCores.setText(Main.getNumOfCore());
         numOfProcessors.setText(Main.getNumOfProcessors());
         numOfTasks.setText(Main.getNumOfTasks());
+        statusImg1.setVisible(false);
     }
 
 }
