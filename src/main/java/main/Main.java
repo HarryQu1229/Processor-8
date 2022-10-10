@@ -3,9 +3,11 @@ package main;
 import JavaFX.Controller;
 import io.InputLoader;
 import io.OutputFormatter;
+import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import models.TheGraph;
 import org.graphstream.graph.Node;
 import algorithm.AStar;
@@ -122,6 +124,13 @@ public class Main extends Application {
 
         Scene scene = new Scene(root);
         stage.setScene(scene);
+        stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent windowEvent) {
+                System.exit(0);
+            }
+        });
+        stage.setResizable(false);
         stage.setTitle("Visualisation");
         stage.show();
     }
