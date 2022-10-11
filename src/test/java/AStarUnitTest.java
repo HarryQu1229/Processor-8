@@ -6,7 +6,7 @@ import algorithm.AStar;
 import algorithm.PartialSolution;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class AStarUniTest {
+public class AStarUnitTest {
 
     @Nested
     class Graph8 {

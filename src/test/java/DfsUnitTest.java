@@ -10,7 +10,7 @@ import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class DfsUniTest {
+public class DfsUnitTest {
 
     @Nested
     class Graph8 {
