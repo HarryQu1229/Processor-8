@@ -222,6 +222,16 @@
                         </HBox>
                      </children>
                   </VBox>
+                  <VBox prefHeight="516.0" prefWidth="580.0">
+                     <children>
+                        <HBox prefHeight="516.0" prefWidth="413.0">
+                           <children>
+                              <VBox fx:id="graphContainer" prefHeight="516.0" prefWidth="435.0" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+                  
                </children>
             </HBox>
          </center>

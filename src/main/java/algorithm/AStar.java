@@ -21,6 +21,15 @@ public class AStar {
                 - x2.getNodeStates().get(x1.getNodesPath().get(x1.getNodesPath().size() - 1)).getStartingTime();
     });
 
+    private PartialSolution currentSolution;
+
+    public PartialSolution getCurrentSolution() {
+        return currentSolution;
+    }
+
+    public void setCurrentSolution(PartialSolution currentSolution) {
+        this.currentSolution = currentSolution;
+    }
 
     PartialSolution root;
 
@@ -46,6 +55,7 @@ public class AStar {
         while (!solutionQueue.isEmpty()) {
             // poll the first element from the Priority queue.
             PartialSolution prev = solutionQueue.poll();
+            setCurrentSolution(prev);
 
 //            System.out.println(prev);
 

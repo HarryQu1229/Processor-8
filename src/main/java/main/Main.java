@@ -17,6 +17,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 
 import java.io.IOException;
+import java.util.Collection;
 
 public class Main extends Application {
 
@@ -111,6 +112,10 @@ public class Main extends Application {
         outputFormatter.aStar(solution, INPUT_FILE.substring(0, INPUT_FILE.length() - 4));
     }
 
+    public static PartialSolution getCurrentPartialSolution() {
+        return solution;
+    }
+
     @Override
     public void start(Stage stage) throws Exception {
         FXMLLoader loader = new FXMLLoader();
@@ -123,6 +128,7 @@ public class Main extends Application {
         new Thread(Main::runAStar).start();
 
         Scene scene = new Scene(root);
+        scene.getStylesheets().add(getClass().getResource("/css/ganttChart.css").toExternalForm());
         stage.setScene(scene);
         stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override
