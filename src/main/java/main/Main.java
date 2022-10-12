@@ -9,12 +9,14 @@ import org.graphstream.graph.Node;
 import algorithm.AStar;
 import models.Digraph;
 import algorithm.PartialSolution;
+import utils.GraphGenerator;
 
 import java.io.IOException;
 
 public class Main{
 
     public static void main(String[] args) throws IOException {
+
 
         long startTime = System.currentTimeMillis();
 
@@ -39,6 +41,14 @@ public class Main{
         InputLoader.setNumOfProcessors(4);
         ParallelAStar parallelAStar = new ParallelAStar(4);
         System.out.println(parallelAStar.build().getInfo());
+
+
+//        GraphGenerator.generateRandomGraphs(10);
+
+//       if (args.length < 2) {
+//           System.err.println("Invalid arguments");
+//            return;
+//        }
 
 
 //        DFSParallel dfsParallel = new DFSParallel(4);
