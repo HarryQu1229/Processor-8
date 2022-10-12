@@ -1,6 +1,8 @@
 package main;
 
+import algorithm.AStarUtil;
 import algorithm.ParallelAStar;
+import algorithm.DFSParallel;
 import io.InputLoader;
 import io.OutputFormatter;
 import org.graphstream.graph.Node;
@@ -10,7 +12,7 @@ import algorithm.PartialSolution;
 
 import java.io.IOException;
 
-public class Main {
+public class Main{
 
     public static void main(String[] args) throws IOException {
 
@@ -34,14 +36,25 @@ public class Main {
 //        outputFormatter.aStar(solution, path.substring(0, path.length() - 4));
 
         Digraph inputGraph = InputLoader.loadDotFileFromPath("examples/g11/in.dot");
-        InputLoader.setNumOfProcessors(2);
-        ParallelAStar parallelAStar = new ParallelAStar(2);
+        InputLoader.setNumOfProcessors(4);
+        ParallelAStar parallelAStar = new ParallelAStar(4);
+        System.out.println(parallelAStar.build().getInfo());
 
-        PartialSolution build = parallelAStar.build();
+
+//        DFSParallel dfsParallel = new DFSParallel(4);
+//        dfsParallel.findBestPartial();
+//        System.out.println(dfsParallel.getBestPartialSolution().getInfo());
+
+
+//        AStarUtil aStarUtil = new AStarUtil();
+//        System.out.println(aStarUtil.getBestPartialSolution().getInfo());
+//        ParallelAStar parallelAStar = new ParallelAStar(2);
+
+//        PartialSolution build = parallelAStar.build();
 
 //        System.out.println(build);
 
-        System.out.println(build.getInfo());
+//        System.out.println(build.getInfo());
 //
 //
 ////        InputLoader.print(digraph, false);
@@ -76,7 +89,7 @@ public class Main {
 
         long endTime = System.currentTimeMillis(); //获取结束时间
 
-        System.out.println("程序运行时间：" + (endTime - startTime)/1000 + "s");
+        System.out.println("time used：" + (endTime - startTime)/1000 + "s");
     }
 
 

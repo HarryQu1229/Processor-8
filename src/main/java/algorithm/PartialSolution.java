@@ -15,7 +15,6 @@ public class PartialSolution{
     private int idleTime;
 
 
-
     /**
      * Constructor for any subsequent partial solution on the solution tree except the root of the solution tree.
      * @param prevPartial previous PartialSolution immediately prior to the current PartialSolution
@@ -300,6 +299,110 @@ public class PartialSolution{
             finishingTime = Math.max(finishingTime,weight+startingTime);
         }
         return finishingTime;
+    }
+
+    /**
+     * According to current node to find its all possible PartialSolution(not include pruning PartialSolution).
+     * @param node current Node
+     * @return List  contains all possible PartialSolution
+     */
+    public List<PartialSolution> getNextPartialSolution(Node node){
+
+        List<PartialSolution> nextPartialSolution = new ArrayList<>();
+
+        PriorityQueue<PartialSolution> leafNodeQueue = new PriorityQueue<>((x1, x2) -> {
+            // compare the last node's starting time on the Node Path between 2 solutions.
+            return x1.getNodeStates().get(x1.getNodesPath().get(x1.getNodesPath().size() - 1)).getStartingTime()
+                    - x2.getNodeStates().get(x1.getNodesPath().get(x1.getNodesPath().size() - 1)).getStartingTime();
+        });
+
+        // if this node is the first node, then we just assign it to the first processor
+        if (this.getNodesPath().size() == 0) {
+            PartialSolution current = new PartialSolution(this, node, 1);
+            nextPartialSolution.add(current);
+            return nextPartialSolution;
+        } else {
+            List<Integer> emptyProcessorIds = new ArrayList<>();
+            List<Integer> notEmptyProcessorIds = new ArrayList<>();
+            // check for duplicate(homogeneous) empty processors
+            for (int i = 1; i <= InputLoader.getNumOfProcessors(); i++) {
+                if (this.findLastFinishTime(i) == 0) {
+                    emptyProcessorIds.add(i);
+                } else {
+                    notEmptyProcessorIds.add(i);
+                }
+            }
+
+            // if empty processor count is less or equal to 1, it means that there are no homogeneous
+            // empty processors, carry on with normal operations.
+            if (emptyProcessorIds.size() <= 1) {
+
+                for (int i = 1; i <= InputLoader.getNumOfProcessors(); i++) {
+                    PartialSolution current = new PartialSolution(this, node, i);
+                    // if we have reached leaf node of the solution tree, then return the
+                    // current partial solution as optimal solution, by determining the optimal processorId
+                    // that the leaf task node is being scheduled.
+                    if (current.getNodesPath().size() == TheGraph.get().getNodeCount()) {
+                        leafNodeQueue.offer(current);
+                        if (i == InputLoader.getNumOfProcessors()) {
+                            nextPartialSolution.add(leafNodeQueue.peek());
+                            return nextPartialSolution;
+                        }
+                    } else {
+                        // add to the solutionQueue, if the projected underestimate cost from the current node on the
+                        // solution tree is greater than the minimum guess cost we found from the `AStarUtil` methods,
+                        // effectively it means the minimum cost to reach the leaf node of the solution tree from the
+                        // current node is greater than the Projected Upper Limit of the cost. Therefore, we will discard
+                        // the current node and all of its children nodes on the solution tree. Otherwise, we will add
+                        // the current partial solution into the solution Priority queue.
+                        if (current.calculateCostFunction(node, i) <= TheGraph.getMinimumGuessCost()) {
+                            nextPartialSolution.add(current);
+                        }
+                    }
+                }
+
+                // if 2 or more empty processor before the current task being scheduled, we can arbitrarily choose
+                // which empty processor should the task be scheduled on, by convention, we choose the empty processor
+                // with the smallest lexicographically ordered processorID. As this would have the same effect if
+                // any other empty processor was chosen to schedule the current task on. By having this step, a lot of computation
+                // time would be saved if the task is being scheduled on a lot of processors.
+            } else {
+
+                notEmptyProcessorIds.add(emptyProcessorIds.get(0));
+                for (int i = 0; i < notEmptyProcessorIds.size(); i++) {
+                    PartialSolution current = new PartialSolution(this, node, notEmptyProcessorIds.get(i));
+                    // if we have reached leaf node of the solution tree, then return the
+                    // current partial solution as optimal solution, by determining the optimal processorId
+                    // that the leaf task node is being scheduled.
+                    if (current.getNodesPath().size() == TheGraph.get().getNodeCount()) {
+                        leafNodeQueue.offer(current);
+                        if (i == notEmptyProcessorIds.size() - 1) {
+                            nextPartialSolution.add(leafNodeQueue.peek());
+                            return nextPartialSolution;
+                        }
+                    } else {
+                        if (current.calculateCostFunction(node, notEmptyProcessorIds.get(i)) <= TheGraph.getMinimumGuessCost()) {
+                            nextPartialSolution.add(current);
+                        }
+                    }
+                }
+            }
+        }
+        return nextPartialSolution;
+    }
+
+    /**
+     *  get all possible next PartialSolution(not including the duplicate) according to current PartialSolution
+     * @return List of next PartialSolution(not including the duplicate)
+     */
+    public List<PartialSolution> getAllNextPartialSolution(){
+
+        List<PartialSolution> res = new ArrayList<>();
+
+        for(Node node:getAvailableNextNodes()){
+            res.addAll(getNextPartialSolution(node));
+        }
+        return res;
     }
 
 }

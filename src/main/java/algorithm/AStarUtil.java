@@ -14,12 +14,20 @@ public class AStarUtil {
 
     private int NUM_OF_SOLUTION_ROUTES = 7000;
     private int count;
+    private PartialSolution bestPartialSolution;
 
-    AStarUtil(){
+    public AStarUtil(){
         DFSFindOneSolution(new PartialSolution());
         findMinCost(new PartialSolution());
     }
 
+    public PartialSolution getBestPartialSolution() {
+        return bestPartialSolution;
+    }
+
+    public void setBestPartialSolution(PartialSolution bestPartialSolution) {
+        this.bestPartialSolution = bestPartialSolution;
+    }
 
     /**
      * Find a Guess route of a single solution, following the fashion of the best guess (List algorithm),
@@ -83,6 +91,7 @@ public class AStarUtil {
             }
             // if we found a lower finish time of a full solution, set the new Minimum Guess Cost.
             TheGraph.setMinimumGuessCost(prev.calculateEndScheduleTime());
+            setBestPartialSolution(prev);
             // after a number of attempts for full solutions, terminate the search.
             if(count >= NUM_OF_SOLUTION_ROUTES){
                 return true;
