@@ -1,6 +1,7 @@
 package algorithm;
 
 import io.InputLoader;
+import main.Main;
 import models.NodeProperties;
 import models.TheGraph;
 import org.graphstream.graph.Node;
@@ -13,7 +14,7 @@ public class PartialSolution{
     private List<Node> nodesPath;
     private double costFunction;
     private int idleTime;
-
+    private static double percentageDone = 0;
 
 
     /**
@@ -295,6 +296,19 @@ public class PartialSolution{
             finishingTime = Math.max(finishingTime,weight+startingTime);
         }
         return finishingTime;
+    }
+
+    public double getPercentageDone(){
+        if(!Main.getIsRunning()){
+            setPercentageDone(100);
+        }else{
+            percentageDone = Math.max(percentageDone, (double)nodesPath.size()/(double)TheGraph.get().getNodeCount()* 100) ;
+        }
+        return percentageDone;
+    }
+
+    public static void setPercentageDone(double percentage){
+        percentageDone = percentage;
     }
 
 }

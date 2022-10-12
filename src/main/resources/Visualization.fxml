@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -10,13 +11,13 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="676.0" prefWidth="983.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="JavaFX.Controller">
+<AnchorPane prefHeight="676.0" prefWidth="983.0" style="-fx-background-image: url('/images/background.png');" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="JavaFX.Controller">
    <children>
       <BorderPane minHeight="540.0" minWidth="680.0" prefHeight="540.0" prefWidth="680.0" style="-fx-background-radius: 75;" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="60.0" AnchorPane.rightAnchor="60.0" AnchorPane.topAnchor="30.0">
          <top>
             <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                <children>
-                  <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="60.0" prefWidth="60.0" style="-fx-background-radius: 75 75 0 0; -fx-background-color: #7E858F;" text="Proccessor 8" HBox.hgrow="ALWAYS">
+                  <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="60.0" opacity="0.8" prefWidth="60.0" style="-fx-background-radius: 75 75 0 0; -fx-background-color: #37b2fb;" text="Proccessor 8" HBox.hgrow="ALWAYS">
                      <padding>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </padding>
@@ -30,7 +31,7 @@
          <center>
             <HBox prefHeight="100.0" prefWidth="200.0" style="-fx-background-radius: 0 0 75 75; -fx-background-color: white;" BorderPane.alignment="CENTER">
                <children>
-                  <VBox prefHeight="516.0" prefWidth="399.0">
+                  <VBox prefHeight="516.0" prefWidth="546.0">
                      <children>
                         <HBox alignment="CENTER">
                            <children>
@@ -61,22 +62,11 @@
                            <VBox.margin>
                               <Insets bottom="10.0" top="10.0" />
                            </VBox.margin>
-                        </HBox>
-                        <HBox alignment="CENTER">
-                           <children>
-                              <Label text="Best Time: ">
-                                 <font>
-                                    <Font name="Arial" size="24.0" />
-                                 </font></Label>
-                              <Label fx:id="currentBestTime" text="BEST TIME">
-                                 <font>
-                                    <Font name="Arial" size="24.0" />
-                                 </font></Label>
-                           </children>
                            <padding>
-                              <Insets bottom="20.0" top="20.0" />
+                              <Insets bottom="10.0" />
                            </padding>
                         </HBox>
+                        <Separator prefWidth="200.0" />
                         <HBox alignment="CENTER">
                            <children>
                               <Label text="Number of Processors: ">
@@ -94,7 +84,7 @@
                               </Label>
                            </children>
                            <padding>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="10.0" />
                            </padding>
                         </HBox>
                         <HBox alignment="CENTER">
@@ -119,17 +109,20 @@
                         </HBox>
                         <HBox alignment="CENTER">
                            <children>
-                              <Label text="Number of Cores:">
+                              <Label text="Number of Threads:">
                                  <font>
                                     <Font name="Arial" size="17.0" />
                                  </font>
+                                 <padding>
+                                    <Insets bottom="20.0" />
+                                 </padding>
                               </Label>
                               <Label fx:id="numOfCores">
                                  <font>
                                     <Font name="Arial Bold" size="17.0" />
                                  </font>
                                  <HBox.margin>
-                                    <Insets left="10.0" />
+                                    <Insets bottom="20.0" left="10.0" />
                                  </HBox.margin>
                               </Label>
                            </children>
@@ -137,11 +130,39 @@
                               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                            </padding>
                         </HBox>
-                        <VBox fx:id="memBox" alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0">
-                           <opaqueInsets>
-                              <Insets />
-                           </opaqueInsets>
-                        </VBox>
+                        <HBox prefHeight="259.0" prefWidth="415.0">
+                           <children>
+                              <VBox fx:id="memBox" alignment="TOP_CENTER" prefHeight="174.0" prefWidth="331.5">
+                                 <opaqueInsets>
+                                    <Insets />
+                                 </opaqueInsets>
+                              </VBox>
+                              <VBox fx:id="percentageBox" prefHeight="174.0" prefWidth="331.5" />
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="22.0" prefWidth="392.0">
+                           <children>
+                              <Label text="Best Finish Time: ">
+                                 <font>
+                                    <Font name="Arial" size="24.0" />
+                                 </font></Label>
+                              <Label fx:id="currentBestTime" text="BEST TIME">
+                                 <font>
+                                    <Font name="Arial" size="24.0" />
+                                 </font></Label>
+                           </children>
+                           <padding>
+                              <Insets top="-50.0" />
+                           </padding>
+                        </HBox>
+                     </children>
+                     <padding>
+                        <Insets left="10.0" right="10.0" />
+                     </padding>
+                  </VBox>
+                  <Separator orientation="VERTICAL" prefHeight="516.0" prefWidth="0.0" />
+                  <VBox prefHeight="516.0" prefWidth="580.0">
+                     <children>
                         <HBox alignment="CENTER">
                            <children>
                               <VBox alignment="CENTER">
@@ -159,7 +180,7 @@
                                        <children>
                                           <ImageView fx:id="statusImg" fitHeight="50.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
-                                                <Image url="@images/running.gif" />
+                                                <Image url="@images/running2.gif" />
                                              </image>
                                           </ImageView>
                                           <Label fx:id="statusLabel" prefHeight="41.0" prefWidth="83.0" text="Running~">
@@ -172,7 +193,7 @@
                                           </Label>
                                           <ImageView fx:id="statusImg1" fitHeight="50.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
-                                                <Image url="@images/celebrate.png" />
+                                                <Image url="@images/celebrate2.gif" />
                                              </image>
                                           </ImageView>
                                        </children>
@@ -220,13 +241,9 @@
                               <Insets bottom="10.0" top="10.0" />
                            </padding>
                         </HBox>
-                     </children>
-                  </VBox>
-                  <VBox prefHeight="516.0" prefWidth="580.0">
-                     <children>
-                        <HBox prefHeight="516.0" prefWidth="413.0">
+                        <HBox prefHeight="516.0" prefWidth="440.0">
                            <children>
-                              <VBox fx:id="graphContainer" prefHeight="516.0" prefWidth="435.0" />
+                              <VBox fx:id="graphContainer" prefHeight="516.0" prefWidth="637.0" />
                            </children>
                         </HBox>
                      </children>

@@ -150,7 +150,7 @@ public class Main extends Application {
     public static Boolean getIsRunning() {return isRunning;}
     public static String getCurrentBestTime() {
         if (solution == null) {
-            return "UNKNOWN";
+            return "CALCULATING";
         } else {
             isRunning = false;
             return String.valueOf(solution.calculateEndScheduleTime());

@@ -21,14 +21,14 @@ public class AStar {
                 - x2.getNodeStates().get(x1.getNodesPath().get(x1.getNodesPath().size() - 1)).getStartingTime();
     });
 
-    private PartialSolution currentSolution;
+    private static PartialSolution currentSolution;
 
-    public PartialSolution getCurrentSolution() {
+    public static PartialSolution getCurrentSolution() {
         return currentSolution;
     }
 
-    public void setCurrentSolution(PartialSolution currentSolution) {
-        this.currentSolution = currentSolution;
+    public static void setCurrentSolution(PartialSolution solution) {
+        currentSolution = solution;
     }
 
     PartialSolution root;
