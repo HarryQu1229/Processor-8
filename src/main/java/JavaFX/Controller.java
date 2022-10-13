@@ -185,6 +185,7 @@ public class Controller implements javafx.fxml.Initializable {
 
             // Updating status
             if (!Main.getIsRunning()) {
+                percentageTile.setValue(100);
                 endRuntimeCounter();
                 statusLabel.setText("Finished");
                 statusImg.setVisible(false);
