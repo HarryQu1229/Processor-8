@@ -1,0 +1,37 @@
+digraph {
+	graph [ "Name"="testing-node15-edge25" ];
+	"0" ["Weight"=2];
+	"1" ["Weight"=8];
+	"2" ["Weight"=8];
+	"3" ["Weight"=4];
+	"4" ["Weight"=8];
+	"5" ["Weight"=4];
+	"6" ["Weight"=0];
+	"7" ["Weight"=8];
+	"8" ["Weight"=0];
+	"9" ["Weight"=5];
+	"10" ["Weight"=5];
+	"11" ["Weight"=5];
+	"12" ["Weight"=3];
+	"13" ["Weight"=6];
+	"14" ["Weight"=1];
+	"6" -> "0" ["Weight"=8];
+	"13" -> "5" ["Weight"=2];
+	"9" -> "2" ["Weight"=0];
+	"12" -> "14" ["Weight"=6];
+	"6" -> "14" ["Weight"=9];
+	"10" -> "3" ["Weight"=4];
+	"4" -> "6" ["Weight"=1];
+	"1" -> "12" ["Weight"=2];
+	"9" -> "4" ["Weight"=2];
+	"11" -> "12" ["Weight"=8];
+	"1" -> "10" ["Weight"=2];
+	"3" -> "13" ["Weight"=4];
+	"8" -> "1" ["Weight"=3];
+	"1" -> "11" ["Weight"=9];
+	"3" -> "12" ["Weight"=0];
+	"12" -> "2" ["Weight"=7];
+	"11" -> "9" ["Weight"=8];
+	"12" -> "5" ["Weight"=4];
+	"5" -> "7" ["Weight"=1];
+}
