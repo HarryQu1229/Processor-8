@@ -14,4 +14,4 @@ module project{
     opens images;
     exports main;
     exports JavaFX;
-        }
+}

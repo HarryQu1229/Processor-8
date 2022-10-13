@@ -1,6 +1,9 @@
 package main;
 
 import JavaFX.Controller;
+import algorithm.AStarUtil;
+import algorithm.ParallelAStar;
+import algorithm.DFSParallel;
 import io.InputLoader;
 import io.OutputFormatter;
 import javafx.event.EventHandler;
@@ -15,6 +18,7 @@ import models.Digraph;
 import algorithm.PartialSolution;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import utils.GraphGenerator;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -34,18 +38,29 @@ public class Main extends Application {
 
     public static void main(String[] args) throws IOException {
 
-        if (args.length < 2) {
-            System.err.println("Invalid arguments");
-            return;
-        }
 
         String path = args[0];
         INPUT_FILE = path;
         int processAmount = Integer.parseInt(args[1]);
         numOfProcessors = args[1];
+        long startTime = System.currentTimeMillis();
 
-        InputLoader.setNumOfProcessors(processAmount);
-        InputLoader.loadDotFileFromPath(path);
+//        if (args.length < 2) {
+//            System.err.println("Invalid arguments");
+//            return;
+//        }
+//
+//        String path = args[0];
+//        int processAmount = Integer.parseInt(args[1]);
+//
+//        InputLoader.setNumOfProcessors(processAmount);
+//        InputLoader.loadDotFileFromPath(path);
+//
+//        AStar aStar = new AStar();
+//        PartialSolution solution = aStar.buildTree();
+//
+//        OutputFormatter outputFormatter = new OutputFormatter();
+//        outputFormatter.aStar(solution, path.substring(0, path.length() - 4));
 
         numOfTasks= String.valueOf(TheGraph.get().getNodeCount());
 
@@ -55,13 +70,35 @@ public class Main extends Application {
 
 
         AStar aStar = new AStar();
-        solution = aStar.buildTree();
+        solution = aStar.buildTree(new PartialSolution());
+//        Digraph inputGraph = InputLoader.loadDotFileFromPath("examples/g11/in.dot");
+//        InputLoader.setNumOfProcessors(4);
+//        ParallelAStar parallelAStar = new ParallelAStar(4);
+//        System.out.println(parallelAStar.build().getInfo());
 
-        OutputFormatter outputFormatter = new OutputFormatter();
-        outputFormatter.aStar(solution, path.substring(0, path.length() - 4));
 
-//        Digraph inputGraph = InputLoader.loadDotFileFromPath("examples/g7/in.dot");
-//        InputLoader.setNumOfProcessors(2);
+//        GraphGenerator.generateRandomGraphs(10);
+
+//       if (args.length < 2) {
+//           System.err.println("Invalid arguments");
+//            return;
+//        }
+
+
+//        DFSParallel dfsParallel = new DFSParallel(4);
+//        dfsParallel.findBestPartial();
+//        System.out.println(dfsParallel.getBestPartialSolution().getInfo());
+
+
+//        AStarUtil aStarUtil = new AStarUtil();
+//        System.out.println(aStarUtil.getBestPartialSolution().getInfo());
+//        ParallelAStar parallelAStar = new ParallelAStar(2);
+
+//        PartialSolution build = parallelAStar.build();
+
+//        System.out.println(build);
+
+//        System.out.println(build.getInfo());
 //
 //
 ////        InputLoader.print(digraph, false);
@@ -86,12 +123,17 @@ public class Main extends Application {
 //
 //
 //        AStar aStar = new AStar();
-//        PartialSolution p = aStar.buildTree();
+//        PartialSolution p = aStar.buildTree(new PartialSolution());
+//        System.out.println(p.getInfo());
 //        new OutputFormatter().aStar(p, inputGraph);
 
 //        System.out.println(p.calculateEndScheduleTime());
 //        PartialSolution p = aStar.getLastPartialSolution();
 //        System.out.println(p);
+
+        long endTime = System.currentTimeMillis(); //获取结束时间
+
+        System.out.println("time used：" + (endTime - startTime)/1000 + "s");
     }
 
 
@@ -107,7 +149,7 @@ public class Main extends Application {
 
     private static void runAStar() {
         AStar aStar = new AStar();
-        solution = aStar.buildTree();
+        solution = aStar.buildTree(new PartialSolution());
         OutputFormatter outputFormatter = new OutputFormatter();
         outputFormatter.aStar(solution, INPUT_FILE.substring(0, INPUT_FILE.length() - 4));
     }
