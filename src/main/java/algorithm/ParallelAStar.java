@@ -15,6 +15,7 @@ public class ParallelAStar extends AStar{
       CompletionService<PartialSolution> cs;
       private int numofThread;
 
+
       public ParallelAStar(int numOfThread){
           super();
           this.numofThread = numOfThread;

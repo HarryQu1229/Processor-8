@@ -38,7 +38,7 @@ public class Main extends Application {
 
     public static void main(String[] args) throws IOException {
 
-
+        numOfCore = "4";
         String path = args[0];
         INPUT_FILE = path;
         int processAmount = Integer.parseInt(args[1]);
@@ -53,8 +53,8 @@ public class Main extends Application {
 //        String path = args[0];
 //        int processAmount = Integer.parseInt(args[1]);
 //
-//        InputLoader.setNumOfProcessors(processAmount);
-//        InputLoader.loadDotFileFromPath(path);
+        InputLoader.setNumOfProcessors(processAmount);
+        InputLoader.loadDotFileFromPath(path);
 //
 //        AStar aStar = new AStar();
 //        PartialSolution solution = aStar.buildTree();
@@ -148,8 +148,8 @@ public class Main extends Application {
     }
 
     private static void runAStar() {
-        AStar aStar = new AStar();
-        solution = aStar.buildTree(new PartialSolution());
+       ParallelAStar parallelAStar = new ParallelAStar(Integer.parseInt(getNumOfCore()));
+        solution = parallelAStar.build();
         OutputFormatter outputFormatter = new OutputFormatter();
         outputFormatter.aStar(solution, INPUT_FILE.substring(0, INPUT_FILE.length() - 4));
     }
@@ -190,6 +190,7 @@ public class Main extends Application {
     public static String getNumOfCore() {return numOfCore;}
     public static String getNumOfTasks() {return numOfTasks;}
     public static Boolean getIsRunning() {return isRunning;}
+
     public static String getCurrentBestTime() {
         if (solution == null) {
             return "CALCULATING";
@@ -198,5 +199,5 @@ public class Main extends Application {
             return String.valueOf(solution.calculateEndScheduleTime());
         }
     }
-//    public PartialSolution getSolution() {return solution;}
+    public static PartialSolution getSolution() {return solution;}
 }

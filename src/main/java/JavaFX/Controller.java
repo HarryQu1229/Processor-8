@@ -130,7 +130,9 @@ public class Controller implements javafx.fxml.Initializable {
         startTime=System.currentTimeMillis();
         runtimePoller = new Timeline(new KeyFrame(Duration.millis(100), event -> {
             currentTime = System.currentTimeMillis();
-            runtimeCounter.setText((currentTime - startTime) / 1000 + "s");
+            double time = (currentTime-startTime*1.0) /1000;
+            runtimeCounter.setText(time+"");
+
         }));
         runtimePoller.setCycleCount(Animation.INDEFINITE);
         runtimePoller.play();
@@ -195,8 +197,8 @@ public class Controller implements javafx.fxml.Initializable {
         poller.play();
     }
 
-    private void updateGanttChart() {
-        PartialSolution solution = AStar.getCurrentSolution();
+    private void updateGanttChart(PartialSolution solution) {
+//        PartialSolution solution = AStar.getCurrentSolution();
 
         if( solution != null) {
             // clear current chart
@@ -249,9 +251,12 @@ public class Controller implements javafx.fxml.Initializable {
 
     private void setUpGraphTimer(){
         graphTimer = new Timeline(new KeyFrame(Duration.seconds(0.5), event -> {
-            updateGanttChart();
+            updateGanttChart(AStar.getCurrentSolution());
             if( !Main.getIsRunning() ){
                 chart.setTitle("Optimal Schedule");
+                updateGanttChart(Main.getSolution());
+                percentageTile.setValue(100);
+                PartialSolution.setPercentageDone(100);
                 graphTimer.stop();
             }
         }));
