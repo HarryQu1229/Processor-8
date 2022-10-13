@@ -4,7 +4,6 @@ import algorithm.AStar;
 import algorithm.PartialSolution;
 import eu.hansolo.tilesfx.Tile;
 import eu.hansolo.tilesfx.TileBuilder;
-import eu.hansolo.tilesfx.chart.ChartData;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -16,12 +15,17 @@ import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label;
+
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import java.lang.management.ManagementFactory;
+import com.sun.management.OperatingSystemMXBean;
+
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
@@ -53,7 +57,7 @@ public class Controller implements javafx.fxml.Initializable {
     @FXML
     private VBox memBox;
     @FXML
-    private VBox percentageBox;
+    private VBox cpuBox;
     @FXML
     private ImageView statusImg;
     @FXML
@@ -69,18 +73,17 @@ public class Controller implements javafx.fxml.Initializable {
     private Timeline runtimePoller;
 
     private Timeline graphTimer;
-
-    private ChartData chartData = new ChartData("Item 1", 100);
-
     private long startTime;
     private long currentTime;
     private Tile memoryTile;
-    private Tile percentageTile;
+    private Tile cpuTile;
     private int TILE_WIDTH = 200;
     private int TILE_HEIGHT = 200;
 
     private GanttChart<Number,String> chart;
     private int numberOfProcessor;
+
+    private final OperatingSystemMXBean osBean = ManagementFactory.getPlatformMXBean(OperatingSystemMXBean.class);
 
 
     @Override
@@ -88,7 +91,7 @@ public class Controller implements javafx.fxml.Initializable {
         setUpDefaultValues();
         setUpRuntimeCounter();
         setUpMemoryTile();
-        setUpPercentageTile();
+        setUpCpuTile();
         setUpGanttChart();
         setUpGraphTimer();
         update();
@@ -150,34 +153,38 @@ public class Controller implements javafx.fxml.Initializable {
                 .title("Memory Usage")
                 .unit("MB")
                 .build();
+        // set initial memory tile
+        memoryTile.setValue((Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory())/(1000000d));
         memBox.getChildren().addAll(this.memoryTile);
 
     }
 
-    private void setUpPercentageTile() {
-        percentageTile = TileBuilder.create()
-                .skinType(Tile.SkinType.RADIAL_PERCENTAGE)
+    private void setUpCpuTile() {
+        cpuTile = TileBuilder.create()
+                .skinType(Tile.SkinType.FLUID)
                 .prefSize(TILE_WIDTH, TILE_HEIGHT)
+                .title("CPU Usage")
                 .maxValue(100)
-                .unitColor(Color.WHITE)
-                .valueColor(Color.LIGHTBLUE)
-                .descriptionColor(Color.WHITE)
-                .description("Searched")
-                .textVisible(false)
-                .chartData(chartData)
+                .threshold(80)
+                .unit("\u0025")
+                .decimals(0)
+                .barColor(Tile.BLUE)
                 .animated(true)
-                .title("Current Progress")
                 .build();
-        percentageBox.getChildren().addAll(this.percentageTile);
+        // set initial value
+        cpuTile.setValue(osBean.getSystemCpuLoad() * 100);
+        cpuBox.getChildren().addAll(cpuTile);
     }
 
     private void update() {
         poller = new Timeline(new KeyFrame(Duration.millis(100), event -> {
 
-            // Updating memory tile
             if (Main.getIsRunning()) {
-                double memoryUsage = (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory())/(1000000d);
-                memoryTile.setValue(memoryUsage);
+                // Updating memory tile
+                memoryTile.setValue((Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory())/(1000000d));
+
+                // Updating CPU tile
+                cpuTile.setValue(osBean.getSystemCpuLoad() * 100);
             }
 
             // Updating best time
@@ -185,7 +192,6 @@ public class Controller implements javafx.fxml.Initializable {
 
             // Updating status
             if (!Main.getIsRunning()) {
-                percentageTile.setValue(100);
                 endRuntimeCounter();
                 statusLabel.setText("Finished");
                 statusImg.setVisible(false);
@@ -198,13 +204,10 @@ public class Controller implements javafx.fxml.Initializable {
     }
 
     private void updateGanttChart(PartialSolution solution) {
-//        PartialSolution solution = AStar.getCurrentSolution();
 
         if( solution != null) {
             // clear current chart
             chart.getData().clear();
-
-            percentageTile.setValue(solution.getPercentageDone());
 
             XYChart.Series[] seriesArr = new XYChart.Series[numberOfProcessor];
 
@@ -224,16 +227,16 @@ public class Controller implements javafx.fxml.Initializable {
             for (int i = 0; i < Integer.parseInt(Main.getNumOfProcessors()); i++) {
                 chart.getData().add(seriesArr[i]);
             }
-        }else{
-            long time = (currentTime - startTime)/1000;
-            if(time < 2){
-                percentageTile.setValue(0);
-            }else if ( time < 4){
-                percentageTile.setValue(14.51);
-                PartialSolution.setPercentageDone(14.51);
-            }else if (time < 8){
-                percentageTile.setValue(20.41);
-                PartialSolution.setPercentageDone(20.41);
+
+            // add tooltip to each task scheduled
+            for (XYChart.Series series : chart.getData()) {
+                for (XYChart.Data data : (ObservableList<XYChart.Data>) series.getData()) {
+                    GanttChart.ExtraData extraData = (GanttChart.ExtraData) data.getExtraValue();
+                    // show tooltip with task id and start time and processor id
+                    Tooltip t = new Tooltip("Task: " + extraData.getTaskName() + "\nStart Time: " + data.getXValue() + "\nProcessor: " + data.getYValue());
+                    t.setShowDelay(Duration.ZERO);
+                    Tooltip.install(data.getNode(), t);
+                }
             }
         }
     }
@@ -255,8 +258,6 @@ public class Controller implements javafx.fxml.Initializable {
             if( !Main.getIsRunning() ){
                 chart.setTitle("Optimal Schedule");
                 updateGanttChart(Main.getSolution());
-                percentageTile.setValue(100);
-                PartialSolution.setPercentageDone(100);
                 graphTimer.stop();
             }
         }));

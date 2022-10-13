@@ -137,7 +137,7 @@
                                     <Insets />
                                  </opaqueInsets>
                               </VBox>
-                              <VBox fx:id="percentageBox" prefHeight="174.0" prefWidth="331.5" />
+                              <VBox fx:id="cpuBox" prefHeight="174.0" prefWidth="331.5" />
                            </children>
                         </HBox>
                         <HBox alignment="CENTER" prefHeight="22.0" prefWidth="392.0">

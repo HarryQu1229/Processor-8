@@ -7,6 +7,7 @@ module project{
     requires javafx.base;
     requires gs.core;
     requires eu.hansolo.tilesfx;
+    requires jdk.management;
 
 
     opens main;
