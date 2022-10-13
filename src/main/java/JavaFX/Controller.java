@@ -233,7 +233,7 @@ public class Controller implements javafx.fxml.Initializable {
                 for (XYChart.Data data : (ObservableList<XYChart.Data>) series.getData()) {
                     GanttChart.ExtraData extraData = (GanttChart.ExtraData) data.getExtraValue();
                     // show tooltip with task id and start time and processor id
-                    Tooltip t = new Tooltip("Task: " + extraData.getTaskName() + "\nStart Time: " + data.getXValue() + "\nProcessor: " + data.getYValue());
+                    Tooltip t = new Tooltip("Task: " + extraData.getTaskName() + "\nStart Time: " + data.getXValue() + "\nFinish Time: " + ((int)data.getXValue() + (int)TheGraph.get().getNodeWeightById(extraData.getTaskName())));
                     t.setShowDelay(Duration.ZERO);
                     Tooltip.install(data.getNode(), t);
                 }
