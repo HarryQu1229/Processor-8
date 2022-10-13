@@ -9,6 +9,16 @@ import java.util.List;
 import java.util.PriorityQueue;
 
 public class AStar {
+
+    private static PartialSolution currentSolution;
+
+    public static PartialSolution getCurrentSolution() {
+        return currentSolution;
+    }
+
+    public static void setCurrentSolution(PartialSolution solution) {
+        currentSolution = solution;
+    }
     public AStar() {
         // add the root element of the solution tree - i.e. the empty schedule
         new AStarUtil();
@@ -31,6 +41,7 @@ public class AStar {
         while (!solutionQueue.isEmpty()) {
             // poll the first element from the Priority queue.
             PartialSolution prev = solutionQueue.poll();
+            setCurrentSolution(prev);
 
             // get available next nodes from the current partial solution.
             List<Node> availableNextNodes = prev.getAvailableNextNodes();
