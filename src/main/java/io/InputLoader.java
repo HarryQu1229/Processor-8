@@ -1,5 +1,6 @@
 package io;
 
+import org.apache.commons.cli.*;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
@@ -79,5 +80,50 @@ public class InputLoader {
                 }
             }
         }
+    }
+
+    public static CommandLine parseArgs(String[] args) {
+
+        // initialise options
+        Options options = new Options();
+
+        Option optionP = new Option("p", true, "number of cores for execution in parallel");
+        optionP.setRequired(false);
+
+        Option optionV  = new Option("v", false, "visualisation");
+        optionV.setRequired(false);
+
+        Option optionO = new Option("o", true, "output file name");
+        optionO.setRequired(false);
+
+
+        options.addOption(optionP);
+        options.addOption(optionV);
+        options.addOption(optionO);
+
+        // if invalid arguments are passed, print help message and exit
+        if (args.length < 2) {
+            System.err.println("Invalid arguments");
+            printHelp(options);
+            return null;
+        }
+
+        CommandLineParser parser = new DefaultParser();
+        try {
+            return parser.parse(options, args);
+        } catch (ParseException e) {
+            printHelp(options);
+            return null;
+        }
+    }
+
+    /**
+     * An util method that prints help message
+     *
+     * @param options the options to print help message for
+     */
+    public static void printHelp(Options options) {
+        HelpFormatter formatter = new HelpFormatter();
+        formatter.printHelp("java -jar <jar file name>", "Options:", options, "");
     }
 }

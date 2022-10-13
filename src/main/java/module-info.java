@@ -1,4 +1,4 @@
-module project{
+module com.project {
 
     requires javafx.controls;
     requires javafx.fxml;
@@ -8,6 +8,7 @@ module project{
     requires gs.core;
     requires eu.hansolo.tilesfx;
     requires jdk.management;
+    requires commons.cli;
 
 
     opens main;

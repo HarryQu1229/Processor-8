@@ -7,6 +7,10 @@ import org.graphstream.stream.file.FileSinkDOT;
 import models.Digraph;
 import algorithm.PartialSolution;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.util.Scanner;
 import java.io.IOException;
 
 public class OutputFormatter {
@@ -24,13 +28,26 @@ public class OutputFormatter {
         return baseGraph;
     }
 
-    private void writeToFile(Digraph digraph, String outputFile) {
+    private void writeToFile(Digraph digraph, String outputFile)  {
         FileSinkDOT fs = new FileSinkDOT(true);
         try {
             fs.writeAll(digraph, outputFile);
         } catch (IOException e) {
             System.err.println(e.getMessage());
         }
+
+        StringBuilder sb = new StringBuilder();
+        try (Scanner scanner = new Scanner(new File(outputFile))) {
+            sb.append(String.format("digraph \"%s\" {\n", digraph.getId()));
+            scanner.nextLine();
+            while (scanner.hasNext()) {
+                sb.append(scanner.nextLine() + "\n");
+            }
+        } catch (FileNotFoundException e) {}
+
+        try (FileWriter writer = new FileWriter(outputFile)) {
+            writer.write(sb.toString());
+        } catch (IOException e) {}
     }
 
 }

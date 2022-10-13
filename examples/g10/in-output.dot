@@ -1,4 +1,4 @@
-digraph {
+digraph "solution.examples/g10/in.dot" {
 	graph [ "No of nodes"=10.0 ];
 	graph [ "CCR"=10.0 ];
 	graph [ "Density"=1.9 ];
