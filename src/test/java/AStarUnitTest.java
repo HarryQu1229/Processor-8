@@ -20,7 +20,7 @@ public class AStarUnitTest {
         public void TwoProcessors() {
             InputLoader.setNumOfProcessors(2);
             AStar aStar = new AStar();
-            PartialSolution solution = aStar.buildTree();
+            PartialSolution solution = aStar.buildTree(new PartialSolution());
             assertEquals(28, solution.calculateEndScheduleTime());
         }
 
@@ -28,7 +28,7 @@ public class AStarUnitTest {
         public void FourProcessors() {
             InputLoader.setNumOfProcessors(4);
             AStar aStar = new AStar();
-            PartialSolution solution = aStar.buildTree();
+            PartialSolution solution = aStar.buildTree(new PartialSolution());
             assertEquals(22, solution.calculateEndScheduleTime());
         }
 
@@ -46,7 +46,7 @@ public class AStarUnitTest {
         public void TwoProcessors() {
             InputLoader.setNumOfProcessors(2);
             AStar aStar = new AStar();
-            PartialSolution solution = aStar.buildTree();
+            PartialSolution solution = aStar.buildTree(new PartialSolution());
             assertEquals(581, solution.calculateEndScheduleTime());
         }
 
@@ -54,7 +54,7 @@ public class AStarUnitTest {
         public void FourProcessors() {
             InputLoader.setNumOfProcessors(4);
             AStar aStar = new AStar();
-            PartialSolution solution = aStar.buildTree();
+            PartialSolution solution = aStar.buildTree(new PartialSolution());
             assertEquals(581, solution.calculateEndScheduleTime());
         }
 
@@ -72,7 +72,7 @@ public class AStarUnitTest {
         public void TwoProcessors() {
             InputLoader.setNumOfProcessors(2);
             AStar aStar = new AStar();
-            PartialSolution solution = aStar.buildTree();
+            PartialSolution solution = aStar.buildTree(new PartialSolution());
             assertEquals(55, solution.calculateEndScheduleTime());
         }
 
@@ -80,7 +80,7 @@ public class AStarUnitTest {
         public void FourProcessors() {
             InputLoader.setNumOfProcessors(4);
             AStar aStar = new AStar();
-            PartialSolution solution = aStar.buildTree();
+            PartialSolution solution = aStar.buildTree(new PartialSolution());
             assertEquals(55, solution.calculateEndScheduleTime());
         }
 
@@ -98,7 +98,7 @@ public class AStarUnitTest {
         public void TwoProcessors() {
             InputLoader.setNumOfProcessors(2);
             AStar aStar = new AStar();
-            PartialSolution solution = aStar.buildTree();
+            PartialSolution solution = aStar.buildTree(new PartialSolution());
             assertEquals(50, solution.calculateEndScheduleTime());
         }
 
@@ -106,7 +106,7 @@ public class AStarUnitTest {
         public void FourProcessors() {
             InputLoader.setNumOfProcessors(4);
             AStar aStar = new AStar();
-            PartialSolution solution = aStar.buildTree();
+            PartialSolution solution = aStar.buildTree(new PartialSolution());
             assertEquals(50, solution.calculateEndScheduleTime());
         }
 
@@ -124,7 +124,7 @@ public class AStarUnitTest {
         public void TwoProcessors() {
             InputLoader.setNumOfProcessors(2);
             AStar aStar = new AStar();
-            PartialSolution solution = aStar.buildTree();
+            PartialSolution solution = aStar.buildTree(new PartialSolution());
             assertEquals(350, solution.calculateEndScheduleTime());
         }
 
@@ -132,7 +132,7 @@ public class AStarUnitTest {
         public void FourProcessors() {
             InputLoader.setNumOfProcessors(4);
             AStar aStar = new AStar();
-            PartialSolution solution = aStar.buildTree();
+            PartialSolution solution = aStar.buildTree(new PartialSolution());
             assertEquals(227, solution.calculateEndScheduleTime());
         }
 
