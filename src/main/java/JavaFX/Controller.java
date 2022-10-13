@@ -36,7 +36,6 @@ import org.graphstream.graph.Node;
 public class Controller implements javafx.fxml.Initializable {
 
     private static final int BLOCKHEIGHTDENOMINATOR = 100;
-
 //    @FXML
 //    private Label percentageLabel;
     @FXML
