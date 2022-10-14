@@ -25,7 +25,7 @@
                 <version>0.0.8</version>
                 <configuration>
                     <mainClass>main.NewMain</mainClass>
-                    <commandlineArgs>examples/g2/in.dot 2 -p 4 -v</commandlineArgs>
+                    <commandlineArgs>examples/g4/in.dot 2 -p 4 -v</commandlineArgs>
                 </configuration>
             </plugin>
             <plugin>

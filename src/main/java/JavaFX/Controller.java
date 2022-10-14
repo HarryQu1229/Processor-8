@@ -172,7 +172,7 @@ public class Controller implements javafx.fxml.Initializable {
                 .animated(true)
                 .build();
         // set initial value
-        cpuTile.setValue(osBean.getSystemCpuLoad() * 100);
+        cpuTile.setValue(osBean.getProcessCpuLoad() * 100);
         cpuBox.getChildren().addAll(cpuTile);
     }
 
@@ -184,7 +184,7 @@ public class Controller implements javafx.fxml.Initializable {
                 memoryTile.setValue((Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory())/(1000000d));
 
                 // Updating CPU tile
-                cpuTile.setValue(osBean.getSystemCpuLoad() * 100);
+                cpuTile.setValue(osBean.getProcessCpuLoad() * 100);
             }
 
             // Updating best time

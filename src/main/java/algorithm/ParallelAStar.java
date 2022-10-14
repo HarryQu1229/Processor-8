@@ -15,7 +15,6 @@ public class ParallelAStar extends AStar{
       CompletionService<PartialSolution> cs;
       private int numofThread;
 
-
       public ParallelAStar(int numOfThread){
           super();
           this.numofThread = numOfThread;
@@ -41,11 +40,17 @@ public class ParallelAStar extends AStar{
 
           solutionQueue.offer(new PartialSolution());
 
-          while(solutionQueue.size()<numofThread){
+          while(solutionQueue.size()<numofThread * 100){
                PartialSolution prev  = solutionQueue.poll();
 
                //get all next partialSolution of current PartialSolution
                List<PartialSolution> nextAllPartialSolution = prev.getAllNextPartialSolution();
+
+               for(PartialSolution p:nextAllPartialSolution){
+                   if(p.getNodesPath().size()==TheGraph.get().getNodeCount()){
+                       return p;
+                   }
+               }
 
                solutionQueue.addAll(nextAllPartialSolution);
           }
