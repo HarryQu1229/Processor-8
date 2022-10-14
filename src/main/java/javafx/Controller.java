@@ -1,4 +1,4 @@
-package JavaFX;
+package javafx;
 
 import algorithm.AStar;
 import algorithm.PartialSolution;
@@ -10,7 +10,6 @@ import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.chart.BubbleChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
@@ -18,30 +17,27 @@ import javafx.scene.control.Label;
 
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
 import java.lang.management.ManagementFactory;
+
 import com.sun.management.OperatingSystemMXBean;
 
 import javafx.scene.control.Tooltip;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
-import main.Main;
+import main.FxMain;
 import models.NodeProperties;
-import models.TheGraph;
-import org.graphstream.graph.Graph;
+import models.InputGraph;
 import org.graphstream.graph.Node;
 
 public class Controller implements javafx.fxml.Initializable {
 
     private static final int BLOCKHEIGHTDENOMINATOR = 100;
-//    @FXML
-//    private Label percentageLabel;
+
     @FXML
     private Label inputFile;
     @FXML
@@ -80,7 +76,7 @@ public class Controller implements javafx.fxml.Initializable {
     private int TILE_WIDTH = 200;
     private int TILE_HEIGHT = 200;
 
-    private GanttChart<Number,String> chart;
+    private GanttChart<Number, String> chart;
     private int numberOfProcessor;
 
     private final OperatingSystemMXBean osBean = ManagementFactory.getPlatformMXBean(OperatingSystemMXBean.class);
@@ -97,7 +93,12 @@ public class Controller implements javafx.fxml.Initializable {
         update();
     }
 
+    /**
+     * Set up the chart that displays the detailed scheduling of all tasks
+     */
     private void setUpGanttChart() {
+
+        // Set up the base chart
         NumberAxis xAxis = new NumberAxis();
         CategoryAxis yAxis = new CategoryAxis();
 
@@ -109,6 +110,7 @@ public class Controller implements javafx.fxml.Initializable {
         yAxis.setTickLabelGap(10);
         yAxis.setAnimated(false);
 
+        // Append the blocks that represent the tasks
         List<String> processorsList = new ArrayList<>();
         for (int i = 0; i < numberOfProcessor; i++) {
             processorsList.add(i + 1 + "");
@@ -116,24 +118,28 @@ public class Controller implements javafx.fxml.Initializable {
 
         yAxis.setCategories(FXCollections.<String>observableArrayList(processorsList));
 
-        chart =  new GanttChart<Number,String>(xAxis,yAxis);
+        chart = new GanttChart<>(xAxis, yAxis);
 
         chart.setTitle("Current Partial Schedule");
+
         // set chart title to bold
-        chart.setStyle("-fx-font-weight: " +  700);
-        chart.setBlockHeight( BLOCKHEIGHTDENOMINATOR / numberOfProcessor);
+        chart.setStyle("-fx-font-weight: " + 700);
+        chart.setBlockHeight(BLOCKHEIGHTDENOMINATOR / numberOfProcessor);
 
         chart.setLegendVisible(false);
 
         graphContainer.getChildren().add(chart);
     }
 
+    /**
+     * Display how long the program has been running on the UI
+     */
     private void setUpRuntimeCounter() {
-        startTime=System.currentTimeMillis();
+        startTime = System.currentTimeMillis();
         runtimePoller = new Timeline(new KeyFrame(Duration.millis(100), event -> {
             currentTime = System.currentTimeMillis();
-            double time = (currentTime-startTime*1.0) /1000;
-            runtimeCounter.setText(time+"");
+            double time = (currentTime - startTime * 1.0) / 1000;
+            runtimeCounter.setText(time + "");
 
         }));
         runtimePoller.setCycleCount(Animation.INDEFINITE);
@@ -144,6 +150,9 @@ public class Controller implements javafx.fxml.Initializable {
         runtimePoller.stop();
     }
 
+    /**
+     * Set up the tile that displays the RAM usage
+     */
     private void setUpMemoryTile() {
         memoryTile = TileBuilder.create()
                 .skinType(Tile.SkinType.GAUGE)
@@ -153,12 +162,16 @@ public class Controller implements javafx.fxml.Initializable {
                 .title("Memory Usage")
                 .unit("MB")
                 .build();
+
         // set initial memory tile
-        memoryTile.setValue((Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory())/(1000000d));
+        memoryTile.setValue((Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / (1000000d));
         memBox.getChildren().addAll(this.memoryTile);
 
     }
 
+    /**
+     * Set up the tile that displays the CPU usage
+     */
     private void setUpCpuTile() {
         cpuTile = TileBuilder.create()
                 .skinType(Tile.SkinType.FLUID)
@@ -171,6 +184,7 @@ public class Controller implements javafx.fxml.Initializable {
                 .barColor(Tile.BLUE)
                 .animated(true)
                 .build();
+
         // set initial value
         cpuTile.setValue(osBean.getProcessCpuLoad() * 100);
         cpuBox.getChildren().addAll(cpuTile);
@@ -179,19 +193,19 @@ public class Controller implements javafx.fxml.Initializable {
     private void update() {
         poller = new Timeline(new KeyFrame(Duration.millis(100), event -> {
 
-            if (Main.getIsRunning()) {
+            if (FxMain.getIsRunning()) {
                 // Updating memory tile
-                memoryTile.setValue((Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory())/(1000000d));
+                memoryTile.setValue((Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / (1000000d));
 
                 // Updating CPU tile
                 cpuTile.setValue(osBean.getProcessCpuLoad() * 100);
             }
 
             // Updating best time
-            currentBestTime.setText((Main.getCurrentBestTime()));
+            currentBestTime.setText((FxMain.getCurrentBestTime()));
 
             // Updating status
-            if (!Main.getIsRunning()) {
+            if (!FxMain.getIsRunning()) {
                 endRuntimeCounter();
                 statusLabel.setText("Finished");
                 statusImg.setVisible(false);
@@ -203,9 +217,14 @@ public class Controller implements javafx.fxml.Initializable {
         poller.play();
     }
 
+    /**
+     * Whenever a new complete schedule has been obtained, update the gantt chart to show user the scheduler
+     *
+     * @param solution the new complete schedule that needs to be displayed
+     */
     private void updateGanttChart(PartialSolution solution) {
 
-        if( solution != null) {
+        if (solution != null) {
             // clear current chart
             chart.getData().clear();
 
@@ -216,15 +235,15 @@ public class Controller implements javafx.fxml.Initializable {
             }
 
             NodeProperties nodeProperties;
-            for (Node node : solution.getNodesPath()){
+            for (Node node : solution.getNodesPath()) {
                 nodeProperties = solution.getNodeStates().get(node);
                 int taskProcessor = nodeProperties.getProcessorId();
                 int taskStartTime = nodeProperties.getStartingTime();
-                XYChart.Data data = new XYChart.Data(taskStartTime, taskProcessor+"", new GanttChart.ExtraData((int)TheGraph.get().getNodeWeightById(node.getId()),"task" ,node.getId()));
+                XYChart.Data data = new XYChart.Data(taskStartTime, taskProcessor + "", new GanttChart.ExtraData((int) InputGraph.get().getNodeWeightById(node.getId()), "task", node.getId()));
                 seriesArr[taskProcessor - 1].getData().add(data);
             }
 
-            for (int i = 0; i < Integer.parseInt(Main.getNumOfProcessors()); i++) {
+            for (int i = 0; i < Integer.parseInt(FxMain.getNumOfProcessors()); i++) {
                 chart.getData().add(seriesArr[i]);
             }
 
@@ -233,7 +252,7 @@ public class Controller implements javafx.fxml.Initializable {
                 for (XYChart.Data data : (ObservableList<XYChart.Data>) series.getData()) {
                     GanttChart.ExtraData extraData = (GanttChart.ExtraData) data.getExtraValue();
                     // show tooltip with task id and start time and processor id
-                    Tooltip t = new Tooltip("Task: " + extraData.getTaskName() + "\nStart Time: " + data.getXValue() + "\nFinish Time: " + ((int)data.getXValue() + (int)TheGraph.get().getNodeWeightById(extraData.getTaskName())));
+                    Tooltip t = new Tooltip("Task: " + extraData.getTaskName() + "\nStart Time: " + data.getXValue() + "\nFinish Time: " + ((int) data.getXValue() + (int) InputGraph.get().getNodeWeightById(extraData.getTaskName())));
                     t.setShowDelay(Duration.ZERO);
                     Tooltip.install(data.getNode(), t);
                 }
@@ -242,22 +261,22 @@ public class Controller implements javafx.fxml.Initializable {
     }
 
     private void setUpDefaultValues() {
-        inputFile.setText(Main.getInputFile());
-        outputFile.setText(Main.getOutputFile());
-        numOfCores.setText(Main.getNumOfCore());
-        numOfProcessors.setText(Main.getNumOfProcessors());
-        numOfTasks.setText(Main.getNumOfTasks());
-        numberOfProcessor = Integer.parseInt(Main.getNumOfProcessors());
+        inputFile.setText(FxMain.getInputFile());
+        outputFile.setText(FxMain.getOutputFile());
+        numOfCores.setText(FxMain.getNumOfCore());
+        numOfProcessors.setText(FxMain.getNumOfProcessors());
+        numOfTasks.setText(FxMain.getNumOfTasks());
+        numberOfProcessor = Integer.parseInt(FxMain.getNumOfProcessors());
         statusImg1.setVisible(false);
         currentBestTime.setTextFill(Color.RED);
     }
 
-    private void setUpGraphTimer(){
+    private void setUpGraphTimer() {
         graphTimer = new Timeline(new KeyFrame(Duration.seconds(0.5), event -> {
             updateGanttChart(AStar.getCurrentSolution());
-            if( !Main.getIsRunning() ){
+            if (!FxMain.getIsRunning()) {
                 chart.setTitle("Optimal Schedule");
-                updateGanttChart(Main.getSolution());
+                updateGanttChart(FxMain.getSolution());
                 graphTimer.stop();
             }
         }));

@@ -1,22 +1,25 @@
 package algorithm;
 
-public class NodeInfo {
+/**
+ * A model class stores the information about each node in the solution tree
+ */
+public class SolutionTreeNode {
     private String nodeId;
     private int weight;
-    private int indegrees;
+    private int inDegrees;
     private int scheduledProcessor;
     private int scheduledStartTime;
 
-    public NodeInfo(String nodeId, int weight, int indegree) {
+    public SolutionTreeNode(String nodeId, int weight, int inDegree) {
         this.nodeId = nodeId;
         this.weight = weight;
-        this.indegrees = indegree;
+        this.inDegrees = inDegree;
         this.scheduledProcessor = -1;
         this.scheduledStartTime = -1;
     }
 
-    public NodeInfo clone() {
-        NodeInfo nodeInfo = new NodeInfo(this.nodeId, this.weight, this.indegrees);
+    public SolutionTreeNode clone() {
+        SolutionTreeNode nodeInfo = new SolutionTreeNode(this.nodeId, this.weight, this.inDegrees);
         nodeInfo.setScheduledProcessor(this.scheduledProcessor);
         nodeInfo.setScheduledStartTime(this.scheduledStartTime);
         return nodeInfo;
@@ -30,8 +33,8 @@ public class NodeInfo {
         return weight;
     }
 
-    public int getIndegrees() {
-        return indegrees;
+    public int getInDegrees() {
+        return inDegrees;
     }
 
     public int getScheduledProcessor() {
@@ -51,11 +54,11 @@ public class NodeInfo {
     }
 
     public void decreaseIndegrees() {
-        this.indegrees--;
+        this.inDegrees--;
     }
 
     public void increaseIndegrees() {
-        this.indegrees++;
+        this.inDegrees++;
     }
 
     @Override
@@ -63,7 +66,7 @@ public class NodeInfo {
         return "NodeInfo{" +
                 "nodeId='" + nodeId + '\'' +
                 ", weight=" + weight +
-                ", indegrees=" + indegrees +
+                ", indegrees=" + inDegrees +
                 ", scheduledProcessor=" + scheduledProcessor +
                 ", scheduledStartTime=" + scheduledStartTime +
                 '}';

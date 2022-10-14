@@ -24,7 +24,7 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.8</version>
                 <configuration>
-                    <mainClass>main.NewMain</mainClass>
+                    <mainClass>main.Main</mainClass>
                     <commandlineArgs>examples/g4/in.dot 2 -p 4 -v</commandlineArgs>
                 </configuration>
             </plugin>
@@ -41,7 +41,7 @@
                         <configuration>
                             <transformers>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>main.NewMain</mainClass>
+                                    <mainClass>main.Main</mainClass>
                                 </transformer>
                             </transformers>
                         </configuration>

@@ -1,6 +1,9 @@
 package models;
 
-public class TheGraph {
+/**
+ * The class that stores the information about the input graph
+ */
+public class InputGraph {
 
     private static Digraph graph;
 
@@ -19,7 +22,7 @@ public class TheGraph {
     }
 
     public static void setMinimumGuessCost(int minCost) {
-        TheGraph.minimumGuessCost = minCost;
+        InputGraph.minimumGuessCost = minCost;
     }
 
 

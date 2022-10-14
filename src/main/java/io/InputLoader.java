@@ -14,11 +14,11 @@ public class InputLoader {
 
     private static int numOfProcessors;
 
-    public static void setNumOfProcessors(int inputNumOfProcessors){
+    public static void setNumOfProcessors(int inputNumOfProcessors) {
         numOfProcessors = inputNumOfProcessors;
     }
 
-    public static int getNumOfProcessors(){
+    public static int getNumOfProcessors() {
         return numOfProcessors;
     }
 
@@ -43,6 +43,12 @@ public class InputLoader {
         return graph;
     }
 
+    /**
+     * Load the graph using relative path
+     *
+     * @param path the relative path of the dot file
+     * @return the graph that is loaded from the dot file
+     */
     public static Digraph loadDotFileFromPath(String path) {
         Digraph graph = new Digraph("solution." + path);
         FileSource fileSource = new FileSourceDOT();
@@ -82,6 +88,13 @@ public class InputLoader {
         }
     }
 
+    /**
+     * Handling the command line arguments
+     *
+     * @param args all the command line arguments stored in a string array
+     * @return a CommandLine instance that stores the required setup of command line arguments, or null if the argument
+     * is invalid
+     */
     public static CommandLine parseArgs(String[] args) {
 
         // initialise options
@@ -90,12 +103,11 @@ public class InputLoader {
         Option optionP = new Option("p", true, "number of cores for execution in parallel");
         optionP.setRequired(false);
 
-        Option optionV  = new Option("v", false, "visualisation");
+        Option optionV = new Option("v", false, "visualisation");
         optionV.setRequired(false);
 
         Option optionO = new Option("o", true, "output file name");
         optionO.setRequired(false);
-
 
         options.addOption(optionP);
         options.addOption(optionV);

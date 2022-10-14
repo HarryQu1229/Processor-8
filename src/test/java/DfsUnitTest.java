@@ -1,5 +1,5 @@
-import algorithm.BranchAndBoundAlgorithm;
-import algorithm.NodeInfo;
+import algorithm.BranchAndBound;
+import algorithm.SolutionTreeNode;
 import io.InputLoader;
 import org.graphstream.graph.Node;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,38 +25,38 @@ public class DfsUnitTest {
         @Test
         public void TwoProcessors() {
             InputLoader.setNumOfProcessors(2);
-            Map<Node, NodeInfo> nodeInfo = new HashMap<>();
+            Map<Node, SolutionTreeNode> nodeInfo = new HashMap<>();
             int nodeSize = 0;
             int sum = 0;
             for (Node node: digraph) {
                 int weight = (int) digraph.getNodeWeightById(node.getId());
                 nodeInfo.put(
                         node,
-                        new NodeInfo(node.getId(), weight, node.getInDegree())
+                        new SolutionTreeNode(node.getId(), weight, node.getInDegree())
                 );
                 nodeSize++;
                 sum += weight;
             }
-            int ans = BranchAndBoundAlgorithm.solve(nodeInfo, nodeSize, sum);
+            int ans = BranchAndBound.solve(nodeInfo, nodeSize, sum);
             assertEquals(28, ans);
         }
 
         @Test
         public void FourProcessors() {
             InputLoader.setNumOfProcessors(4);
-            Map<Node, NodeInfo> nodeInfo = new HashMap<>();
+            Map<Node, SolutionTreeNode> nodeInfo = new HashMap<>();
             int nodeSize = 0;
             int sum = 0;
             for (Node node: digraph) {
                 int weight = (int) digraph.getNodeWeightById(node.getId());
                 nodeInfo.put(
                         node,
-                        new NodeInfo(node.getId(), weight, node.getInDegree())
+                        new SolutionTreeNode(node.getId(), weight, node.getInDegree())
                 );
                 nodeSize++;
                 sum += weight;
             }
-            int ans = BranchAndBoundAlgorithm.solve(nodeInfo, nodeSize, sum);
+            int ans = BranchAndBound.solve(nodeInfo, nodeSize, sum);
             assertEquals(22, ans);
         }
 
@@ -75,38 +75,38 @@ public class DfsUnitTest {
         @Test
         public void TwoProcessors() {
             InputLoader.setNumOfProcessors(2);
-            Map<Node, NodeInfo> nodeInfo = new HashMap<>();
+            Map<Node, SolutionTreeNode> nodeInfo = new HashMap<>();
             int nodeSize = 0;
             int sum = 0;
             for (Node node: digraph) {
                 int weight = (int) digraph.getNodeWeightById(node.getId());
                 nodeInfo.put(
                         node,
-                        new NodeInfo(node.getId(), weight, node.getInDegree())
+                        new SolutionTreeNode(node.getId(), weight, node.getInDegree())
                 );
                 nodeSize++;
                 sum += weight;
             }
-            int ans = BranchAndBoundAlgorithm.solve(nodeInfo, nodeSize, sum);
+            int ans = BranchAndBound.solve(nodeInfo, nodeSize, sum);
             assertEquals(581, ans);
         }
 
         @Test
         public void FourProcessors() {
             InputLoader.setNumOfProcessors(4);
-            Map<Node, NodeInfo> nodeInfo = new HashMap<>();
+            Map<Node, SolutionTreeNode> nodeInfo = new HashMap<>();
             int nodeSize = 0;
             int sum = 0;
             for (Node node: digraph) {
                 int weight = (int) digraph.getNodeWeightById(node.getId());
                 nodeInfo.put(
                         node,
-                        new NodeInfo(node.getId(), weight, node.getInDegree())
+                        new SolutionTreeNode(node.getId(), weight, node.getInDegree())
                 );
                 nodeSize++;
                 sum += weight;
             }
-            int ans = BranchAndBoundAlgorithm.solve(nodeInfo, nodeSize, sum);
+            int ans = BranchAndBound.solve(nodeInfo, nodeSize, sum);
             assertEquals(581, ans);
         }
 
@@ -125,38 +125,38 @@ public class DfsUnitTest {
         @Test
         public void TwoProcessors() {
             InputLoader.setNumOfProcessors(2);
-            Map<Node, NodeInfo> nodeInfo = new HashMap<>();
+            Map<Node, SolutionTreeNode> nodeInfo = new HashMap<>();
             int nodeSize = 0;
             int sum = 0;
             for (Node node: digraph) {
                 int weight = (int) digraph.getNodeWeightById(node.getId());
                 nodeInfo.put(
                         node,
-                        new NodeInfo(node.getId(), weight, node.getInDegree())
+                        new SolutionTreeNode(node.getId(), weight, node.getInDegree())
                 );
                 nodeSize++;
                 sum += weight;
             }
-            int ans = BranchAndBoundAlgorithm.solve(nodeInfo, nodeSize, sum);
+            int ans = BranchAndBound.solve(nodeInfo, nodeSize, sum);
             assertEquals(55, ans);
         }
 
         @Test
         public void FourProcessors() {
             InputLoader.setNumOfProcessors(4);
-            Map<Node, NodeInfo> nodeInfo = new HashMap<>();
+            Map<Node, SolutionTreeNode> nodeInfo = new HashMap<>();
             int nodeSize = 0;
             int sum = 0;
             for (Node node: digraph) {
                 int weight = (int) digraph.getNodeWeightById(node.getId());
                 nodeInfo.put(
                         node,
-                        new NodeInfo(node.getId(), weight, node.getInDegree())
+                        new SolutionTreeNode(node.getId(), weight, node.getInDegree())
                 );
                 nodeSize++;
                 sum += weight;
             }
-            int ans = BranchAndBoundAlgorithm.solve(nodeInfo, nodeSize, sum);
+            int ans = BranchAndBound.solve(nodeInfo, nodeSize, sum);
             assertEquals(55, ans);
         }
 
@@ -175,38 +175,38 @@ public class DfsUnitTest {
         @Test
         public void TwoProcessors() {
             InputLoader.setNumOfProcessors(2);
-            Map<Node, NodeInfo> nodeInfo = new HashMap<>();
+            Map<Node, SolutionTreeNode> nodeInfo = new HashMap<>();
             int nodeSize = 0;
             int sum = 0;
             for (Node node: digraph) {
                 int weight = (int) digraph.getNodeWeightById(node.getId());
                 nodeInfo.put(
                         node,
-                        new NodeInfo(node.getId(), weight, node.getInDegree())
+                        new SolutionTreeNode(node.getId(), weight, node.getInDegree())
                 );
                 nodeSize++;
                 sum += weight;
             }
-            int ans = BranchAndBoundAlgorithm.solve(nodeInfo, nodeSize, sum);
+            int ans = BranchAndBound.solve(nodeInfo, nodeSize, sum);
             assertEquals(50, ans);
         }
 
         @Test
         public void FourProcessors() {
             InputLoader.setNumOfProcessors(4);
-            Map<Node, NodeInfo> nodeInfo = new HashMap<>();
+            Map<Node, SolutionTreeNode> nodeInfo = new HashMap<>();
             int nodeSize = 0;
             int sum = 0;
             for (Node node: digraph) {
                 int weight = (int) digraph.getNodeWeightById(node.getId());
                 nodeInfo.put(
                         node,
-                        new NodeInfo(node.getId(), weight, node.getInDegree())
+                        new SolutionTreeNode(node.getId(), weight, node.getInDegree())
                 );
                 nodeSize++;
                 sum += weight;
             }
-            int ans = BranchAndBoundAlgorithm.solve(nodeInfo, nodeSize, sum);
+            int ans = BranchAndBound.solve(nodeInfo, nodeSize, sum);
             assertEquals(50, ans);
         }
 
@@ -225,38 +225,38 @@ public class DfsUnitTest {
         @Test
         public void TwoProcessors() {
             InputLoader.setNumOfProcessors(2);
-            Map<Node, NodeInfo> nodeInfo = new HashMap<>();
+            Map<Node, SolutionTreeNode> nodeInfo = new HashMap<>();
             int nodeSize = 0;
             int sum = 0;
             for (Node node: digraph) {
                 int weight = (int) digraph.getNodeWeightById(node.getId());
                 nodeInfo.put(
                         node,
-                        new NodeInfo(node.getId(), weight, node.getInDegree())
+                        new SolutionTreeNode(node.getId(), weight, node.getInDegree())
                 );
                 nodeSize++;
                 sum += weight;
             }
-            int ans = BranchAndBoundAlgorithm.solve(nodeInfo, nodeSize, sum);
+            int ans = BranchAndBound.solve(nodeInfo, nodeSize, sum);
             assertEquals(350, ans);
         }
 
         @Test
         public void FourProcessors() {
             InputLoader.setNumOfProcessors(4);
-            Map<Node, NodeInfo> nodeInfo = new HashMap<>();
+            Map<Node, SolutionTreeNode> nodeInfo = new HashMap<>();
             int nodeSize = 0;
             int sum = 0;
             for (Node node: digraph) {
                 int weight = (int) digraph.getNodeWeightById(node.getId());
                 nodeInfo.put(
                         node,
-                        new NodeInfo(node.getId(), weight, node.getInDegree())
+                        new SolutionTreeNode(node.getId(), weight, node.getInDegree())
                 );
                 nodeSize++;
                 sum += weight;
             }
-            int ans = BranchAndBoundAlgorithm.solve(nodeInfo, nodeSize, sum);
+            int ans = BranchAndBound.solve(nodeInfo, nodeSize, sum);
             assertEquals(227, ans);
         }
 

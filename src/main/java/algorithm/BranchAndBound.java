@@ -1,22 +1,22 @@
 package algorithm;
 
 import io.InputLoader;
-import models.TheGraph;
+import models.InputGraph;
 import org.graphstream.graph.Node;
 
 import java.util.*;
 
-public class BranchAndBoundAlgorithm {
+public class BranchAndBound {
     public static int minCost = Integer.MAX_VALUE;
     public static int numOfNodes;
     public static int sumOfWeights;
-    public static List<NodeInfo> solution;
+    public static List<SolutionTreeNode> solution;
     public static List<Node> visitedNodes;
-    public static Map<Node, NodeInfo> nodeInfo;
+    public static Map<Node, SolutionTreeNode> nodeInfo;
     public static int[] processorsCurrentTimes;
 
-    public static int solve(Map<Node, NodeInfo> nodeInfo, int nodeSize, int sum) {
-        BranchAndBoundAlgorithm.nodeInfo = nodeInfo;
+    public static int solve(Map<Node, SolutionTreeNode> nodeInfo, int nodeSize, int sum) {
+        BranchAndBound.nodeInfo = nodeInfo;
         numOfNodes = nodeSize;
         sumOfWeights = sum;
         visitedNodes = new ArrayList<>();
@@ -26,16 +26,19 @@ public class BranchAndBoundAlgorithm {
 
         // print out the solution
         int ans = 0;
-        for (NodeInfo eachNodeInfo : solution) {
+        for (SolutionTreeNode eachNodeInfo : solution) {
             ans = Math.max(ans, eachNodeInfo.getScheduledStartTime() + eachNodeInfo.getWeight());
-            System.out.println(eachNodeInfo.toDotString());
         }
 
-        System.out.println("Total time: " + ans);
         return ans;
 
     }
 
+    /**
+     * Use branch and bound algorithm to calculate the best scheduling time
+     *
+     * @param currentCost the cost of best scheduling
+     */
     public static void calculate(int currentCost) {
 
         // if the currentCost is already larger than the current minCost, return
@@ -45,14 +48,12 @@ public class BranchAndBoundAlgorithm {
 
         // if all nodes have been processed, check if it can give us the final answer
         if (visitedNodes.size() == numOfNodes) {
-            if (minCost > currentCost) {
-                minCost = currentCost;
-                solution = new ArrayList<>();
-                for (Node node : visitedNodes) {
-                    solution.add(nodeInfo.get(node).clone());
-                }
-                return;
+            minCost = currentCost;
+            solution = new ArrayList<>();
+            for (Node node : visitedNodes) {
+                solution.add(nodeInfo.get(node).clone());
             }
+            return;
         }
 
         int startTimeForCurrentChild;
@@ -61,9 +62,9 @@ public class BranchAndBoundAlgorithm {
         int previousScheduledProcessor;
         int previousScheduledStartTime;
         // get the next node to be processed
-        for (Node node : TheGraph.get()) {
+        for (Node node : InputGraph.get()) {
             // if the current node should not start (indegree is 0), return
-            if (nodeInfo.get(node).getIndegrees() != 0) {
+            if (nodeInfo.get(node).getInDegrees() != 0) {
                 continue;
             }
 
@@ -73,7 +74,7 @@ public class BranchAndBoundAlgorithm {
             }
 
             // update all indegress of the nodes that are connected to the current node
-            for (Node child : TheGraph.get().getChildrenOfNode(node)) {
+            for (Node child : InputGraph.get().getChildrenOfNode(node)) {
                 nodeInfo.get(child).decreaseIndegrees();
             }
 
@@ -93,12 +94,12 @@ public class BranchAndBoundAlgorithm {
                         if (i == nodeInfo.get(eachProcessedNode).getScheduledProcessor()) {
                             // find the finishing time of the parent node of the current node and let it be the starting
                             // time of the current node.
-                            startTimeForCurrentChild = Math.max(startTimeForCurrentChild, +nodeInfo.get(eachProcessedNode).getScheduledStartTime() + nodeInfo.get(eachProcessedNode).getWeight());
+                            startTimeForCurrentChild = Math.max(startTimeForCurrentChild, nodeInfo.get(eachProcessedNode).getScheduledStartTime() + nodeInfo.get(eachProcessedNode).getWeight());
                             // if the current node is on the different processor with the selected its parent node.
                         } else {
                             // find the finishing time of the parent node of the current node and add communication cost,
                             // then let it be the starting time of the current node.
-                            startTimeForCurrentChild = Math.max(startTimeForCurrentChild, nodeInfo.get(eachProcessedNode).getScheduledStartTime() + nodeInfo.get(eachProcessedNode).getWeight() + TheGraph.get().getEdgeWeight(eachProcessedNode.getId(), node.getId()).intValue());
+                            startTimeForCurrentChild = Math.max(startTimeForCurrentChild, nodeInfo.get(eachProcessedNode).getScheduledStartTime() + nodeInfo.get(eachProcessedNode).getWeight() + InputGraph.get().getEdgeWeight(eachProcessedNode.getId(), node.getId()).intValue());
                         }
                     }
                 }
@@ -133,7 +134,7 @@ public class BranchAndBoundAlgorithm {
             sumOfWeights += nodeInfo.get(node).getWeight();
 
             // update all indegress of the nodes that are connected to the current node
-            for (Node child : TheGraph.get().getChildrenOfNode(node)) {
+            for (Node child : InputGraph.get().getChildrenOfNode(node)) {
                 nodeInfo.get(child).increaseIndegrees();
             }
         }

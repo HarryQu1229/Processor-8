@@ -7,6 +7,10 @@ import org.graphstream.stream.file.FileSinkDOT;
 import java.io.IOException;
 import java.util.Random;
 
+/**
+ * This class can randomly generate digraph
+ * This is for the purpose of speed integration testing
+ */
 public class GraphGenerator {
 
     /**
@@ -65,7 +69,7 @@ public class GraphGenerator {
                     graph.addEdge(String.valueOf(i), String.valueOf(source), String.valueOf(target), true);
                     graph.getEdge(String.valueOf(i)).setAttribute("Weight", (int) (Math.random() * 10));
                 } catch (Exception e) {
-                    System.out.println("Error: " + e.getMessage());
+                    System.err.println(e.getMessage());
                 }
             }
         }

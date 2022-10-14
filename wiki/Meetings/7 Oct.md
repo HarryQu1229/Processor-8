@@ -1,6 +1,6 @@
 # Meeting Minutes 07/10
 
-1. Member showed the the set up of JavaFX
+1. Member showed the the set up of javafx
 2. Discussed and agreed what tasks need to be done before finial submissino
    1. Multi thread the algorithm
    2. Visualization

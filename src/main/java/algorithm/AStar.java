@@ -1,10 +1,8 @@
 package algorithm;
 
-import io.InputLoader;
-import models.TheGraph;
+import models.InputGraph;
 import org.graphstream.graph.Node;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.PriorityQueue;
 
@@ -19,15 +17,17 @@ public class AStar {
     public static void setCurrentSolution(PartialSolution solution) {
         currentSolution = solution;
     }
+
     public AStar() {
         // add the root element of the solution tree - i.e. the empty schedule
         new AStarUtil();
     }
 
     /**
-     * using A star algorithm to build tree and calculate solution,
+     * Calculate the best schedule from a certain node
      *
-     * @return String   the shortest solution path.
+     * @param root where the calculation should start from
+     * @return the partial solution that contains the best schedule
      */
     public PartialSolution buildTree(PartialSolution root) {
 
@@ -52,10 +52,10 @@ public class AStar {
                 // is sufficient for the starting node. Effectively pruning by removing the symmetric part of the
                 // solution tree.
                 List<PartialSolution> nextPartialSolution = prev.getNextPartialSolution(node);
-                for(PartialSolution partialSolution:nextPartialSolution){
-                    if(partialSolution.getNodesPath().size()==TheGraph.get().getNodeCount()){
+                for (PartialSolution partialSolution : nextPartialSolution) {
+                    if (partialSolution.getNodesPath().size() == InputGraph.get().getNodeCount()) {
                         return partialSolution;
-                    }else{
+                    } else {
                         solutionQueue.offer(partialSolution);
                     }
                 }
