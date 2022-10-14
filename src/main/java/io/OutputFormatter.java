@@ -21,11 +21,11 @@ public class OutputFormatter {
     /**
      * Append the necessary attributes to the graph and output the solution from A Star algorithm to a dot file
      * @param partialSolution the solution comes out from A Star algorithm
-     * @param inputGraphName the name of the graph, which will be written to the dot file as well
+     * @param outputGraphName the name of the graph, which will be written to the dot file as well
      * @return the graph instance that is written to the dot file, this graph contains the information about how each
      * task is scheduled
      */
-    public Digraph aStar(PartialSolution partialSolution, String inputGraphName) {
+    public Digraph aStar(PartialSolution partialSolution, String outputGraphName) {
         Digraph baseGraph = InputGraph.get();
         partialSolution.getNodesPath().forEach(n -> {
             Node node = baseGraph.getNodeById(n.getId());
@@ -34,7 +34,7 @@ public class OutputFormatter {
             node.setAttribute("Processor", properties.getProcessorId());
             node.setAttribute("Weight", (int) baseGraph.getNodeWeightById(node.getId()));
         });
-        writeToFile(baseGraph, inputGraphName + "-output.dot");
+        writeToFile(baseGraph, outputGraphName);
         return baseGraph;
     }
 

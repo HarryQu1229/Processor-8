@@ -46,6 +46,9 @@ public class FxMain extends Application {
 
         if (cmd.hasOption("o")) {
             OUTPUT_FILE = cmd.getOptionValue("o");
+            if (!OUTPUT_FILE.endsWith(".dot")) {
+                OUTPUT_FILE += ".dot";
+            }
         } else {
             OUTPUT_FILE = path.substring(0, path.length() - 4) + "-output.dot";
         }
@@ -59,12 +62,23 @@ public class FxMain extends Application {
         if (visualise) {
             launch(args);
         } else {
-            AStar aStar = Integer.parseInt(numOfCore) > 1 ? new ParallelAStar(Integer.parseInt(numOfCore)) : new AStar();
-            solution = aStar.buildTree(new PartialSolution());
+            System.out.println("\n------------------- Processor 8 -------------------");
+            System.out.println("Start Computing: " + INPUT_FILE);
+            System.out.println("Number of processors: " + numOfProcessors);
+            System.out.println("Number of cores: " + numOfCore);
+            System.out.println("Running...");
+            long start = System.currentTimeMillis();
+            runAStar();
+            long timeUsed = System.currentTimeMillis() - start;
+            System.out.println();
+            System.out.println("Completed!");
+            System.out.println("Solution saved to " + OUTPUT_FILE);
+            System.out.println("Cost of optimal schedule: " + solution.calculateEndScheduleTime());
+            String time = String.format("Time used: %.2fs", (double) timeUsed / 1000);
+            System.out.println(time);
+            System.out.println("-----------------------------------------------------\n");
         }
 
-        OutputFormatter outputFormatter = new OutputFormatter();
-        outputFormatter.aStar(solution, path.substring(0, path.length() - 4));
         System.exit(0);
 
     }
@@ -84,7 +98,7 @@ public class FxMain extends Application {
         ParallelAStar parallelAStar = new ParallelAStar(Integer.parseInt(getNumOfCore()));
         solution = parallelAStar.build();
         OutputFormatter outputFormatter = new OutputFormatter();
-        outputFormatter.aStar(solution, INPUT_FILE.substring(0, INPUT_FILE.length() - 4));
+        outputFormatter.aStar(solution, OUTPUT_FILE);
     }
 
     public static PartialSolution getCurrentPartialSolution() {
