@@ -1,20 +1,20 @@
-digraph {
-	"11" ["Start"=0,"Weight"=8,"Processor"=1];
+digraph "solution.examples/g2/in.dot" {
+	"11" ["Start"=0,"Weight"=8,"Processor"=2];
 	"13" ["Start"=32,"Weight"=10,"Processor"=3];
-	"6" ["Start"=64,"Weight"=14,"Processor"=3];
-	"15" ["Start"=0,"Weight"=14,"Processor"=2];
-	"14" ["Start"=14,"Weight"=12,"Processor"=2];
-	"12" ["Start"=26,"Weight"=6,"Processor"=2];
-	"10" ["Start"=32,"Weight"=6,"Processor"=2];
-	"9" ["Start"=38,"Weight"=8,"Processor"=2];
-	"8" ["Start"=46,"Weight"=18,"Processor"=2];
-	"5" ["Start"=64,"Weight"=14,"Processor"=2];
-	"4" ["Start"=48,"Weight"=16,"Processor"=3];
-	"7" ["Start"=70,"Weight"=12,"Processor"=4];
-	"3" ["Start"=54,"Weight"=20,"Processor"=1];
-	"2" ["Start"=74,"Weight"=4,"Processor"=1];
-	"1" ["Start"=80,"Weight"=12,"Processor"=1];
-	"0" ["Start"=92,"Weight"=12,"Processor"=1];
+	"6" ["Start"=70,"Weight"=14,"Processor"=1];
+	"15" ["Start"=0,"Weight"=14,"Processor"=1];
+	"14" ["Start"=14,"Weight"=12,"Processor"=1];
+	"12" ["Start"=26,"Weight"=6,"Processor"=1];
+	"10" ["Start"=32,"Weight"=6,"Processor"=1];
+	"9" ["Start"=48,"Weight"=8,"Processor"=4];
+	"8" ["Start"=38,"Weight"=18,"Processor"=1];
+	"5" ["Start"=56,"Weight"=14,"Processor"=1];
+	"4" ["Start"=58,"Weight"=16,"Processor"=2];
+	"7" ["Start"=62,"Weight"=12,"Processor"=3];
+	"3" ["Start"=56,"Weight"=20,"Processor"=4];
+	"2" ["Start"=76,"Weight"=4,"Processor"=4];
+	"1" ["Start"=80,"Weight"=12,"Processor"=4];
+	"0" ["Start"=92,"Weight"=12,"Processor"=4];
 	"1" -> "0" ["Weight"=9.0];
 	"10" -> "2" ["Weight"=2.0];
 	"10" -> "3" ["Weight"=6.0];

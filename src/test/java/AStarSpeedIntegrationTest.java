@@ -39,7 +39,7 @@ public class AStarSpeedIntegrationTest {
         public void twoProcessor() {
             InputLoader.setNumOfProcessors(2);
             aStar = new AStar();
-            aStar.buildTree();
+            aStar.buildTree(new PartialSolution());
         }
 
         @Test
@@ -47,7 +47,7 @@ public class AStarSpeedIntegrationTest {
         public void fourProcessor() {
             InputLoader.setNumOfProcessors(4);
             aStar = new AStar();
-            aStar.buildTree();
+            aStar.buildTree(new PartialSolution());
         }
     }
 
@@ -67,7 +67,7 @@ public class AStarSpeedIntegrationTest {
         public void twoProcessor() {
             InputLoader.setNumOfProcessors(2);
             aStar = new AStar();
-            aStar.buildTree();
+            aStar.buildTree(new PartialSolution());
         }
 
         @Test
@@ -75,7 +75,7 @@ public class AStarSpeedIntegrationTest {
         public void fourProcessor() {
             InputLoader.setNumOfProcessors(4);
             aStar = new AStar();
-            aStar.buildTree();
+            aStar.buildTree(new PartialSolution());
         }
     }
 
@@ -95,7 +95,7 @@ public class AStarSpeedIntegrationTest {
         public void twoProcessor() {
             InputLoader.setNumOfProcessors(2);
             aStar = new AStar();
-            aStar.buildTree();
+            aStar.buildTree(new PartialSolution());
         }
 
         @Test
@@ -103,7 +103,7 @@ public class AStarSpeedIntegrationTest {
         public void fourProcessor() {
             InputLoader.setNumOfProcessors(4);
             aStar = new AStar();
-            aStar.buildTree();
+            aStar.buildTree(new PartialSolution());
         }
     }
 
