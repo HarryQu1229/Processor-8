@@ -2,26 +2,24 @@ package algorithm;
 
 import io.InputLoader;
 import models.NodeProperties;
-import models.TheGraph;
+import models.InputGraph;
 import org.graphstream.graph.Node;
 
 import java.util.*;
 
-public class PartialSolution{
+public class PartialSolution {
 
     private LinkedHashMap<Node, NodeProperties> nodeStates;
     private List<Node> nodesPath;
     private double costFunction;
     private int idleTime;
 
-
-
     /**
      * Constructor for any subsequent partial solution on the solution tree except the root of the solution tree.
+     *
      * @param prevPartial previous PartialSolution immediately prior to the current PartialSolution
      * @param currentNode The current Task(node) that is going to be scheduled
      * @param processorId Which Processor is the current Task(node) is going to be scheduled on
-     * @Param numOfProcessor
      */
     public PartialSolution(PartialSolution prevPartial, Node currentNode, int processorId) {
 
@@ -59,6 +57,7 @@ public class PartialSolution{
     public int getIdleTime() {
         return idleTime;
     }
+
     public LinkedHashMap<Node, NodeProperties> getNodeStates() {
         return nodeStates;
     }
@@ -70,16 +69,15 @@ public class PartialSolution{
 
     /**
      * @return a String representation of the current partial solution status on the solution tree.
-     *           i.e.  "(nodeId,processorId,startTime);"
+     * i.e.  "(nodeId,processorId,startTime);"
      */
-    public String getInfo(){
+    public String getInfo() {
 
         StringBuffer sb = new StringBuffer();
-        for(int i=0;i<nodesPath.size();i++){
-            Node node = nodesPath.get(i);
-            sb.append("(" + node.getId()+",");
-            sb.append(nodeStates.get(node).getProcessorId()+",");
-            sb.append(nodeStates.get(node).getStartingTime()+")");
+        for (Node node : nodesPath) {
+            sb.append("(").append(node.getId()).append(",");
+            sb.append(nodeStates.get(node).getProcessorId()).append(",");
+            sb.append(nodeStates.get(node).getStartingTime()).append(")");
             sb.append(";");
         }
         sb.append(" Finishing Time: ");
@@ -90,9 +88,10 @@ public class PartialSolution{
 
     /**
      * initialize fields from the previous partial solution.
+     *
      * @param prevPartial previous PartialSolution immediately prior to the current PartialSolution
      */
-    private void initializeFromPrevPartialSolution(PartialSolution prevPartial){
+    private void initializeFromPrevPartialSolution(PartialSolution prevPartial) {
         // copy nodePath from the previous solution
         this.nodesPath = new ArrayList<>();
         nodesPath.addAll(prevPartial.getNodesPath());
@@ -116,13 +115,13 @@ public class PartialSolution{
     /**
      * initialize fields for root partial solution of the solution tree.
      */
-    private void initializeRootPartialSolution(){
+    private void initializeRootPartialSolution() {
         this.nodesPath = new ArrayList<>();
         this.nodeStates = new LinkedHashMap<>();
         idleTime = 0;
 
         // initialize status for all nodes.
-        for (Node node : TheGraph.get().getAllNodes()) {
+        for (Node node : InputGraph.get().getAllNodes()) {
             NodeProperties nodeProperties = new NodeProperties();
             nodeProperties.setProcessorId(0);//processorId
             nodeProperties.setInDegree(node.getInDegree());// inDegree
@@ -135,22 +134,24 @@ public class PartialSolution{
 
     /**
      * logic for schedule task according to supplied task(Node) and processorId.
+     *
      * @param currentNode The current Task(node) that is going to be scheduled
      * @param processorId Which Processor is the current Task(node) is going to be scheduled on
      */
-    private void scheduleTask(Node currentNode, int processorId){
-            // set the starting time of the current node.
-            int earliestStartTime = calculateStartingTime(currentNode, processorId);
-            nodeStates.get(currentNode).setStartingTime(earliestStartTime);
+    private void scheduleTask(Node currentNode, int processorId) {
+        // set the starting time of the current node.
+        int earliestStartTime = calculateStartingTime(currentNode, processorId);
+        nodeStates.get(currentNode).setStartingTime(earliestStartTime);
     }
 
     /**
      * logic for calculating next available starting time for the task.
+     *
      * @param currentNode The current Task(node) that is going to be scheduled
      * @param processorId Which Processor is the current Task(node) is going to be scheduled on
      * @return int      starting time
      */
-    public int calculateStartingTime(Node currentNode, int processorId){
+    public int calculateStartingTime(Node currentNode, int processorId) {
         // make sure it's not the root partial solution of the solution tree before going to the next step.
         if (!nodesPath.isEmpty()) {
             // find the latest finishing time of previously direct parent(s) of the current node(Task) iteratively.
@@ -161,13 +162,13 @@ public class PartialSolution{
                     if (nodeStates.get(node).getProcessorId() == processorId) {
                         // find the finishing time of the parent node of the current node and let it be the starting
                         // time of the current node.
-                        startTime = (int) Math.max(startTime, nodeStates.get(node).getStartingTime() + TheGraph.get().getNodeWeightById(node.getId()));
+                        startTime = (int) Math.max(startTime, nodeStates.get(node).getStartingTime() + InputGraph.get().getNodeWeightById(node.getId()));
                         // if the current node is on the different processor with the selected its parent node.
                     } else {
                         // find the finishing time of the parent node of the current node and add communication cost,
                         // then let it be the starting time of the current node.
-                        int communicationCost = TheGraph.get().getEdgeWeight(node.getId(), currentNode.getId()).intValue();
-                        startTime = (int) Math.max(startTime, nodeStates.get(node).getStartingTime() + TheGraph.get().getNodeWeightById(node.getId()) + communicationCost);
+                        int communicationCost = InputGraph.get().getEdgeWeight(node.getId(), currentNode.getId()).intValue();
+                        startTime = (int) Math.max(startTime, nodeStates.get(node).getStartingTime() + InputGraph.get().getNodeWeightById(node.getId()) + communicationCost);
                     }
                 }
             }
@@ -181,17 +182,18 @@ public class PartialSolution{
 
     /**
      * calculate the minimum bottom level among all possible future tasks.
-     * @return int      minimum bottom level.
+     *
+     * @return int minimum bottom level.
      */
-    private int futureMinBottomLevel(){
+    private int futureMinBottomLevel() {
         int MinStartingTime = Integer.MAX_VALUE;
         int bottomLevel = 0;
-        for(Node node : getAvailableNextNodes()){
-            for(int p = 1; p <= InputLoader.getNumOfProcessors(); p++){
+        for (Node node : getAvailableNextNodes()) {
+            for (int p = 1; p <= InputLoader.getNumOfProcessors(); p++) {
                 int startingTime = calculateStartingTime(node, p);
-                if(startingTime < MinStartingTime){
+                if (startingTime < MinStartingTime) {
                     MinStartingTime = startingTime;
-                    bottomLevel = (int) (TheGraph.get().getBottomLevel(node) + startingTime);
+                    bottomLevel = (int) (InputGraph.get().getBottomLevel(node) + startingTime);
                 }
             }
         }
@@ -201,17 +203,18 @@ public class PartialSolution{
 
     /**
      * Get the last finish time of this processor
+     *
      * @param processorId processor Id
      * @return last finish time of this processor
      */
-    public int findLastFinishTime(int processorId){
+    public int findLastFinishTime(int processorId) {
 
         int lastTime = 0;
-        for(Node node:nodesPath){
-            if(nodeStates.get(node).getProcessorId()==processorId){
+        for (Node node : nodesPath) {
+            if (nodeStates.get(node).getProcessorId() == processorId) {
                 String nodeId = node.getId();
-                lastTime = (int)Math.max(lastTime,
-                        nodeStates.get(node).getStartingTime() + TheGraph.get().getNodeWeightById(nodeId));
+                lastTime = (int) Math.max(lastTime,
+                        nodeStates.get(node).getStartingTime() + InputGraph.get().getNodeWeightById(nodeId));
             }
         }
         return lastTime;
@@ -223,7 +226,7 @@ public class PartialSolution{
      * @param currentNode The current Task(node) that is going to be scheduled
      * @param processorId Which Processor is the current Task(node) is going to be scheduled on
      */
-    private void updateCurrentPartialSolutionStatus(Node currentNode, int processorId){
+    private void updateCurrentPartialSolutionStatus(Node currentNode, int processorId) {
         // add this node to the solution path
         nodesPath.add(currentNode);
         // set current node's processor number.
@@ -233,7 +236,7 @@ public class PartialSolution{
 
         // decrease all direct children indegree by 1 (effectively get rid of the in edges from the current node to
         // all its children nodes).
-        List<Node> childrenNodes = TheGraph.get().getChildrenOfNode(currentNode);
+        List<Node> childrenNodes = InputGraph.get().getChildrenOfNode(currentNode);
         for (Node childNode : childrenNodes) {
             int currentInDegree = nodeStates.get(childNode).getInDegree();
             nodeStates.get(childNode).setInDegree(currentInDegree - 1);
@@ -247,38 +250,43 @@ public class PartialSolution{
      * @param processorId Which Processor is the current Task(node) is going to be scheduled on
      * @return double       costFunction value of the current partial solution.
      */
-    public double calculateCostFunction(Node currentNode, int processorId){
+    public double calculateCostFunction(Node currentNode, int processorId) {
 
         // find idle time
         idleTime += nodeStates.get(currentNode).getStartingTime() - findLastFinishTime(processorId);
 
         // find the max bottomLevel + startingTime of scheduled node as of this partial solution.
         double bottomLevel = 0;
-        for(Node node: nodesPath) {
+        for (Node node : nodesPath) {
             bottomLevel = Math.max(bottomLevel,
-                    nodeStates.get(node).getStartingTime() + TheGraph.get().getBottomLevel(node));
+                    nodeStates.get(node).getStartingTime() + InputGraph.get().getBottomLevel(node));
         }
 
         // calculate the load balance of the current partial solution.
-        double loadBalance = (TheGraph.get().getSumWeightOfNodes() + idleTime) / (double)InputLoader.getNumOfProcessors();
+        double loadBalance = (InputGraph.get().getSumWeightOfNodes() + idleTime) / (double) InputLoader.getNumOfProcessors();
 
         // Since the calculation of the futureMinBottomLevel is computer intensive, we pre-check that if the current
         // bottom level and loadBalance is already greater than the Minimum Guess Cost, if so, there is no need to calculate
         // the futureMinBottomLevel since we will be dropping this partial solution and all combination of its children
         // from the solution tree.
-        if (TheGraph.getMinimumGuessCost()!=0  && Math.max(bottomLevel, loadBalance) > TheGraph.getMinimumGuessCost()){
-            return Math.max(bottomLevel,loadBalance);
+        if (InputGraph.getMinimumGuessCost() != 0 && Math.max(bottomLevel, loadBalance) > InputGraph.getMinimumGuessCost()) {
+            return Math.max(bottomLevel, loadBalance);
         }
         // return the MAX value from maxCurrentBottomLevel, currentLoadBalance, and futureMinBottomLevel
         // as the cost function value for the current partial solution.
-        return Math.max(Math.max(bottomLevel,loadBalance),futureMinBottomLevel());
+        return Math.max(Math.max(bottomLevel, loadBalance), futureMinBottomLevel());
     }
 
     @Override
     public String toString() {
+        StringBuilder sb = new StringBuilder();
+        for (Node node : nodesPath) {
+            sb.append(node.getId()).append(": ");
+            sb.append(nodeStates.get(node).getProcessorId()).append(" ");
+        }
         return "PartialSolution{" +
-                "nodesPath=" + nodesPath +
-                ", costFunction=" + costFunction +
+                "nodesPath=" + nodesPath + " (" + sb + " )" +
+                "endTime=" + this.calculateEndScheduleTime() +
                 '}';
     }
 
@@ -287,14 +295,122 @@ public class PartialSolution{
      *
      * @return int      finishing time.
      */
-    public int calculateEndScheduleTime(){
+    public int calculateEndScheduleTime() {
         int finishingTime = 0;
-        for (Node node: nodesPath){
-            int weight = (int) TheGraph.get().getNodeWeightById(node.getId());
+        for (Node node : nodesPath) {
+            int weight = (int) InputGraph.get().getNodeWeightById(node.getId());
             int startingTime = nodeStates.get(node).getStartingTime();
-            finishingTime = Math.max(finishingTime,weight+startingTime);
+            finishingTime = Math.max(finishingTime, weight + startingTime);
         }
         return finishingTime;
     }
+
+
+    /**
+     * According to current node to find its all possible PartialSolution(not include pruning PartialSolution).
+     *
+     * @param node current Node
+     * @return List  contains all possible PartialSolution
+     */
+    public List<PartialSolution> getNextPartialSolution(Node node) {
+
+        List<PartialSolution> nextPartialSolution = new ArrayList<>();
+
+        PriorityQueue<PartialSolution> leafNodeQueue = new PriorityQueue<>((x1, x2) -> {
+            // compare the last node's starting time on the Node Path between 2 solutions.
+            return x1.getNodeStates().get(x1.getNodesPath().get(x1.getNodesPath().size() - 1)).getStartingTime()
+                    - x2.getNodeStates().get(x1.getNodesPath().get(x1.getNodesPath().size() - 1)).getStartingTime();
+        });
+
+        // if this node is the first node, then we just assign it to the first processor
+        if (this.getNodesPath().size() == 0) {
+            PartialSolution current = new PartialSolution(this, node, 1);
+            nextPartialSolution.add(current);
+            return nextPartialSolution;
+        } else {
+            List<Integer> emptyProcessorIds = new ArrayList<>();
+            List<Integer> notEmptyProcessorIds = new ArrayList<>();
+            // check for duplicate(homogeneous) empty processors
+            for (int i = 1; i <= InputLoader.getNumOfProcessors(); i++) {
+                if (this.findLastFinishTime(i) == 0) {
+                    emptyProcessorIds.add(i);
+                } else {
+                    notEmptyProcessorIds.add(i);
+                }
+            }
+
+            // if empty processor count is less or equal to 1, it means that there are no homogeneous
+            // empty processors, carry on with normal operations.
+            if (emptyProcessorIds.size() <= 1) {
+
+                for (int i = 1; i <= InputLoader.getNumOfProcessors(); i++) {
+                    PartialSolution current = new PartialSolution(this, node, i);
+                    // if we have reached leaf node of the solution tree, then return the
+                    // current partial solution as optimal solution, by determining the optimal processorId
+                    // that the leaf task node is being scheduled.
+                    if (current.getNodesPath().size() == InputGraph.get().getNodeCount()) {
+                        leafNodeQueue.offer(current);
+                        if (i == InputLoader.getNumOfProcessors()) {
+                            nextPartialSolution.add(leafNodeQueue.peek());
+                            return nextPartialSolution;
+                        }
+                    } else {
+                        // add to the solutionQueue, if the projected underestimate cost from the current node on the
+                        // solution tree is greater than the minimum guess cost we found from the `AStarUtil` methods,
+                        // effectively it means the minimum cost to reach the leaf node of the solution tree from the
+                        // current node is greater than the Projected Upper Limit of the cost. Therefore, we will discard
+                        // the current node and all of its children nodes on the solution tree. Otherwise, we will add
+                        // the current partial solution into the solution Priority queue.
+                        if (current.calculateCostFunction(node, i) <= InputGraph.getMinimumGuessCost()) {
+                            nextPartialSolution.add(current);
+                        }
+                    }
+                }
+
+                // if 2 or more empty processor before the current task being scheduled, we can arbitrarily choose
+                // which empty processor should the task be scheduled on, by convention, we choose the empty processor
+                // with the smallest lexicographically ordered processorID. As this would have the same effect if
+                // any other empty processor was chosen to schedule the current task on. By having this step, a lot of computation
+                // time would be saved if the task is being scheduled on a lot of processors.
+            } else {
+
+                notEmptyProcessorIds.add(emptyProcessorIds.get(0));
+                for (int i = 0; i < notEmptyProcessorIds.size(); i++) {
+                    PartialSolution current = new PartialSolution(this, node, notEmptyProcessorIds.get(i));
+                    // if we have reached leaf node of the solution tree, then return the
+                    // current partial solution as optimal solution, by determining the optimal processorId
+                    // that the leaf task node is being scheduled.
+                    if (current.getNodesPath().size() == InputGraph.get().getNodeCount()) {
+                        leafNodeQueue.offer(current);
+                        if (i == notEmptyProcessorIds.size() - 1) {
+                            nextPartialSolution.add(leafNodeQueue.peek());
+                            return nextPartialSolution;
+                        }
+                    } else {
+                        if (current.calculateCostFunction(node, notEmptyProcessorIds.get(i)) <= InputGraph.getMinimumGuessCost()) {
+                            nextPartialSolution.add(current);
+                        }
+                    }
+                }
+            }
+        }
+        return nextPartialSolution;
+    }
+
+    /**
+     * get all possible next PartialSolution(not including the duplicate) according to current PartialSolution
+     *
+     * @return List of next PartialSolution(not including the duplicate)
+     */
+    public List<PartialSolution> getAllNextPartialSolution() {
+
+        List<PartialSolution> res = new ArrayList<>();
+
+        for (Node node : getAvailableNextNodes()) {
+            res.addAll(getNextPartialSolution(node));
+        }
+        return res;
+    }
+
 
 }

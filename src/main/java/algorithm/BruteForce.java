@@ -1,7 +1,7 @@
 package algorithm;
 
 import io.InputLoader;
-import models.TheGraph;
+import models.InputGraph;
 import org.graphstream.graph.Node;
 import models.Digraph;
 
@@ -38,7 +38,7 @@ public class BruteForce extends Digraph {
      */
     public void print() {
 
-        try(PrintWriter out = new PrintWriter("texts.txt")) {
+        try (PrintWriter out = new PrintWriter("texts.txt")) {
             Queue<String> queue = new LinkedList<>();
             int count = 0;
 
@@ -49,67 +49,63 @@ public class BruteForce extends Digraph {
                 out.println(poll);
                 count++;
                 List<Node> children = getChildrenOfNode(getNodeById(poll));
-                for (int i = 0; i < children.size(); i++) {
-                    queue.add(children.get(i).getId());
+                for (Node child : children) {
+                    queue.add(child.getId());
                 }
             }
 
             out.println(count);
             out.println(minStartingTime);
-        }catch (Exception e){
-
-        }
-
+        } catch (Exception ignored) {}
     }
 
-
-    // build the solutionTree From this PartialSolution
     int minStartingTime = Integer.MAX_VALUE;
 
     /**
      * method to recursively build the solution tree
+     *
      * @param prevPartialSolution previous PartialSolution immediately prior to the current PartialSolution
      */
     public void build(PartialSolution prevPartialSolution) {
 
-
-            if (prevPartialSolution.getNodesPath().size() == TheGraph.get().getNodeCount()) {
-                int FinalFinishTime  = 0;
-                List<Node> nodes = prevPartialSolution.getNodesPath();
-                for(int i=0;i<nodes.size();i++){
-                    FinalFinishTime = (int) Math.max(FinalFinishTime,prevPartialSolution.getNodeStates().get(nodes.get(i)).getStartingTime()+TheGraph.get().getNodeWeightById(nodes.get(i).getId()));
-                }
-
-                minStartingTime = Math.min(minStartingTime,FinalFinishTime);
-                return;
+        if (prevPartialSolution.getNodesPath().size() == InputGraph.get().getNodeCount()) {
+            int FinalFinishTime = 0;
+            List<Node> nodes = prevPartialSolution.getNodesPath();
+            for (Node node : nodes) {
+                FinalFinishTime = (int) Math.max(FinalFinishTime, prevPartialSolution.getNodeStates().get(node).getStartingTime() + InputGraph.get().getNodeWeightById(node.getId()));
             }
 
-            List<Node> availableNextNodes = prevPartialSolution.getAvailableNextNodes();
-            // for every available next Tasks.
-            for (Node availableNextNode : availableNextNodes) {
-                // for every processor
-                if(prevPartialSolution.getNodesPath().size()==0){
+            minStartingTime = Math.min(minStartingTime, FinalFinishTime);
+            return;
+        }
+
+        List<Node> availableNextNodes = prevPartialSolution.getAvailableNextNodes();
+        // for every available next Tasks.
+        for (Node availableNextNode : availableNextNodes) {
+            // for every processor
+            if (prevPartialSolution.getNodesPath().size() == 0) {
+                PartialSolution currentPartialSolution = new PartialSolution(prevPartialSolution,
+                        availableNextNode, 1);
+                appendChildNodes(prevPartialSolution, currentPartialSolution);
+                build(currentPartialSolution);
+            } else {
+                for (int j = 1; j <= InputLoader.getNumOfProcessors(); j++) {
+                    // create a new PartialSolution and recursively expand the next level of the solution graph
                     PartialSolution currentPartialSolution = new PartialSolution(prevPartialSolution,
-                            availableNextNode, 1);
+                            availableNextNode, j);
+
                     appendChildNodes(prevPartialSolution, currentPartialSolution);
                     build(currentPartialSolution);
-                }else{
-                    for (int j = 1; j <= InputLoader.getNumOfProcessors(); j++) {
-                        // create a new PartialSolution and recursively expand the next level of the solution graph
-                        PartialSolution currentPartialSolution = new PartialSolution(prevPartialSolution,
-                                availableNextNode, j);
-
-                        appendChildNodes(prevPartialSolution, currentPartialSolution);
-                        build(currentPartialSolution);
-                    }
-
                 }
+
             }
+        }
     }
 
     /**
      * helper methods to append the children to the current solution tree digraph
-     * @param prev previous Partial solution
+     *
+     * @param prev    previous Partial solution
      * @param current current Partial solution
      */
     private void appendChildNodes(PartialSolution prev, PartialSolution current) {
