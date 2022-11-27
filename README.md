@@ -51,6 +51,8 @@ Two UI libraries that helped us build the UI, where `JavaFX` is the base UI libr
 
 A Java built-in library that allows us to apply multi threading in our program, and also provide us with multiple useful features, for example, obtaining the result of the thread that finishes the first
 
+
+
 | Member name |
 | ----------- |
 | Alan Zhang  |
