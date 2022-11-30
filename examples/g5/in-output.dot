@@ -1,0 +1,27 @@
+digraph {
+	"a" ["Start"=0,"Weight"=2,"Processor"=1];
+	"b" ["Start"=7,"Weight"=4,"Processor"=1];
+	"c" ["Start"=4,"Weight"=4,"Processor"=2];
+	"d" ["Start"=2,"Weight"=5,"Processor"=1];
+	"e" ["Start"=8,"Weight"=4,"Processor"=2];
+	"f" ["Start"=11,"Weight"=3,"Processor"=1];
+	"g" ["Start"=17,"Weight"=2,"Processor"=1];
+	"h" ["Start"=12,"Weight"=5,"Processor"=2];
+	"i" ["Start"=17,"Weight"=4,"Processor"=2];
+	"j" ["Start"=14,"Weight"=3,"Processor"=1];
+	"k" ["Start"=20,"Weight"=2,"Processor"=1];
+	"a" -> "b" ["Weight"=6.0];
+	"a" -> "c" ["Weight"=2.0];
+	"a" -> "d" ["Weight"=3.0];
+	"a" -> "e" ["Weight"=4.0];
+	"b" -> "f" ["Weight"=4.0];
+	"b" -> "j" ["Weight"=6.0];
+	"c" -> "g" ["Weight"=2.0];
+	"d" -> "h" ["Weight"=4.0];
+	"e" -> "h" ["Weight"=2.0];
+	"e" -> "i" ["Weight"=3.0];
+	"f" -> "j" ["Weight"=4.0];
+	"g" -> "k" ["Weight"=2.0];
+	"h" -> "k" ["Weight"=3.0];
+	"j" -> "k" ["Weight"=6.0];
+}
