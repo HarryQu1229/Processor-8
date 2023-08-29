@@ -1,4 +1,4 @@
-digraph {
+digraph "solution.examples/g2/in.dot" {
 	"11" ["Start"=0,"Weight"=8,"Processor"=2];
 	"13" ["Start"=26,"Weight"=10,"Processor"=1];
 	"6" ["Start"=36,"Weight"=14,"Processor"=1];

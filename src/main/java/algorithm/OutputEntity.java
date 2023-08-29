@@ -2,6 +2,10 @@ package algorithm;
 
 import org.graphstream.graph.Node;
 
+/**
+ * The model class the stores the information about how a single task is scheduled
+ * Including which processor the task executes on, when the task starts, and the cost of the task itself
+ */
 public class OutputEntity {
     private Node task;
     private double weight;

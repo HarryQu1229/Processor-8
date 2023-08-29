@@ -30,7 +30,5 @@ Initially, we wanted to generate the entire solution tree and traverse the tree 
 
 #### Solution
 
-Considering the size of solution tree, we decided not to generate the entire solution tree but to calculate schedule as we generate the tree 
-
-*To be continued*
+Considering the size of solution tree, we decided not to generate the entire solution tree but to calculate schedule as we generate the tree. We used A Star algorithm to probe which node to continue at each position in the solution tree
 
